@@ -4,6 +4,7 @@
   import path from 'path';
 
   export default defineConfig({
+    base: './', // Ensures assets are loaded correctly on GitHub Pages
     plugins: [react()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -51,7 +52,7 @@
     },
     build: {
       target: 'esnext',
-      outDir: 'build',
+      outDir: 'dist', // Changed from 'build' to 'dist' to match the deploy workflow
     },
     server: {
       port: 3000,
