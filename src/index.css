@@ -1429,3 +1429,17 @@ html {
     transform: rotate(360deg);
   }
 }
+
+/* Radix UI Slider styles - ensure visibility */
+[data-orientation="horizontal"] {
+  display: flex !important;
+  width: 100% !important;
+}
+
+[data-orientation="horizontal"] > span[data-orientation="horizontal"]:first-child {
+  display: block !important;
+  width: 100% !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  position: relative !important;
+}

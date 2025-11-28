@@ -204,39 +204,82 @@ export default function SliderDonationWidget({ onDonationChange }: SliderDonatio
       {selectedNonprofit && (
         <div className="relative py-[16px]">
           <div className="rounded-[20px] border border-[#e4e7ec] bg-white px-[18px] py-[22px] shadow-sm">
-            <div className="relative h-[10px] w-full rounded-full bg-[#e4e4e4]">
-              {/* Active gradient */}
-              <div
-                className="absolute left-0 top-0 h-full rounded-full transition-all"
-                style={{
-                  width: `${progressPercent}%`,
-                  background: 'linear-gradient(90deg, #9dd9ff 0%, #5fb6ff 50%, #1a73e8 100%)',
-                }}
-              />
+            <div className="relative h-[10px] w-full">
+              {/* Background track - light gray for inactive portion */}
+              <div className="absolute left-0 top-0 h-full w-full rounded-full bg-[#e4e4e4]" />
+              
+              {/* Active blue segments */}
+              {selectedAmount > 0 && (
+                <>
+                  {/* Light blue fading segment from position 0 to position 1 - always visible when any amount is selected */}
+                  <div
+                    className="absolute left-0 top-0 h-full rounded-full transition-all"
+                    style={{
+                      width: `${getPositionPercent(1)}%`,
+                      background: 'linear-gradient(90deg, #9dd9ff 0%, rgba(157, 217, 255, 0.3) 100%)',
+                    }}
+                  />
+                  
+                  {/* Solid vibrant blue segment from position 1 to handle - only when amount >= 1 */}
+                  {selectedAmount >= 1 && progressPercent > getPositionPercent(1) && (
+                    <div
+                      className="absolute left-0 top-0 h-full rounded-full transition-all"
+                      style={{
+                        left: `${getPositionPercent(1)}%`,
+                        width: `${Math.max(0, progressPercent - getPositionPercent(1))}%`,
+                        background: '#1a73e8',
+                      }}
+                    />
+                  )}
+                </>
+              )}
 
-              {/* Step markers */}
-              {sliderSteps.map((step) => {
+              {/* Step markers - always visible, different shapes for different positions */}
+              {sliderSteps.map((step, index) => {
                 const position = getPositionPercent(step);
+                const isLast = index === sliderSteps.length - 1;
+                const isFirst = index === 0;
+                const isSecond = index === 1;
                 const isActive = selectedAmount >= step;
+                
+                // Circular markers at positions 0 and 1
+                if (isFirst || isSecond) {
+                  return (
+                    <div
+                      key={`marker-${step}`}
+                      className={`absolute top-1/2 -translate-y-1/2 rounded-full transition-colors ${
+                        isActive ? 'bg-[#1a73e8]' : 'bg-[#c7c7c7]'
+                      }`}
+                      style={{
+                        left: `${position}%`,
+                        transform: 'translate(-50%, -50%)',
+                        width: '8px',
+                        height: '8px',
+                      }}
+                    />
+                  );
+                }
+                
+                // Rounded rectangular markers for positions 2+
                 return (
                   <div
                     key={`marker-${step}`}
-                    className={`absolute top-1/2 -translate-y-1/2 rounded-full transition-colors ${
+                    className={`absolute top-1/2 -translate-y-1/2 rounded-[2px] transition-colors ${
                       isActive ? 'bg-[#1a73e8]' : 'bg-[#c7c7c7]'
                     }`}
                     style={{
                       left: `${position}%`,
                       transform: 'translate(-50%, -50%)',
-                      width: '8px',
-                      height: '8px',
+                      width: isLast ? '12px' : '6px',
+                      height: isLast ? '8px' : '6px',
                     }}
                   />
                 );
               })}
 
-              {/* Handle */}
+              {/* Handle - white circle with blue outline */}
               <div
-                className="absolute top-1/2 -translate-y-1/2 rounded-full border-2 border-[#1a73e8] bg-white shadow-md transition-transform"
+                className="absolute top-1/2 -translate-y-1/2 rounded-full border-2 border-[#1a73e8] bg-white transition-transform z-10"
                 style={{
                   left: `${progressPercent}%`,
                   transform: 'translate(-50%, -50%)',
@@ -244,6 +287,7 @@ export default function SliderDonationWidget({ onDonationChange }: SliderDonatio
                   height: '24px',
                 }}
               />
+              
               {/* Range input for interaction */}
               <input
                 type="range"
@@ -252,7 +296,7 @@ export default function SliderDonationWidget({ onDonationChange }: SliderDonatio
                 step={1}
                 value={selectedAmount}
                 onChange={(e) => handleSliderChange(Number(e.target.value))}
-                className="absolute left-0 top-0 h-[30px] w-full cursor-pointer opacity-0"
+                className="absolute left-0 top-0 h-[30px] w-full cursor-pointer opacity-0 z-20"
               />
             </div>
           </div>
