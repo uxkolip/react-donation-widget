@@ -100,6 +100,11 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
   const presetAmounts = [0.5, 1, 3];
 
   const handleAmountClick = (amount: number) => {
+    // Don't show spinner if this amount is already selected
+    if (selectedAmount === amount) {
+      return;
+    }
+    
     setLoadingAmount(amount);
     
     setTimeout(() => {
