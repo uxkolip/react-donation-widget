@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { X, Search, Check, Plus, Heart, Dog, Users, TreePine, Stethoscope } from 'lucide-react';
+import { X, Search, Check, Heart, Dog, Users, TreePine, Stethoscope } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 interface Nonprofit {
@@ -218,7 +218,6 @@ export default function NonprofitSelector({ isOpen, onClose, onSelect, selectedI
                           </div>
                         ) : (
                           <div className="w-[32px] h-[32px] rounded-full border-2 border-[#e0e0e0] flex items-center justify-center hover:border-[#0957e8] transition-colors">
-                            <Plus size={20} className="text-[#757575]" />
                           </div>
                         )}
                       </div>
