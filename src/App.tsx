@@ -9,7 +9,7 @@ const navLinkClasses =
 
 export default function App() {
   return (
-    <BrowserRouter basename="/react-donation-widget">
+    <BrowserRouter>
       <div className="min-h-screen bg-[#f5f5f5] py-[40px] px-[16px] md:px-[24px]">
         <div className="max-w-[800px] mx-auto">
           <header className="mb-[24px]">
