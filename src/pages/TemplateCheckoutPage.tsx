@@ -20,9 +20,9 @@ export default function TemplateCheckoutPage() {
   return (
     <div className="max-w-[800px] mx-auto">
       <header className="mb-[32px]">
-        <h1 className="text-[#212121] mb-[8px] text-[24px] font-semibold">Template Checkout</h1>
+        <h1 className="text-[#212121] mb-[8px] text-[24px] font-semibold">Ολοκλήρωση Παραγγελίας</h1>
         <p className="text-[#757575]">
-          Η σελίδα ολοκλήρωσης παραγγελίας που βασίζεται στο template που μοιράστηκες.
+        Συμπληρώστε τα στοιχεία σας για να ολοκληρώσετε την παραγγελία
         </p>
       </header>
 
@@ -42,7 +42,7 @@ export default function TemplateCheckoutPage() {
             <span className="text-[#00c853]">Δωρεάν</span>
           </div>
           {donationAmount > 0 && (
-            <div className="flex justify-between items-center text-[#e53935]">
+            <div className="flex justify-between items-center text-[#0957e8]">
               <span>Δωρεά</span>
               <span>+{formatCurrency(donationAmount)}</span>
             </div>

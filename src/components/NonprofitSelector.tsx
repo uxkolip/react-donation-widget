@@ -188,7 +188,7 @@ export default function NonprofitSelector({ isOpen, onClose, onSelect, selectedI
                     >
                       {/* Icon */}
                       <div className="w-[48px] h-[48px] rounded-full bg-[#fee5e5] flex items-center justify-center shrink-0">
-                        <Icon size={24} className="text-[#e53935]" />
+                        <Icon size={24} className="text-[#0957e8]" />
                       </div>
 
                       {/* Content */}

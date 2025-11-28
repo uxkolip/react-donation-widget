@@ -1,5 +1,5 @@
 import React from 'react';
-import { X } from 'lucide-react';
+import { X, Check } from 'lucide-react';
 import { useEffect } from 'react';
 
 interface AmountSelectorProps {
@@ -100,15 +100,11 @@ export default function AmountSelector({
                     </span>
                     <div className="flex items-center justify-center shrink-0">
                       {isSelected ? (
-                        <div 
-                          className="w-[32px] h-[32px] rounded-full border-2 border-[#0957e8] bg-white flex items-center justify-center"
-                        >
-                          <div 
-                            className="w-[12px] h-[12px] rounded-full bg-[#0957e8]"
-                          />
+                        <div className="w-[32px] h-[32px] rounded-full bg-[#4caf50] flex items-center justify-center">
+                          <Check size={20} className="text-white" />
                         </div>
                       ) : (
-                        <div className="w-[32px] h-[32px] rounded-full border-2 border-[#e0e0e0] bg-white flex items-center justify-center hover:border-[#0957e8] transition-colors" />
+                        <div className="w-[32px] h-[32px] rounded-full border-2 border-[#e0e0e0] flex items-center justify-center hover:border-[#0957e8] transition-colors" />
                       )}
                     </div>
                   </button>

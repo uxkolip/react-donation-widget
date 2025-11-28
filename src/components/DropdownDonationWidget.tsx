@@ -193,7 +193,7 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
           };
           return (
             <div className={`w-[32px] h-[32px] rounded-full ${getIconBg(selectedNonprofit.category)} flex items-center justify-center shrink-0 flex-shrink-0`}>
-              <Icon size={18} className="text-[#e53935]" />
+              <Icon size={18} className="text-[#0957e8]" />
             </div>
           );
         })()}

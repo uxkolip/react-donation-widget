@@ -29,31 +29,31 @@ export default function App() {
                   }`
                 }
               >
-                Dropdown
+                Version 1
               </NavLink>
               <NavLink
                 to="/classic"
                 className={({ isActive }) =>
                   `${navLinkClasses} ${
                     isActive
-                      ? 'bg-[#0957e8] border-[#0957e8] text-white'
-                      : 'bg-white border-[#e0e0e0] text-[#212121] hover:border-[#0957e8]'
+                      ? 'bg-[#4caf50] border-[#4caf50] text-white'
+                      : 'bg-white border-[#e0e0e0] text-[#212121] hover:border-[#4caf50]'
                   }`
                 }
               >
-                Drawer
+                Version 2
               </NavLink>
               <NavLink
                 to="/template"
                 className={({ isActive }) =>
                   `${navLinkClasses} ${
                     isActive
-                      ? 'bg-[#212121] border-[#212121] text-white'
-                      : 'bg-white border-[#e0e0e0] text-[#212121] hover:border-[#212121]'
+                      ? 'bg-[#4caf50] border-[#4caf50] text-white'
+                      : 'bg-white border-[#e0e0e0] text-[#212121] hover:border-[#4caf50]'
                   }`
                 }
               >
-                Roundup
+                Version 3
               </NavLink>
             </nav>
           </header>
