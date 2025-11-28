@@ -8,8 +8,11 @@ const navLinkClasses =
   'px-[16px] py-[8px] rounded-[999px] text-[14px] font-medium border transition-all';
 
 export default function App() {
+  // Set basename based on deployment
+  const basename = window.location.hostname === 'localhost' ? '/' : '/react-donation-widget/';
+  
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <div className="min-h-screen bg-[#f5f5f5] py-[40px] px-[16px] md:px-[24px]">
         <div className="max-w-[800px] mx-auto">
           <header className="mb-[24px]">
