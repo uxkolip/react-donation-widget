@@ -163,7 +163,7 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
         </div>
 
       {/* Organization Dropdown */}
-      <div className="flex items-center gap-[12px]">
+      <div className="flex items-center gap-[4px]">
         {(() => {
           const Icon = getIcon(selectedNonprofit.icon);
           const getIconBg = (category: string) => {
@@ -184,11 +184,12 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
             </div>
           );
         })()}
-        <select
-          value={selectedNonprofit.id}
-          onChange={(event) => handleNonprofitSelect(event.target.value)}
-          className="w-full border border-[#e0e0e0] rounded-[8px] bg-white px-[12px] py-[12px] text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none"
-        >
+          <select
+            value={selectedNonprofit.id}
+            onChange={(event) => handleNonprofitSelect(event.target.value)}
+            className="w-full border border-[#e0e0e0] rounded-[8px] bg-white px-[16px] py-0 text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none"
+            style={{ height: '45px' }}
+          >
           {nonprofits.map((nonprofit) => (
             <option key={nonprofit.id} value={nonprofit.id}>
               {nonprofit.name}
