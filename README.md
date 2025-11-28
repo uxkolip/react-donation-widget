@@ -1,6 +1,6 @@
 # Mock Checkout Page with Donations
 
-This repository hosts a Vite-powered React demo that showcases two checkout experiences (classic and templated) plus a dropdown-based donation widget. It is intended to mirror a mock Figma flow for comparing donation UX patterns.
+Hi! This repository hosts a Vite-powered React demo that showcases two checkout experiences (classic and templated) plus a dropdown-based donation widget. It is intended to mirror a mock Figma flow for comparing donation UX patterns.
 
 ## Features
 
