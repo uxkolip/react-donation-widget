@@ -213,12 +213,13 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
       </div>
 
       {/* Amount Selection */}
-      <div className="relative shrink-0 w-full">
-        <div className="size-full">
-          <div className="box-border content-stretch flex flex-col gap-[12px] items-start relative w-full py-[8px] mt-[0px] mr-[0px] mb-[8px] ml-[0px]">
-            <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full">
-              {/* Preset amounts */}
-              {presetAmounts.map((amount) => {
+      {selectedNonprofit && (
+        <div className="relative shrink-0 w-full">
+          <div className="size-full">
+            <div className="box-border content-stretch flex flex-col gap-[12px] items-start relative w-full py-[8px] mt-[0px] mr-[0px] mb-[8px] ml-[0px]">
+              <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full">
+                {/* Preset amounts */}
+                {presetAmounts.map((amount) => {
                 const isLoading = loadingAmount === amount;
                 const isSelected = selectedAmount === amount;
                 
@@ -292,10 +293,11 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
                   )}
                 </div>
               </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
