@@ -3,9 +3,10 @@ import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-do
 import DropdownCheckoutPage from './pages/DropdownCheckoutPage';
 import ClassicCheckoutPage from './pages/ClassicCheckoutPage';
 import TemplateCheckoutPage from './pages/TemplateCheckoutPage';
+import SliderCheckoutPage from './pages/SliderCheckoutPage';
 
 const navLinkClasses =
-  'px-[16px] py-[8px] rounded-[999px] text-[14px] font-medium border transition-all';
+  'px-[16px] py-[8px] rounded-[999px] text-[14px] font-medium border transition-all truncate';
 
 export default function App() {
   // Set basename based on deployment
@@ -29,7 +30,7 @@ export default function App() {
                   }`
                 }
               >
-                Version 1
+                Ver. 1
               </NavLink>
               <NavLink
                 to="/classic"
@@ -41,7 +42,7 @@ export default function App() {
                   }`
                 }
               >
-                Version 2
+                Ver. 2
               </NavLink>
               <NavLink
                 to="/template"
@@ -53,7 +54,19 @@ export default function App() {
                   }`
                 }
               >
-                Version 3
+                Ver. 3
+              </NavLink>
+              <NavLink
+                to="/slider"
+                className={({ isActive }) =>
+                  `${navLinkClasses} ${
+                    isActive
+                      ? 'bg-[#4caf50] border-[#4caf50] text-white'
+                      : 'bg-white border-[#e0e0e0] text-[#212121] hover:border-[#4caf50]'
+                  }`
+                }
+              >
+                Ver. 4
               </NavLink>
             </nav>
           </header>
@@ -63,6 +76,7 @@ export default function App() {
               <Route path="/" element={<DropdownCheckoutPage />} />
               <Route path="/classic" element={<ClassicCheckoutPage />} />
               <Route path="/template" element={<TemplateCheckoutPage />} />
+              <Route path="/slider" element={<SliderCheckoutPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>

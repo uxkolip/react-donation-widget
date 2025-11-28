@@ -65,7 +65,7 @@ export default function TemplateDonationWidget({
               <Heart size={28} className="text-[#e53935]" />
             )}
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <p className="text-[#212121] font-medium mb-[4px]">Θέλετε να κάνετε μια δωρεά;</p>
             <p className={`text-[#757575] text-[14px] transition-opacity ${!isEnabled ? 'opacity-50' : 'opacity-100'}`}>
               +<button
@@ -80,7 +80,7 @@ export default function TemplateDonationWidget({
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="underline decoration-[#212121] decoration-2 underline-offset-2 text-[#212121] font-semibold hover:text-[#0957e8] transition-colors"
+                className="inline-block max-w-[200px] truncate underline decoration-[#212121] w-full decoration-2 underline-offset-2 text-[#212121] font-semibold hover:text-[#0957e8] transition-colors align-bottom"
                 disabled={!isEnabled}
               >
                 {selectedNonprofit.name}
