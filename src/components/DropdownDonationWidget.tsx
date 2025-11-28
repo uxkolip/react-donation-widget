@@ -99,6 +99,13 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
 
   const presetAmounts = [0.5, 1, 3];
 
+  // Initialize donation on mount
+  React.useEffect(() => {
+    if (selectedAmount) {
+      onDonationChange?.(selectedAmount, selectedNonprofit);
+    }
+  }, []);
+
   const handleAmountClick = (amount: number) => {
     setLoadingAmount(amount);
     
