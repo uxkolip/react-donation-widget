@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Heart } from 'lucide-react';
 import NonprofitSelector, { type Nonprofit } from './NonprofitSelector';
 import AmountSelector from './AmountSelector';
+import { ImageWithFallback } from './figma/ImageWithFallback';
 
 const euroFormatter = new Intl.NumberFormat('el-GR', {
   minimumFractionDigits: 2,
@@ -24,11 +25,12 @@ export default function TemplateDonationWidget({
   itemsCount = 3,
 }: TemplateDonationWidgetProps) {
   const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit>({
-    id: '2',
-    name: 'Αρκτούρος',
-    description: 'Προστασία άγριων ζώων και του φυσικού τους περιβάλλοντος.',
+    id: 'zwes',
+    name: 'Ζω.Ε.Σ. (Ζωοφιλικές Ενημερώσεις Σχολείων, Ιδρυμάτων και Οργανισμών)',
+    description: 'Δραστηριοποιείται στον τομέα της προστασίας ζώων και της εκπαίδευσης για την ευζωία τους.',
     category: 'animals',
     icon: 'dog',
+    logo: 'https://youbehero.com/images/cause/113/l/zwes-logo.jpg',
   });
   const [selectedAmount, setSelectedAmount] = useState(0.5);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,8 +54,16 @@ export default function TemplateDonationWidget({
     <>
       <div className="bg-white rounded-[8px] border border-[#feeaea] mb-[24px] p-[20px] shadow-sm">
         <div className="flex items-start gap-[12px]">
-          <div className="h-[48px] w-[48px] rounded-[12px] bg-[#fee5e5] flex items-center justify-center shrink-0">
-            <Heart size={28} className="text-[#e53935]" />
+          <div className="h-[48px] w-[48px] rounded-[12px] bg-[#fee5e5] flex items-center justify-center shrink-0 overflow-hidden">
+            {selectedNonprofit.logo ? (
+              <ImageWithFallback
+                src={selectedNonprofit.logo}
+                alt={selectedNonprofit.name}
+                className="w-full h-full object-contain"
+              />
+            ) : (
+              <Heart size={28} className="text-[#e53935]" />
+            )}
           </div>
           <div className="flex-1">
             <p className="text-[#212121] font-medium mb-[4px]">Θέλετε να κάνετε μια δωρεά;</p>

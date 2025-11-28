@@ -56,5 +56,11 @@ export default defineConfig(({ command }) => ({
   server: {
     port: 3000,
     open: true,
+    watch: {
+      usePolling: false,
+    },
+    hmr: {
+      overlay: true,
+    },
   },
 }));

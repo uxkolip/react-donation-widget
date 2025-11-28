@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Loader2, Heart, Dog, Users, TreePine, Stethoscope } from 'lucide-react';
 import svgPaths from "../imports/svg-rlj4j84hj5";
 import type { Nonprofit } from './NonprofitSelector';
+import { ImageWithFallback } from './figma/ImageWithFallback';
 
 const getIcon = (iconType: string) => {
   switch (iconType) {
@@ -34,60 +35,60 @@ interface DropdownDonationWidgetProps {
 // Nonprofits list - matching the one from NonprofitSelector
 const nonprofits: Nonprofit[] = [
   {
-    id: '1',
+    id: 'proskopoi',
+    name: 'Σώμα Ελλήνων Προσκόπων',
+    description: 'Οργάνωση προσκόπων που προωθεί την εκπαίδευση, την κοινωνική ευθύνη και την προστασία του περιβάλλοντος.',
+    category: 'humans',
+    icon: 'users',
+    logo: 'https://youbehero.com/images/cause/85/l/proskopoi-logo.png'
+  },
+  {
+    id: 'edny',
+    name: 'Εθελοντική Δασοπροστασία Νοτίου Υμηττού (Ε.Δ.Ν.Υ.)',
+    description: 'Οργάνωση που ασχολείται με την προστασία και διατήρηση των δασικών οικοσυστημάτων.',
+    category: 'environment',
+    icon: 'tree',
+    logo: 'https://youbehero.com/images/cause/206/l/edny_logo.png'
+  },
+  {
+    id: 'zwes',
     name: 'Ζω.Ε.Σ. (Ζωοφιλικές Ενημερώσεις Σχολείων, Ιδρυμάτων και Οργανισμών)',
-    description: 'Δραστηριοποιείται στον τομέα της προστασίας ζώων...',
+    description: 'Δραστηριοποιείται στον τομέα της προστασίας ζώων και της εκπαίδευσης για την ευζωία τους.',
     category: 'animals',
-    icon: 'dog'
+    icon: 'dog',
+    logo: 'https://youbehero.com/images/cause/113/l/zwes-logo.jpg'
   },
   {
-    id: '2',
-    name: 'Αρκτούρος',
-    description: 'Προστασία και περίθαλψη άγριων ζώων, με έμφαση σε αρκούδες και λύκους.',
+    id: 'tripolis',
+    name: 'Πολιτιστικός Φιλοζωικός Σύλλογος Τρίπολης',
+    description: 'Σύλλογος που συνδυάζει πολιτιστικές δραστηριότητες με την προστασία και φροντίδα ζώων.',
     category: 'animals',
-    icon: 'dog'
+    icon: 'dog',
+    logo: 'https://youbehero.com/images/cause/98/l/politistikos-filozoikos-sillogos-tripolis-logo.png'
   },
   {
-    id: '3',
-    name: 'Το Χαμόγελο του Παιδιού',
-    description: 'Υποστήριξη και προστασία παιδιών που βρίσκονται σε κίνδυνο.',
-    category: 'humans',
-    icon: 'heart'
-  },
-  {
-    id: '4',
-    name: 'Κιβωτός του Κόσμου',
-    description: 'Δίνει την ευκαιρία σε αδέσποτα ζώα συντροφιάς...',
-    category: 'humans',
-    icon: 'users'
-  },
-  {
-    id: '5',
-    name: 'Γιατροί του Κόσμου',
-    description: 'Παροχή ιατρικής περίθαλψης σε ευάλωτες ομάδες πληθυσμού.',
-    category: 'humans',
-    icon: 'stethoscope'
-  },
-  {
-    id: '6',
-    name: 'WWF Ελλάς',
-    description: 'Είναι ιδιωτικό ζωολογικό καταφύγιο και φιλανθρωπική οργάνωση...',
-    category: 'environment',
-    icon: 'tree'
-  },
-  {
-    id: 'save-your-hood',
-    name: 'Save Your Hood',
-    description: 'Εθελοντική πρωτοβουλία που φροντίζει γειτονιές και κοινόχρηστους χώρους μέσα από δράσεις καθαρισμού.',
-    category: 'environment',
-    icon: 'tree'
-  },
-  {
-    id: '7',
-    name: 'Προστασία Αδέσποτων Ζώων Η Αγάπη',
-    description: 'Είναι ο μεγάλος δεσμευτής των αδέσποτων ζώων συντροφιάς...',
+    id: 'espi',
+    name: 'Ελληνικός Σύλλογος Προστασίας Ιπποειδών',
+    description: 'Οργάνωση αφοσιωμένη στην προστασία και ευζωία των ιπποειδών (άλογα, γαϊδούρια, μουλάρια).',
     category: 'animals',
-    icon: 'dog'
+    icon: 'dog',
+    logo: 'https://youbehero.com/images/cause/183/l/espi_logo.jpg'
+  },
+  {
+    id: 'agkalia',
+    name: 'ΑμKE Ψυχοκοινωνικών Παρεμβάσεων «Αγκαλιά»',
+    description: 'Οργάνωση που παρέχει ψυχοκοινωνική υποστήριξη και παρεμβάσεις σε ευάλωτες ομάδες πληθυσμού.',
+    category: 'humans',
+    icon: 'heart',
+    logo: 'https://youbehero.com/images/cause/312/l/amke_agkalia_logo.png'
+  },
+  {
+    id: 'sege',
+    name: 'ΣΥΝΔΕΣΜΟΣ ΕΠΙΧΕΙΡΗΜΑΤΙΩΝ ΓΥΝΑΙΚΩΝ ΕΛΛΑΔΟΣ - Σ.Ε.Γ.Ε.',
+    description: 'Σύνδεσμος που υποστηρίζει και προωθεί την επιχειρηματικότητα των γυναικών στην Ελλάδα.',
+    category: 'humans',
+    icon: 'users',
+    logo: 'https://youbehero.com/images/cause/212/l/sege_logo.jpeg'
   }
 ];
 
@@ -181,7 +182,7 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
         </div>
 
       {/* Organization Dropdown */}
-      <div className="flex items-center gap-[4px] mb-[16px]">
+      <div className="flex items-center gap-[16px] mb-[16px]">
         {selectedNonprofit && (() => {
           const Icon = getIcon(selectedNonprofit.icon);
           const getIconBg = (category: string) => {
@@ -197,8 +198,16 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
             }
           };
           return (
-            <div className={`w-[32px] h-[32px] rounded-full ${getIconBg(selectedNonprofit.category)} flex items-center justify-center shrink-0 flex-shrink-0`}>
-              <Icon size={18} className="text-[#0957e8]" />
+            <div className={`w-[32px] h-[32px] rounded-full ${getIconBg(selectedNonprofit.category)} flex items-center justify-center shrink-0 flex-shrink-0 overflow-hidden`}>
+              {selectedNonprofit.logo ? (
+                <ImageWithFallback
+                  src={selectedNonprofit.logo}
+                  alt={selectedNonprofit.name}
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <Icon size={18} className="text-[#0957e8]" />
+              )}
             </div>
           );
         })()}

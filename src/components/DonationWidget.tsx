@@ -21,9 +21,11 @@ export default function DonationWidget({ onDonationChange }: DonationWidgetProps
   const [loadingAmount, setLoadingAmount] = useState<number | null>(null);
   const [isClearing, setIsClearing] = useState(false);
   const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit>({
-    id: '1',
+    id: 'zwes',
     name: 'Ζω.Ε.Σ. (Ζωοφιλικές Ενημερώσεις Σχολείων, Ιδρυμάτων και Οργανισμών)',
-    description: 'Οργανισμός που προάγει την ευημερία των ζώων μέσω εκπαίδευσης σε σχολεία και ιδρύματα.'
+    description: 'Δραστηριοποιείται στον τομέα της προστασίας ζώων και της εκπαίδευσης για την ευζωία τους.',
+    category: 'animals',
+    icon: 'dog'
   });
 
   const presetAmounts = [0.5, 1, 3];
