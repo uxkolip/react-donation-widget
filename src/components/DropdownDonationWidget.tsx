@@ -28,7 +28,7 @@ const euroFormatter = new Intl.NumberFormat('el-GR', {
 const formatAmount = (value: number) => euroFormatter.format(value);
 
 interface DropdownDonationWidgetProps {
-  onDonationChange?: (amount: number, nonprofit: Nonprofit) => void;
+  onDonationChange?: (amount: number, nonprofit: Nonprofit | null) => void;
 }
 
 // Nonprofits list - matching the one from NonprofitSelector
@@ -92,26 +92,23 @@ const nonprofits: Nonprofit[] = [
 ];
 
 export default function DropdownDonationWidget({ onDonationChange }: DropdownDonationWidgetProps) {
-  const [selectedAmount, setSelectedAmount] = useState<number | null>(1);
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [loadingAmount, setLoadingAmount] = useState<number | null>(null);
   const [isClearing, setIsClearing] = useState(false);
-  const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit>(nonprofits.find(n => n.id === 'save-your-hood') || nonprofits[0]);
+  const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(null);
 
   const presetAmounts = [0.5, 1, 3];
-
-  // Initialize donation on mount
-  React.useEffect(() => {
-    if (selectedAmount) {
-      onDonationChange?.(selectedAmount, selectedNonprofit);
-    }
-  }, []);
 
   const handleAmountClick = (amount: number) => {
     setLoadingAmount(amount);
     
     setTimeout(() => {
       setSelectedAmount(amount);
-      onDonationChange?.(amount, selectedNonprofit);
+      if (selectedNonprofit) {
+        onDonationChange?.(amount, selectedNonprofit);
+      } else {
+        onDonationChange?.(0, null);
+      }
       setLoadingAmount(null);
     }, 800);
   };
@@ -121,17 +118,26 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
     
     setTimeout(() => {
       setSelectedAmount(null);
-      onDonationChange?.(0, selectedNonprofit);
+      setSelectedNonprofit(null);
+      onDonationChange?.(0, null);
       setIsClearing(false);
     }, 800);
   };
 
   const handleNonprofitSelect = (nonprofitId: string) => {
-    const nonprofit = nonprofits.find(n => n.id === nonprofitId) || nonprofits[0];
-    setSelectedNonprofit(nonprofit);
-    const currentAmount = selectedAmount || 0;
-    if (currentAmount > 0) {
-      onDonationChange?.(currentAmount, nonprofit);
+    if (nonprofitId === '') {
+      setSelectedNonprofit(null);
+      onDonationChange?.(0, null);
+      return;
+    }
+    const nonprofit = nonprofits.find(n => n.id === nonprofitId);
+    if (nonprofit) {
+      setSelectedNonprofit(nonprofit);
+      if (selectedAmount) {
+        onDonationChange?.(selectedAmount, nonprofit);
+      } else {
+        onDonationChange?.(0, nonprofit);
+      }
     }
   };
 
@@ -170,8 +176,8 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
         </div>
 
       {/* Organization Dropdown */}
-      <div className="flex items-center gap-[4px]">
-        {(() => {
+      <div className="flex items-center gap-[4px] mb-[16px]">
+        {selectedNonprofit && (() => {
           const Icon = getIcon(selectedNonprofit.icon);
           const getIconBg = (category: string) => {
             switch (category) {
@@ -192,11 +198,12 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
           );
         })()}
           <select
-            value={selectedNonprofit.id}
+            value={selectedNonprofit?.id || ''}
             onChange={(event) => handleNonprofitSelect(event.target.value)}
             className="w-full border border-[#e0e0e0] rounded-[8px] bg-white px-[16px] py-0 text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none"
             style={{ height: '45px' }}
           >
+          {!selectedNonprofit && <option value="">Επιλογή φορέα</option>}
           {nonprofits.map((nonprofit) => (
             <option key={nonprofit.id} value={nonprofit.id}>
               {nonprofit.name}
@@ -247,7 +254,7 @@ export default function DropdownDonationWidget({ onDonationChange }: DropdownDon
                                 isSelected ? 'text-white' : 'text-[#212121] group-hover:text-white'
                               }`}
                             >
-                              {amount}€
+                              {formatAmount(amount)}€
                             </p>
                           )}
                         </div>

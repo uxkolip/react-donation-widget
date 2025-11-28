@@ -12,9 +12,15 @@ export default function DropdownCheckoutPage() {
 
   const finalTotal = ORDER_TOTAL + donationAmount;
 
-  const handleDonationChange = (amount: number, nonprofit: Nonprofit) => {
-    setDonationAmount(amount);
-    setSelectedNonprofit(nonprofit);
+  const handleDonationChange = (amount: number, nonprofit: Nonprofit | null) => {
+    // Only add donation to cart if both amount and nonprofit are selected
+    if (amount > 0 && nonprofit) {
+      setDonationAmount(amount);
+      setSelectedNonprofit(nonprofit);
+    } else {
+      setDonationAmount(0);
+      setSelectedNonprofit(nonprofit);
+    }
   };
 
   return (
