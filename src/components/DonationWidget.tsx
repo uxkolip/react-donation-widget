@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import svgPaths from "../imports/svg-rlj4j84hj5";
 import NonprofitSelector, { type Nonprofit } from './NonprofitSelector';
 
 const euroFormatter = new Intl.NumberFormat('el-GR', {
@@ -89,7 +88,7 @@ export default function DonationWidget({ onDonationChange }: DonationWidgetProps
   return (
     <>
       <div className="bg-white relative rounded-[8px] size-full">
-        <div className="content-stretch flex flex-col gap-[8px] items-center justify-center overflow-clip relative rounded-[inherit] size-full mt-[0px] mr-[0px] mb-[8px] ml-[0px]">
+        <div className="content-stretch flex flex-col gap-[8px] items-center justify-center overflow-clip relative rounded-[inherit] size-full mt-[0px] mr-[0px] mb-[20px] ml-[0px]">
           {/* Header */}
           <div className="bg-[#eeeeee] relative shrink-0 w-full">
             <div className="flex flex-row items-center size-full">
@@ -183,13 +182,9 @@ export default function DonationWidget({ onDonationChange }: DonationWidgetProps
                       {isClearing ? (
                         <Loader2 size={16} className="text-[#212121] animate-spin" />
                       ) : (
-                        <div className="absolute inset-[-5.26%_-6.02%]">
-                          <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 19 21">
-                            <g id="Frame 4389">
-                              <path d={svgPaths.p28692500} id="Vector" stroke="var(--stroke-0, #212121)" />
-                            </g>
-                          </svg>
-                        </div>
+                        <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M0.666016 3.77774H13.1105M5.33268 6.88885V11.5555M8.44379 6.88885V11.5555M1.44379 3.77774L2.22157 13.1111C2.22157 13.5236 2.38546 13.9193 2.67718 14.211C2.96891 14.5027 3.36457 14.6666 3.77713 14.6666H9.99935C10.4119 14.6666 10.8076 14.5027 11.0993 14.211C11.391 13.9193 11.5549 13.5236 11.5549 13.1111L12.3327 3.77774M4.5549 3.77774V1.4444C4.5549 1.23812 4.63685 1.04029 4.78271 0.894432C4.92857 0.74857 5.1264 0.666626 5.33268 0.666626H8.44379C8.65007 0.666626 8.8479 0.74857 8.99377 0.894432C9.13963 1.04029 9.22157 1.23812 9.22157 1.4444V3.77774" stroke="#212121" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
                       )}
                     </div>
                   </button>

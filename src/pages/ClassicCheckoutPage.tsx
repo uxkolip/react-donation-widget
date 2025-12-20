@@ -30,6 +30,8 @@ export default function ClassicCheckoutPage() {
         <CheckoutForm />
       </section>
 
+      <DonationWidget onDonationChange={handleDonationChange} />
+
       <section className="bg-white rounded-[8px] p-[24px] border border-[#e0e0e0] mb-[24px]">
         <h2 className="text-[#212121] mb-[16px] text-[18px]">Περίληψη Παραγγελίας</h2>
         <div className="flex flex-col gap-[12px]">
@@ -54,10 +56,6 @@ export default function ClassicCheckoutPage() {
             </div>
           </div>
         </div>
-      </section>
-
-      <section className="mb-[24px]">
-        <DonationWidget onDonationChange={handleDonationChange} />
       </section>
 
       <button className="w-full bg-[#0957e8] text-white py-[14px] px-[24px] rounded-[8px] hover:bg-[#0745b8] transition-colors">

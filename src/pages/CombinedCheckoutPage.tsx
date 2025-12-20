@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import CheckoutForm from '../components/CheckoutForm';
-import TemplateDonationWidget from '../components/TemplateDonationWidget';
+import CombinedDonationWidget from '../components/CombinedDonationWidget';
 import type { Nonprofit } from '../components/NonprofitSelector';
 import { formatCurrency } from '../lib/currency';
 
 const ORDER_TOTAL = 149.99;
 
-export default function TemplateCheckoutPage() {
+export default function CombinedCheckoutPage() {
   const [donationAmount, setDonationAmount] = useState(0);
   const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(null);
 
   const finalTotal = ORDER_TOTAL + donationAmount;
 
-  const handleDonationChange = (amount: number, nonprofit: Nonprofit) => {
-    setDonationAmount(amount);
-    setSelectedNonprofit(nonprofit);
+  const handleDonationChange = (amount: number, nonprofit: Nonprofit | null) => {
+    if (amount > 0 && nonprofit) {
+      setDonationAmount(amount);
+      setSelectedNonprofit(nonprofit);
+    } else {
+      setDonationAmount(0);
+      setSelectedNonprofit(nonprofit);
+    }
   };
 
   return (
@@ -22,7 +27,7 @@ export default function TemplateCheckoutPage() {
       <header className="mb-[32px]">
         <h1 className="text-[#212121] mb-[8px] text-[24px] font-semibold">Ολοκλήρωση Παραγγελίας</h1>
         <p className="text-[#757575]">
-        Συμπληρώστε τα στοιχεία σας για να ολοκληρώσετε την παραγγελία
+          Συμπληρώστε τα στοιχεία σας για να ολοκληρώσετε την παραγγελία
         </p>
       </header>
 
@@ -30,10 +35,9 @@ export default function TemplateCheckoutPage() {
         <CheckoutForm />
       </section>
 
-      <TemplateDonationWidget
-        onDonationChange={handleDonationChange}
-        orderTotal={ORDER_TOTAL}
-      />
+      <div className="mb-[24px]">
+        <CombinedDonationWidget onDonationChange={handleDonationChange} />
+      </div>
 
       <section className="bg-white rounded-[8px] p-[24px] border border-[#e0e0e0] mb-[24px]">
         <h2 className="text-[#212121] mb-[16px] text-[18px]">Περίληψη Παραγγελίας</h2>
@@ -61,9 +65,17 @@ export default function TemplateCheckoutPage() {
         </div>
       </section>
 
-      <p className="text-center text-[#9e9e9e] text-[12px]">
-        Επιλεγμένη οργάνωση: {selectedNonprofit?.name ?? 'Καμία'}
+      <button className="w-full bg-[#0957e8] text-white py-[14px] px-[24px] rounded-[8px] hover:bg-[#0745b8] transition-colors">
+        Ολοκλήρωση Παραγγελίας
+      </button>
+      <p className="text-center text-[#757575] mt-[16px]">
+        Οι συναλλαγές σας είναι ασφαλείς και κρυπτογραφημένες
       </p>
+      {selectedNonprofit && (
+        <p className="text-center text-[#9e9e9e] text-[12px] mt-[8px]">
+          Επιλεγμένη οργάνωση: {selectedNonprofit.name}
+        </p>
+      )}
     </div>
   );
 }

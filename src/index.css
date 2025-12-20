@@ -1443,3 +1443,195 @@ html {
   min-width: 0 !important;
   position: relative !important;
 }
+
+/* Hide native range input styling completely */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-track {
+  background: transparent;
+  height: 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+  border: none;
+}
+
+input[type="range"]::-moz-range-track {
+  background: transparent;
+  height: 0;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 0;
+  height: 0;
+  background: transparent;
+  border: none;
+}
+
+/* Rainbow border glow animation for organization dropdown */
+@property --glow-deg {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: -90deg;
+}
+
+@property --clr-1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: red;
+}
+
+@property --clr-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: yellow;
+}
+
+@property --clr-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: green;
+}
+
+@property --clr-4 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: blue;
+}
+
+@property --clr-5 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: purple;
+}
+
+@keyframes cheerful-bounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  25% {
+    transform: translateY(-3px) scale(1.01);
+  }
+  50% {
+    transform: translateY(0) scale(1);
+  }
+  75% {
+    transform: translateY(-1px) scale(1.005);
+  }
+}
+
+/* Rainbow Glow Animations */
+@keyframes glow-rotate {
+  to {
+    --glow-deg: 270deg;
+  }
+}
+
+@keyframes glow-fade {
+  0%, 100% {
+    opacity: 0;
+  }
+  10%, 50% {
+    opacity: var(--glow-intensity);
+  }
+}
+
+@keyframes shake {
+  25%, 75% {
+    transform: translateX(4px);
+  }
+  50% {
+    transform: translateX(-4px);
+  }
+}
+
+.animate-rainbow-glow {
+  /* CSS Variables */
+  --gradient-glow: var(--clr-1), var(--clr-2), var(--clr-3), var(--clr-4), var(--clr-5), var(--clr-1);
+  --border-width: 2px;
+  --glow-size: 0.5rem;
+  --glow-intensity: 0.2;
+  --surface: white;
+
+  /* Layout */
+  position: relative;
+  isolation: isolate;
+  
+  /* Styling */
+  border: var(--border-width) solid var(--border-color, #e0e0e0);
+  background: var(--surface);
+  
+  /* Animation */
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-rainbow-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--surface);
+}
+
+.animate-rainbow-glow::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--glow-size));
+  z-index: -2;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(from var(--glow-deg), var(--gradient-glow));
+  filter: blur(var(--glow-size));
+  animation: 
+    glow-rotate 1.5s infinite linear,
+    glow-fade 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Donation Widget Colors */
+.donation-widget-bg {
+  background-color: #fcf5ff;
+}
+
+.donation-widget-button-selected {
+  background-color: #8320bd;
+}
+
+.donation-widget-button-selected p {
+  color: white;
+}
+
+.donation-widget-button-default {
+  background-color: white;
+}
+
+.donation-widget-button-default:hover {
+  background-color: #8320bd;
+}
+
+.donation-widget-button-default:hover p {
+  color: white;
+}
+
+.trash-button:hover {
+  background-color: #f0e5ff !important;
+}
+
+.trash-button:active {
+  background-color: #e8d5ff !important;
+}
+
+.donation-widget-badge {
+  background-color: #8320bd;
+}

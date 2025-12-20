@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { ChevronDown, Globe2, Trash2 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { ChevronDown, Globe2 } from 'lucide-react';
 import CheckoutForm from './CheckoutForm';
 import NonprofitSelector, { type Nonprofit } from './NonprofitSelector';
 
@@ -42,7 +42,7 @@ export default function AlternativeCheckoutPage({
         <header className="flex flex-wrap items-center justify-between gap-[16px]">
           <div>
             <p className="text-[#1b1b1b] text-[28px] font-semibold leading-tight">
-              Θέλετε να κάνετε μια δωρεά;
+              Μια μικρή δωρεά μπορεί να κάνει τη διαφορά.
             </p>
             <p className="text-[#757575]">
               Επιλέξτε έναν φορέα και στρογγυλοποιήστε το ποσό της παραγγελίας σας.
@@ -95,7 +95,9 @@ export default function AlternativeCheckoutPage({
               onClick={handleClearSelection}
               className="rounded-[18px] border border-[#dfe4e0] bg-white flex items-center justify-center hover:border-[#b71c1c] transition-colors"
             >
-              <Trash2 className="text-[#424242]" />
+              <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0.666016 3.77774H13.1105M5.33268 6.88885V11.5555M8.44379 6.88885V11.5555M1.44379 3.77774L2.22157 13.1111C2.22157 13.5236 2.38546 13.9193 2.67718 14.211C2.96891 14.5027 3.36457 14.6666 3.77713 14.6666H9.99935C10.4119 14.6666 10.8076 14.5027 11.0993 14.211C11.391 13.9193 11.5549 13.5236 11.5549 13.1111L12.3327 3.77774M4.5549 3.77774V1.4444C4.5549 1.23812 4.63685 1.04029 4.78271 0.894432C4.92857 0.74857 5.1264 0.666626 5.33268 0.666626H8.44379C8.65007 0.666626 8.8479 0.74857 8.99377 0.894432C9.13963 1.04029 9.22157 1.23812 9.22157 1.4444V3.77774" stroke="#424242" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </button>
           </div>
         </div>

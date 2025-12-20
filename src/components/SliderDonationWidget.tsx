@@ -204,23 +204,24 @@ export default function SliderDonationWidget({ onDonationChange }: SliderDonatio
       {selectedNonprofit && (
         <div className="relative py-[16px]">
           <div className="rounded-[20px] border border-[#e4e7ec] bg-white px-[18px] py-[22px] shadow-sm">
-            <div className="relative h-[10px] w-full">
+            <div className="relative h-[10px] w-full" style={{ zIndex: 1 }}>
               {/* Background track - light gray for inactive portion */}
-              <div className="absolute left-0 top-0 h-full w-full rounded-full bg-[#e4e4e4]" />
+              <div className="absolute left-0 top-0 h-full w-full rounded-full bg-[#e4e4e4]" style={{ zIndex: 1 }} />
               
               {/* Active blue segments */}
               {selectedAmount > 0 && (
                 <>
-                  {/* Light blue fading segment from position 0 to position 1 - always visible when any amount is selected */}
+                  {/* Light blue fading segment from position 0 to position 1 */}
                   <div
                     className="absolute left-0 top-0 h-full rounded-full transition-all"
                     style={{
                       width: `${getPositionPercent(1)}%`,
-                      background: 'linear-gradient(90deg, #9dd9ff 0%, rgba(157, 217, 255, 0.3) 100%)',
+                      background: 'linear-gradient(90deg, #9dd9ff 0%, rgba(157, 217, 255, 0.4) 100%)',
+                      zIndex: 2,
                     }}
                   />
                   
-                  {/* Solid vibrant blue segment from position 1 to handle - only when amount >= 1 */}
+                  {/* Solid vibrant blue segment from position 1 to handle */}
                   {selectedAmount >= 1 && progressPercent > getPositionPercent(1) && (
                     <div
                       className="absolute left-0 top-0 h-full rounded-full transition-all"
@@ -228,6 +229,7 @@ export default function SliderDonationWidget({ onDonationChange }: SliderDonatio
                         left: `${getPositionPercent(1)}%`,
                         width: `${Math.max(0, progressPercent - getPositionPercent(1))}%`,
                         background: '#1a73e8',
+                        zIndex: 2,
                       }}
                     />
                   )}
@@ -242,7 +244,7 @@ export default function SliderDonationWidget({ onDonationChange }: SliderDonatio
                 const isSecond = index === 1;
                 const isActive = selectedAmount >= step;
                 
-                // Circular markers at positions 0 and 1
+                // Circular markers at positions 0 and 1 - blue when active
                 if (isFirst || isSecond) {
                   return (
                     <div
@@ -255,12 +257,13 @@ export default function SliderDonationWidget({ onDonationChange }: SliderDonatio
                         transform: 'translate(-50%, -50%)',
                         width: '8px',
                         height: '8px',
+                        zIndex: 3,
                       }}
                     />
                   );
                 }
                 
-                // Rounded rectangular markers for positions 2+
+                // Rounded rectangular markers for positions 2+ - gray (only blue if active, but typically gray)
                 return (
                   <div
                     key={`marker-${step}`}
@@ -272,6 +275,7 @@ export default function SliderDonationWidget({ onDonationChange }: SliderDonatio
                       transform: 'translate(-50%, -50%)',
                       width: isLast ? '12px' : '6px',
                       height: isLast ? '8px' : '6px',
+                      zIndex: 3,
                     }}
                   />
                 );
@@ -279,16 +283,17 @@ export default function SliderDonationWidget({ onDonationChange }: SliderDonatio
 
               {/* Handle - white circle with blue outline */}
               <div
-                className="absolute top-1/2 -translate-y-1/2 rounded-full border-2 border-[#1a73e8] bg-white transition-transform z-10"
+                className="absolute top-1/2 -translate-y-1/2 rounded-full border-2 border-[#1a73e8] bg-white transition-transform"
                 style={{
                   left: `${progressPercent}%`,
                   transform: 'translate(-50%, -50%)',
                   width: '24px',
                   height: '24px',
+                  zIndex: 4,
                 }}
               />
               
-              {/* Range input for interaction */}
+              {/* Range input for interaction - completely hidden */}
               <input
                 type="range"
                 min={minValue}
@@ -296,7 +301,21 @@ export default function SliderDonationWidget({ onDonationChange }: SliderDonatio
                 step={1}
                 value={selectedAmount}
                 onChange={(e) => handleSliderChange(Number(e.target.value))}
-                className="absolute left-0 top-0 h-[30px] w-full cursor-pointer opacity-0 z-20"
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  width: '100%',
+                  height: '30px',
+                  cursor: 'pointer',
+                  opacity: 0,
+                  zIndex: 5,
+                  margin: 0,
+                  padding: 0,
+                  WebkitAppearance: 'none',
+                  appearance: 'none',
+                  background: 'transparent',
+                }}
               />
             </div>
           </div>

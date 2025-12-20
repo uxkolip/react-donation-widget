@@ -20,60 +20,60 @@ interface NonprofitSelectorProps {
 
 const nonprofits: Nonprofit[] = [
   {
-    id: 'proskopoi',
-    name: 'Σώμα Ελλήνων Προσκόπων',
-    description: 'Οργάνωση προσκόπων που προωθεί την εκπαίδευση, την κοινωνική ευθύνη και την προστασία του περιβάλλοντος.',
+    id: 'arsis',
+    name: 'ΑΡΣΙΣ',
+    description: 'Παρέχει κοινωνική υποστήριξη και προστασία σε ευάλωτες ομάδες πληθυσμού.',
+    category: 'humans',
+    icon: 'heart',
+    logo: 'https://youbehero.com/images/cause/265/l/arsis_logo.png'
+  },
+  {
+    id: 'selianitika-ilios',
+    name: 'Πολιτιστικός Σύλλογος Σελιανιτίκων Ήλιος',
+    description: 'Προωθεί τον πολιτισμό, τις παραδόσεις και την ανάπτυξη της τοπικής κοινότητας.',
     category: 'humans',
     icon: 'users',
-    logo: 'https://youbehero.com/images/cause/85/l/proskopoi-logo.png'
+    logo: 'https://youbehero.com/images/cause/389/l/politistikos-sillogos-selianitikon-logo.jpg'
   },
   {
-    id: 'edny',
-    name: 'Εθελοντική Δασοπροστασία Νοτίου Υμηττού (Ε.Δ.Ν.Υ.)',
-    description: 'Οργάνωση που ασχολείται με την προστασία και διατήρηση των δασικών οικοσυστημάτων.',
-    category: 'environment',
-    icon: 'tree',
-    logo: 'https://youbehero.com/images/cause/206/l/edny_logo.png'
+    id: 'kids-fair-collection',
+    name: 'Kids Fair Collection',
+    description: 'Ο κόσμος γίνεται πιο φωτεινός, όταν τα παιδιά δημιουργούν και προσφέρουν – με αγάπη, με χρώμα, με σκοπό.',
+    category: 'humans',
+    icon: 'users',
+    logo: 'https://youbehero.com/images/cause/394/l/kids-fair-collection-logo.png'
   },
   {
-    id: 'zwes',
-    name: 'Ζω.Ε.Σ. (Ζωοφιλικές Ενημερώσεις Σχολείων, Ιδρυμάτων και Οργανισμών)',
-    description: 'Δραστηριοποιείται στον τομέα της προστασίας ζώων και της εκπαίδευσης για την ευζωία τους.',
-    category: 'animals',
-    icon: 'dog',
-    logo: 'https://youbehero.com/images/cause/113/l/zwes-logo.jpg'
-  },
-  {
-    id: 'tripolis',
-    name: 'Πολιτιστικός Φιλοζωικός Σύλλογος Τρίπολης',
-    description: 'Σύλλογος που συνδυάζει πολιτιστικές δραστηριότητες με την προστασία και φροντίδα ζώων.',
-    category: 'animals',
-    icon: 'dog',
-    logo: 'https://youbehero.com/images/cause/98/l/politistikos-filozoikos-sillogos-tripolis-logo.png'
+    id: 'anagennisi',
+    name: 'Σύλλογος Γονέων και Φίλων Αυτιστικών Ατόμων Αναγέννηση',
+    description: 'Υποστηρίζει άτομα με αυτισμό και τις οικογένειές τους, προσφέροντας εκπαίδευση, υποστήριξη και προστασία.',
+    category: 'humans',
+    icon: 'heart',
+    logo: 'https://youbehero.com/images/cause/176/l/anagennisi_logo_tn.png'
   },
   {
     id: 'espi',
     name: 'Ελληνικός Σύλλογος Προστασίας Ιπποειδών',
-    description: 'Οργάνωση αφοσιωμένη στην προστασία και ευζωία των ιπποειδών (άλογα, γαϊδούρια, μουλάρια).',
+    description: 'Αφοσιωμένη στην προστασία και ευζωία των ιπποειδών (άλογα, γαϊδούρια, μουλάρια).',
     category: 'animals',
     icon: 'dog',
     logo: 'https://youbehero.com/images/cause/183/l/espi_logo.jpg'
   },
   {
-    id: 'agkalia',
-    name: 'ΑμKE Ψυχοκοινωνικών Παρεμβάσεων «Αγκαλιά»',
-    description: 'Οργάνωση που παρέχει ψυχοκοινωνική υποστήριξη και παρεμβάσεις σε ευάλωτες ομάδες πληθυσμού.',
+    id: 'moiazw',
+    name: 'ΜΟΙΑΖΩ',
+    description: 'Υποστηρίζει άτομα με αυτισμό και τις οικογένειές τους, προωθώντας την ένταξη και την ποιότητα ζωής.',
     category: 'humans',
     icon: 'heart',
-    logo: 'https://youbehero.com/images/cause/312/l/amke_agkalia_logo.png'
+    logo: 'https://youbehero.com/images/cause/221/l/moiazw_logo.png'
   },
   {
-    id: 'sege',
-    name: 'ΣΥΝΔΕΣΜΟΣ ΕΠΙΧΕΙΡΗΜΑΤΙΩΝ ΓΥΝΑΙΚΩΝ ΕΛΛΑΔΟΣ - Σ.Ε.Γ.Ε.',
-    description: 'Σύνδεσμος που υποστηρίζει και προωθεί την επιχειρηματικότητα των γυναικών στην Ελλάδα.',
-    category: 'humans',
-    icon: 'users',
-    logo: 'https://youbehero.com/images/cause/212/l/sege_logo.jpeg'
+    id: 'ariel',
+    name: '«Ariel» Φιλοζωϊκό-Πολιτιστικό Σωματείο',
+    description: 'Συνδυάζει την προστασία και φροντίδα ζώων με πολιτιστικές δραστηριότητες.',
+    category: 'animals',
+    icon: 'dog',
+    logo: 'https://youbehero.com/images/cause/197/l/logoariel.jpeg'
   }
 ];
 
@@ -158,7 +158,7 @@ export default function NonprofitSelector({ isOpen, onClose, onSelect, selectedI
         >
           {/* Header */}
           <div className="flex items-center justify-between p-[20px] border-b border-[#e0e0e0] shrink-0">
-            <h2 className="text-[#212121]">Επιλογή φορέα</h2>
+            <h2 className="text-[#212121]" style={{ fontWeight: 'bold', fontSize: '16px' }}>Επιλογή δράσης / φορέα</h2>
             <button
               onClick={onClose}
               className="p-[8px] hover:bg-[#f5f5f5] rounded-full transition-colors"
@@ -188,7 +188,7 @@ export default function NonprofitSelector({ isOpen, onClose, onSelect, selectedI
                       className="flex items-center gap-[16px] p-[16px] bg-white border border-[#e0e0e0] rounded-[12px] transition-all hover:shadow-md text-left"
                     >
                       {/* Logo/Icon */}
-                      <div className="w-[48px] h-[48px] rounded-full bg-[#fee5e5] flex items-center justify-center shrink-0 overflow-hidden">
+                      <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center shrink-0 overflow-hidden">
                         {nonprofit.logo ? (
                           <ImageWithFallback
                             src={nonprofit.logo}
