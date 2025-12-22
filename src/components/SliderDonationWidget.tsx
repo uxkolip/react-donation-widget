@@ -203,7 +203,7 @@ export default function SliderDonationWidget({ onDonationChange }: SliderDonatio
       {/* Slider - styled to match the design exactly */}
       {selectedNonprofit && (
         <div className="relative py-[16px]">
-          <div className="rounded-[20px] border border-[#e4e7ec] bg-white px-[18px] py-[22px] shadow-sm">
+          <div className="rounded-[20px] border border-[#e4e7ec] bg-white px-[16px] py-[22px] shadow-sm">
             <div className="relative h-[10px] w-full" style={{ zIndex: 1 }}>
               {/* Background track - light gray for inactive portion */}
               <div className="absolute left-0 top-0 h-full w-full rounded-full bg-[#e4e4e4]" style={{ zIndex: 1 }} />
