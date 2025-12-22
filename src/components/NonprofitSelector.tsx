@@ -158,7 +158,7 @@ export default function NonprofitSelector({ isOpen, onClose, onSelect, selectedI
         >
           {/* Header */}
           <div className="flex items-center justify-between p-[20px] border-b border-[#e0e0e0] shrink-0">
-            <h2 className="text-[#212121]" style={{ fontWeight: 'bold', fontSize: '16px' }}>Επιλογή δράσης / φορέα</h2>
+            <h2 className="text-[#212121]" style={{ fontWeight: 'bold', fontSize: '16px' }}>Επιλογή φορέα</h2>
             <button
               onClick={onClose}
               className="p-[8px] hover:bg-[#f5f5f5] rounded-full transition-colors"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Heart, Dog, Users, TreePine, Stethoscope, ChevronDown } from 'lucide-react';
 import NonprofitSelector, { type Nonprofit } from './NonprofitSelector';
 import { ImageWithFallback } from './figma/ImageWithFallback';
@@ -92,29 +92,49 @@ const nonprofits: Nonprofit[] = [
 ];
 
 // Slider steps - 0, 1,00, 2,00, 4,00 €
-const sliderSteps = [0, 1, 2, 4];
-const sliderLabels = [0, 1, 2, 4];
-
-const minValue = sliderSteps[0];
-const maxValue = sliderSteps[sliderSteps.length - 1];
+const sliderSteps: readonly number[] = [0, 1, 2, 4];
 
 export default function CombinedSliderDonationWidget({ onDonationChange }: CombinedSliderDonationWidgetProps) {
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shouldAnimateDropdown, setShouldAnimateDropdown] = useState(false);
+  const [visualPosition, setVisualPosition] = useState<number | null>(null);
+  const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleSliderChange = (value: number) => {
+  const handleSliderChange = (value: number, isVisualOnly = false) => {
     // Ensure value is always a valid step value
     const validValue = sliderSteps.includes(value) ? value : sliderSteps[0];
-    setSelectedAmount(validValue);
-    // If user selects an amount without a nonprofit, trigger animation
-    if (validValue > 0 && !selectedNonprofit) {
-      setShouldAnimateDropdown(true);
-      setTimeout(() => {
-        setShouldAnimateDropdown(false);
-      }, 1400);
+    
+    // If no nonprofit is selected and trying to move forward
+    if (!selectedNonprofit && validValue > 0) {
+      // Trigger animation
+      if (!shouldAnimateDropdown) {
+        setShouldAnimateDropdown(true);
+        setTimeout(() => {
+          setShouldAnimateDropdown(false);
+        }, 1400);
+      }
+      
+      // Show visual movement temporarily
+      setVisualPosition(validValue);
+      
+      // If not visual only (click on amount), snap back after brief delay
+      if (!isVisualOnly) {
+        setTimeout(() => {
+          setVisualPosition(null);
+          setSelectedAmount(0);
+          onDonationChange?.(0, null);
+        }, 300); // Brief visual feedback before snapping back
+      }
+      
+      return;
     }
+    
+    // Normal update (org is selected or value is 0)
+    setVisualPosition(null);
+    setSelectedAmount(validValue);
+    
     if (selectedNonprofit) {
       onDonationChange?.(validValue, selectedNonprofit);
     } else {
@@ -132,10 +152,47 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
     }
   };
 
-  const getTotalAmount = () => {
-    if (selectedAmount > 0) return formatAmount(selectedAmount);
-    return formatAmount(0);
-  };
+  // Reset amount to 0 when nonprofit is cleared
+  useEffect(() => {
+    if (!selectedNonprofit && selectedAmount > 0) {
+      setSelectedAmount(0);
+      onDonationChange?.(0, null);
+    }
+  }, [selectedNonprofit]);
+
+  // Reset organization dropdown when donation is 0 for more than 3 seconds
+  useEffect(() => {
+    // Clear any existing timeout
+    if (resetTimeoutRef.current) {
+      clearTimeout(resetTimeoutRef.current);
+      resetTimeoutRef.current = null;
+    }
+
+    // If amount is 0 and an org is selected, start the 3-second timer
+    if (selectedAmount === 0 && selectedNonprofit) {
+      resetTimeoutRef.current = setTimeout(() => {
+        // Check current state - if still 0 and org still selected, reset
+        setSelectedNonprofit((currentNonprofit) => {
+          if (currentNonprofit) {
+            onDonationChange?.(0, null);
+            return null;
+          }
+          return currentNonprofit;
+        });
+        resetTimeoutRef.current = null;
+      }, 3000);
+    }
+
+    // Cleanup timeout on unmount or when dependencies change
+    return () => {
+      if (resetTimeoutRef.current) {
+        clearTimeout(resetTimeoutRef.current);
+        resetTimeoutRef.current = null;
+      }
+    };
+  }, [selectedAmount, selectedNonprofit, onDonationChange]);
+
+  const getTotalAmount = () => formatAmount(selectedAmount);
 
   // Convert range input value (0-3 index) to actual step value
   const getStepValueFromIndex = (index: number) => {
@@ -162,19 +219,21 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
     return (index / (sliderSteps.length - 1)) * 100;
   };
 
-  const progressPercent = getPositionPercent(validSelectedAmount);
+  // Use visual position for temporary movement, otherwise use actual selected amount
+  const displayValue = visualPosition !== null ? visualPosition : validSelectedAmount;
+  const progressPercent = getPositionPercent(displayValue);
 
   return (
-    <div className="donation-widget-bg rounded-[8px] border border-[#e0e0e0] p-[20px]">
+    <div className="donation-widget-bg rounded-[8px] border border-[#e0e0e0] p-[20px]" style={{ backgroundColor: 'white' }}>
       {/* Header with question and amount button */}
       <div className="flex items-center mb-[16px]">
         <h3 className="text-[#212121] text-[16px] mr-2" style={{ fontWeight: 'bold' }}>Θα θέλατε να κάνετε μια δωρεά;</h3>
           <button
             type="button"
-            className="donation-widget-badge text-white box-border content-stretch flex gap-[4px] items-center justify-center p-[4px] relative rounded-[4px] shrink-0"
-            style={{ marginLeft: '8px' }}
+            className="donation-widget-badge text-white box-border content-stretch flex gap-[4px] items-center justify-center relative rounded-[4px] shrink-0"
+            style={{ marginLeft: '8px', paddingLeft: '4px', paddingRight: '4px', paddingTop: '4px', paddingBottom: '4px', backgroundColor: '#212121' }}
           >
-          <p className="font-['Proxima_Nova:Semibold',sans-serif] leading-[normal] not-italic relative shrink-0 text-[12px] text-nowrap text-white whitespace-pre" style={{ marginLeft: '12px' }}>
+          <p className="font-['Proxima_Nova:Semibold',sans-serif] leading-[normal] not-italic relative shrink-0 text-[12px] text-nowrap text-white whitespace-pre">
             {getTotalAmount()}€
           </p>
         </button>
@@ -194,34 +253,31 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
           style={{ padding: '12px' }}
         >
           <div className="flex items-center gap-[12px] flex-1 min-w-0">
-            {selectedNonprofit ? (() => {
-              const Icon = getIcon(selectedNonprofit.icon);
-              const getIconBg = (category: string) => {
-                switch (category) {
-                  case 'animals':
-                    return 'bg-[#fee5e5]';
-                  case 'humans':
-                    return 'bg-[#e3f2fd]';
-                  case 'environment':
-                    return 'bg-[#e8f5e9]';
-                  default:
-                    return 'bg-[#fee5e5]';
-                }
-              };
-              return (
-                <div className={`w-[32px] h-[32px] rounded-full ${getIconBg(selectedNonprofit.category)} flex items-center justify-center shrink-0 overflow-hidden`}>
-                  {selectedNonprofit.logo ? (
-                    <ImageWithFallback
-                      src={selectedNonprofit.logo}
-                      alt={selectedNonprofit.name}
-                      className="w-full h-full object-contain"
-                    />
-                  ) : (
-                    <Icon size={18} className="text-[#0957e8]" />
-                  )}
-                </div>
-              );
-            })() : (
+            {selectedNonprofit ? (
+              (() => {
+                const Icon = getIcon(selectedNonprofit.icon);
+                const iconBgMap: Record<string, string> = {
+                  animals: 'bg-[#fee5e5]',
+                  humans: 'bg-[#e3f2fd]',
+                  environment: 'bg-[#e8f5e9]',
+                };
+                const iconBg = iconBgMap[selectedNonprofit.category] ?? 'bg-[#fee5e5]';
+                
+                return (
+                  <div className={`w-[32px] h-[32px] rounded-full ${iconBg} flex items-center justify-center shrink-0 overflow-hidden`}>
+                    {selectedNonprofit.logo ? (
+                      <ImageWithFallback
+                        src={selectedNonprofit.logo}
+                        alt={selectedNonprofit.name}
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <Icon size={18} className="text-[#0957e8]" />
+                    )}
+                  </div>
+                );
+              })()
+            ) : (
               <div className="w-[32px] h-[32px] flex items-center justify-center shrink-0">
                 <svg width="24" height="25" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="0.498535" y="0.606262" width="15" height="15" rx="1.5" fill="#212121"/>
@@ -233,7 +289,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
               </div>
             )}
             <span className="text-left truncate" style={{ fontSize: '16px', fontWeight: 'bold' }}>
-              {selectedNonprofit ? selectedNonprofit.name : 'Επιλογή δράσης / φορέα'}
+              {selectedNonprofit ? selectedNonprofit.name : 'Επιλογή φορέα'}
             </span>
           </div>
           <ChevronDown size={20} className="text-[#757575] shrink-0" />
@@ -248,7 +304,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
               <div 
                 className="absolute left-0 w-full rounded-full"
                 style={{
-                  height: '28px',
+                  height: '20px',
                   top: '30px',
                   transform: 'translateY(-50%)',
                   background: 'linear-gradient(to right, hsl(3,90%,55%) 0%, hsl(63,90%,55%) 50%, hsl(123,90%,55%) 100%)',
@@ -256,11 +312,11 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                   boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                 }}
               />
-              {/* Dark gray overlay - masks the unprogressed portion */}
+              {/* Light gray overlay - masks the unprogressed portion */}
               <div 
                 className="absolute rounded-full"
                 style={{
-                  height: '28px',
+                  height: '20px',
                   top: '30px',
                   transform: 'translateY(-50%)',
                   left: `${progressPercent}%`,
@@ -271,7 +327,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                 }}
               />
 
-              {/* Step markers - always visible */}
+              {/* Step markers - hidden but functionality preserved via range input step */}
               {sliderSteps.map((step, index) => {
                 const position = getPositionPercent(step);
                 const isActive = validSelectedAmount >= step;
@@ -289,36 +345,44 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                       height: '6px',
                       border: isActive ? '2px solid #4bc67d' : '2px solid rgba(255, 255, 255, 0.5)',
                       zIndex: 3,
+                      opacity: 0,
+                      pointerEvents: 'none',
                     }}
                   />
                 );
               })}
 
-              {/* Handle - large with value inside and colored border */}
+              {/* Handle - large with emoji inside and colored border */}
               {(() => {
-                // Determine handle color based on value
-                let handleBorderColor = '#4bc67d'; // green for low (0-1)
-                if (validSelectedAmount === 2) {
-                  handleBorderColor = '#f1c40f'; // yellow for medium (2)
-                } else if (validSelectedAmount === 4) {
-                  handleBorderColor = '#b94a48'; // red for high (4)
-                }
+                const emojiMap: Record<number, string> = { 0: '🙁', 1: '😊', 2: '😄', 4: '😍' };
+                const getEmoji = (value: number) => emojiMap[value] ?? '🙁';
+                
+                const getHandleColor = (value: number) => {
+                  if (value === 2) return '#f1c40f';
+                  if (value === 4) return '#b94a48';
+                  return '#4bc67d';
+                };
                 
                 return (
                   <div
-                    className="absolute rounded-full bg-white transition-all flex items-center justify-center font-bold text-[14px] shadow-lg cursor-pointer"
+                    className="absolute rounded-full bg-white transition-all flex items-center justify-center font-bold shadow-lg cursor-pointer"
                     style={{
                       left: `${progressPercent}%`,
                       top: '50%',
                       transform: 'translate(-50%, -50%)',
-                      width: '40px',
-                      height: '40px',
-                      border: `6px solid ${handleBorderColor}`,
+                      width: '48px',
+                      height: '48px',
+                      border: `4px solid ${getHandleColor(displayValue)}`,
                       zIndex: 4,
                       color: '#404040',
+                      fontSize: '28px',
+                      lineHeight: '1',
+                      userSelect: 'none',
+                      WebkitUserSelect: 'none',
+                      pointerEvents: 'none',
                     }}
                   >
-                    {validSelectedAmount}
+                    {getEmoji(displayValue)}
                   </div>
                 );
               })()}
@@ -330,10 +394,32 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                 max={sliderSteps.length - 1}
                 step={1}
                 value={getIndexFromStepValue(validSelectedAmount)}
+                onInput={(e) => {
+                  // Visual movement during dragging
+                  const index = Number((e.target as HTMLInputElement).value);
+                  const stepValue = getStepValueFromIndex(index);
+                  handleSliderChange(stepValue, true); // isVisualOnly = true
+                }}
                 onChange={(e) => {
                   const index = Number(e.target.value);
                   const stepValue = getStepValueFromIndex(index);
                   handleSliderChange(stepValue);
+                }}
+                onMouseUp={(e) => {
+                  if (!selectedNonprofit) {
+                    const input = e.target as HTMLInputElement;
+                    input.value = '0';
+                    setVisualPosition(null);
+                    handleSliderChange(0);
+                  }
+                }}
+                onTouchEnd={(e) => {
+                  if (!selectedNonprofit) {
+                    const input = e.target as HTMLInputElement;
+                    input.value = '0';
+                    setVisualPosition(null);
+                    handleSliderChange(0);
+                  }
                 }}
                 style={{
                   position: 'absolute',
@@ -341,7 +427,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                   top: '50%',
                   transform: 'translateY(-50%)',
                   width: '100%',
-                  height: '50px',
+                  height: '60px',
                   cursor: 'pointer',
                   opacity: 0,
                   zIndex: 5,
@@ -356,21 +442,14 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
           </div>
 
           {/* Amount labels */}
-          <div className="mt-[24px] flex justify-between text-[13px]" style={{ fontWeight: 'bold' }}>
-            {sliderLabels.map((label) => {
+          <div className="mt-[24px] flex justify-between" style={{ fontWeight: 'bold', fontSize: '14px' }}>
+            {sliderSteps.map((label) => {
               const isSelected = validSelectedAmount === label;
-              // Color labels based on position
-              let labelColor = '#212121';
-              if (isSelected) {
-                if (label <= 1) labelColor = '#4bc67d';
-                else if (label === 2) labelColor = '#f1c40f';
-                else if (label === 4) labelColor = '#b94a48';
-              }
               return (
                 <span
                   key={`label-${label}`}
                   onClick={() => handleSliderChange(label)}
-                  style={{ color: labelColor }}
+                  style={{ color: isSelected ? '#4bc67d' : '#212121' }}
                   className="transition-colors cursor-pointer hover:opacity-80"
                 >
                   {label === 0 ? '0' : formatAmount(label)}€

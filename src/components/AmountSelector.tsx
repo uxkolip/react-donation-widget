@@ -65,7 +65,7 @@ export default function AmountSelector({
         >
           {/* Header */}
           <div className="flex items-center justify-between p-[20px] border-b border-[#e0e0e0] shrink-0">
-            <h2 className="text-[#212121]" style={{ fontWeight: 'bold' }}>Επιλογή ποσού</h2>
+            <h2 className="text-[#212121]">Επιλογή ποσού</h2>
             <button
               type="button"
               onClick={onClose}
