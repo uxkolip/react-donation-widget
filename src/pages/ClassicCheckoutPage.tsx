@@ -19,21 +19,23 @@ export default function ClassicCheckoutPage() {
 
   return (
     <div className="max-w-[800px] mx-auto">
-      <header className="mb-[32px]">
-        <h1 className="text-[#212121] mb-[8px] text-[24px] font-semibold">Ολοκλήρωση Παραγγελίας</h1>
+      <header>
+        <h1 className="text-[#212121] text-[24px] font-semibold" style={{ marginBottom: '8px' }}>Ολοκλήρωση Παραγγελίας</h1>
         <p className="text-[#757575]">
           Συμπληρώστε τα στοιχεία σας για να ολοκληρώσετε την παραγγελία
         </p>
       </header>
 
-      <section className="mb-[24px]">
+      <section className="mt-[32px]">
         <CheckoutForm />
       </section>
 
-      <DonationWidget onDonationChange={handleDonationChange} />
+      <div style={{ marginTop: '32px' }}>
+        <DonationWidget onDonationChange={handleDonationChange} />
+      </div>
 
-      <section className="bg-white rounded-[8px] p-[24px] border border-[#e0e0e0] mb-[24px]">
-        <h2 className="text-[#212121] mb-[16px] text-[18px]">Περίληψη Παραγγελίας</h2>
+      <section className="bg-white rounded-[8px] p-[24px] border border-[#e0e0e0]" style={{ marginTop: '32px' }}>
+        <h2 className="text-[#212121] text-[18px]" style={{ marginBottom: '16px' }}>Περίληψη Παραγγελίας</h2>
         <div className="flex flex-col gap-[12px]">
           <div className="flex justify-between items-center">
             <span className="text-[#424242]">Προϊόντα (3 τεμ.)</span>
@@ -49,7 +51,7 @@ export default function ClassicCheckoutPage() {
               <span>+{formatCurrency(donationAmount)}</span>
             </div>
           )}
-          <div className="border-t border-[#e0e0e0] pt-[12px] mt-[4px]">
+          <div className="border-t border-[#e0e0e0]" style={{ paddingTop: '12px', marginTop: '4px' }}>
             <div className="flex justify-between items-center">
               <span className="text-[#212121]">Σύνολο</span>
               <span className="text-[#212121]">{formatCurrency(finalTotal)}</span>
@@ -58,14 +60,14 @@ export default function ClassicCheckoutPage() {
         </div>
       </section>
 
-      <button className="w-full bg-[#0957e8] text-white py-[14px] px-[24px] rounded-[8px] hover:bg-[#0745b8] transition-colors">
+      <button className="w-full bg-[#0957e8] text-white py-[14px] px-[24px] rounded-[8px] hover:bg-[#0745b8] transition-colors" style={{ marginTop: '32px' }}>
         Ολοκλήρωση Παραγγελίας
       </button>
-      <p className="text-center text-[#757575] mt-[16px]">
+      <p className="text-center text-[#757575]" style={{ marginTop: '16px' }}>
         Οι συναλλαγές σας είναι ασφαλείς και κρυπτογραφημένες
       </p>
       {selectedNonprofit && (
-        <p className="text-center text-[#9e9e9e] text-[12px] mt-[8px]">
+        <p className="text-center text-[#9e9e9e] text-[12px]" style={{ marginTop: '8px' }}>
           Επιλεγμένη οργάνωση: {selectedNonprofit.name}
         </p>
       )}

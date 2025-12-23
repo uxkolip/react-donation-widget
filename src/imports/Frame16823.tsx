@@ -132,7 +132,7 @@ function Frame5() {
     <div className="relative shrink-0 w-full">
       <div className="size-full">
         <div className="box-border content-stretch flex flex-col gap-[12px] items-start p-[8px] relative w-full">
-          <p className="font-['Proxima_Nova:Regular',sans-serif] leading-[normal] not-italic overflow-ellipsis overflow-hidden relative shrink-0 text-[#212121] text-[14px] text-nowrap whitespace-pre">Επιλέξτε το ποσό που θέλετε να δωρήσετε</p>
+          <p className="font-['Proxima_Nova:Regular',sans-serif] leading-[normal] not-italic overflow-ellipsis overflow-hidden relative shrink-0 text-[#212121] text-[14px] text-nowrap whitespace-pre">Επιλογή ποσού</p>
           <Frame10 />
         </div>
       </div>

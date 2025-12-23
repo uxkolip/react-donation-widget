@@ -25,17 +25,17 @@ export default function TemplateDonationWidget({
   itemsCount = 3,
 }: TemplateDonationWidgetProps) {
   const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit>({
-    id: 'zwes',
-    name: 'Ζω.Ε.Σ. (Ζωοφιλικές Ενημερώσεις Σχολείων, Ιδρυμάτων και Οργανισμών)',
-    description: 'Δραστηριοποιείται στον τομέα της προστασίας ζώων και της εκπαίδευσης για την ευζωία τους.',
-    category: 'animals',
-    icon: 'dog',
-    logo: 'https://youbehero.com/images/cause/113/l/zwes-logo.jpg',
+    id: 'arsis',
+    name: 'ΑΡΣΙΣ',
+    description: 'Παρέχει κοινωνική υποστήριξη και προστασία σε ευάλωτες ομάδες πληθυσμού.',
+    category: 'humans',
+    icon: 'heart',
+    logo: 'https://youbehero.com/images/cause/265/l/arsis_logo.png',
   });
   const [selectedAmount, setSelectedAmount] = useState(0.5);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAmountSelectorOpen, setIsAmountSelectorOpen] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(false);
 
   useEffect(() => {
     if (isEnabled) {
@@ -54,7 +54,7 @@ export default function TemplateDonationWidget({
     <>
       <div className="bg-white rounded-[8px] border border-[#feeaea] mb-[24px] p-[20px] shadow-sm">
         <div className="flex items-start gap-[12px]">
-          <div className="h-[48px] w-[48px] rounded-[12px] bg-[#fee5e5] flex items-center justify-center shrink-0 overflow-hidden">
+          <div className="h-[48px] w-[48px] rounded-[12px] flex items-center justify-center shrink-0 overflow-hidden">
             {selectedNonprofit.logo ? (
               <ImageWithFallback
                 src={selectedNonprofit.logo}
@@ -66,8 +66,8 @@ export default function TemplateDonationWidget({
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[#212121] font-medium mb-[4px]">Θέλετε να κάνετε μια δωρεά;</p>
-            <p className={`text-[#757575] text-[14px] transition-opacity ${!isEnabled ? 'opacity-50' : 'opacity-100'}`}>
+            <p className="text-[#212121] font-medium mb-[4px]">Θα θέλατε να κάνετε μια δωρεά;</p>
+            <p className={`text-[#757575] text-[16px] transition-opacity ${!isEnabled ? 'opacity-50' : 'opacity-100'}`}>
               +<button
                 type="button"
                 onClick={() => setIsAmountSelectorOpen(true)}
@@ -80,7 +80,7 @@ export default function TemplateDonationWidget({
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="inline-block max-w-[200px] truncate underline decoration-[#212121] w-full decoration-2 underline-offset-2 text-[#212121] font-semibold hover:text-[#0957e8] transition-colors align-bottom"
+                className="inline-block underline decoration-[#212121] decoration-2 underline-offset-2 text-[#212121] font-semibold hover:text-[#0957e8] transition-colors align-bottom"
                 disabled={!isEnabled}
               >
                 {selectedNonprofit.name}
@@ -127,14 +127,8 @@ export default function TemplateDonationWidget({
             </div>
           </label>
         </div>
-
-        
       </div>
 
-      <button className="w-full bg-[#0957e8] text-white py-[14px] px-[24px] rounded-[8px] hover:bg-[#0745b8] transition-colors">
-        Ολοκλήρωση Παραγγελίας
-      </button>
-      
       <NonprofitSelector
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

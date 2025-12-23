@@ -61,6 +61,10 @@ export default function TemplateCheckoutPage() {
         </div>
       </section>
 
+      <button className="w-full bg-[#0957e8] text-white py-[14px] px-[24px] rounded-[8px] hover:bg-[#0745b8] transition-colors">
+        Ολοκλήρωση Παραγγελίας
+      </button>
+
       <p className="text-center text-[#9e9e9e] text-[12px]">
         Επιλεγμένη οργάνωση: {selectedNonprofit?.name ?? 'Καμία'}
       </p>

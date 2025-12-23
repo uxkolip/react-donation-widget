@@ -158,11 +158,34 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
     <div className="donation-widget-bg rounded-[8px] border border-[#e0e0e0] p-[20px]">
       {/* Header with question and amount button */}
       <div className="flex items-center mb-[16px]">
-        <h3 className="text-[#212121] text-[16px]" style={{ fontWeight: 'bold', marginRight: '8px' }}>Θα θέλατε να κάνετε μια δωρεά;</h3>
+        <h3 className="text-[#212121] text-[16px] font-bold">Θα θέλατε να κάνετε μια δωρεά;</h3>
           <button
             type="button"
-            className="donation-widget-badge text-white box-border content-stretch flex gap-[4px] items-center justify-center p-[4px] relative rounded-[4px] shrink-0 ml-[8px]"
+            className="donation-widget-badge text-white box-border content-stretch flex gap-[4px] items-center justify-center p-[4px] px-2 relative rounded-[4px] shrink-0 ml-[8px]"
           >
+          <span
+            aria-hidden="true"
+            style={{
+              width: '12px',
+              height: '12px',
+              display: 'inline-flex'              
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="12"
+              viewBox="0 0 12 12"
+              width="12"
+              focusable="false"
+              aria-hidden="true"
+              style={{ pointerEvents: 'none', display: 'inherit', width: '100%', height: '100%' }}
+            >
+              <path
+                fill="white"
+                d="M8.125 1C7.35 1 6.599 1.267 6 1.758 5.4 1.268 4.65.999 3.875 1c-.895 0-1.754.356-2.386.989C.856 2.62.5 3.479.5 4.375c0 2.249 1.392 3.908 2.604 4.935.74.62 1.551 1.148 2.419 1.571l.048.022.015.007.004.003h.002L6 10l-.407.914.407.18.406-.18L6 10c.134.305.27.61.407.913l.002-.001.005-.002.014-.007.048-.023c.868-.422 1.68-.95 2.42-1.57C10.107 8.283 11.5 6.624 11.5 4.375c0-.895-.356-1.754-.989-2.386C9.88 1.356 9.021 1 8.125 1ZM6 3.25c.133 0 .26.053.354.146.093.094.146.221.146.354v.327c.284.087.54.247.744.464l.008.009.003.004.001.003c.078.102.114.23.1.357-.014.128-.077.245-.175.327-.099.083-.225.124-.353.115-.128-.009-.248-.067-.334-.162l.002.004-.017-.016c-.13-.12-.302-.186-.48-.185-.199 0-.315.052-.37.096-.043.034-.07.078-.07.157 0 .015.002.03.005.046l.002.004.008.009c.013.01.028.02.044.028.113.06.287.098.571.153.237.047.582.111.86.269.15.085.3.207.41.385.112.18.163.386.163.606 0 .621-.477 1.048-1.122 1.192v.308c0 .133-.053.26-.146.354-.094.093-.221.146-.354.146-.133 0-.26-.053-.354-.146-.093-.094-.146-.221-.146-.354v-.306c-.272-.052-.526-.17-.739-.347-.139-.119-.251-.265-.33-.43l-.017-.043-.007-.017-.002-.006-.002-.004v-.002c-.04-.124-.03-.26.028-.376.059-.117.16-.207.284-.249.124-.042.26-.033.377.024.118.057.208.158.252.281l-.001-.004-.005-.014c.019.032.043.06.072.084.066.056.23.162.59.162.295 0 .463-.075.545-.136.078-.058.083-.105.083-.117 0-.061-.015-.08-.015-.081-.003-.004-.014-.022-.057-.046-.108-.062-.281-.102-.558-.157-.232-.045-.574-.105-.847-.25-.167-.085-.31-.211-.415-.367-.115-.178-.175-.387-.171-.599-.003-.18.036-.358.113-.52.077-.162.19-.305.332-.416.145-.114.311-.194.49-.244v-.32c0-.133.053-.26.146-.354.094-.093.221-.146.354-.146Z"
+              />
+            </svg>
+          </span>
           <p className="font-['Proxima_Nova:Semibold',sans-serif] leading-[normal] not-italic relative shrink-0 text-[12px] text-nowrap text-white whitespace-pre">
             {getTotalAmount()}€
           </p>
@@ -222,7 +245,7 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
               </div>
             )}
             <span className="text-left truncate" style={{ fontSize: '16px', fontWeight: 'bold' }}>
-              {selectedNonprofit ? selectedNonprofit.name : 'Επιλογή δράσης / φορέα'}
+              {selectedNonprofit ? selectedNonprofit.name : 'Επιλογή φορέα'}
             </span>
           </div>
           <ChevronDown size={20} className="text-[#757575] shrink-0" />
@@ -289,7 +312,7 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
                   style={{ width: '100px' }}
                   className={`donation-widget-button-default trash-button box-border content-stretch flex flex-col gap-[16px] items-center justify-end px-[5px] py-[14px] relative rounded-[8px] shrink-0 transition-colors ${
                     isClearing || loadingAmount !== null ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
+                  } ${!selectedNonprofit ? 'opacity-60' : ''}`}
                   aria-label="Καθαρισμός επιλογής"
                 >
                   <div

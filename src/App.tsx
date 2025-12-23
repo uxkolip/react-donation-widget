@@ -1,9 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-dom';
-import DropdownCheckoutPage from './pages/DropdownCheckoutPage';
 import ClassicCheckoutPage from './pages/ClassicCheckoutPage';
 import TemplateCheckoutPage from './pages/TemplateCheckoutPage';
-import SliderCheckoutPage from './pages/SliderCheckoutPage';
 import CombinedCheckoutPage from './pages/CombinedCheckoutPage';
 import CombinedSliderCheckoutPage from './pages/CombinedSliderCheckoutPage';
 
@@ -21,19 +19,6 @@ export default function App() {
           <header className="mb-[24px]">
             
             <nav className="mt-[20px] flex flex-wrap gap-[12px]">
-              <NavLink
-                to="/"
-                end
-                className={({ isActive }) =>
-                  `${navLinkClasses} ${
-                    isActive
-                      ? 'bg-[#4caf50] border-[#4caf50] text-white'
-                      : 'bg-white border-[#e0e0e0] text-[#212121] hover:border-[#4caf50]'
-                  }`
-                }
-              >
-                Ver. 1
-              </NavLink>
               <NavLink
                 to="/classic"
                 className={({ isActive }) =>
@@ -57,18 +42,6 @@ export default function App() {
                 }
               >
                 Ver. 3
-              </NavLink>
-              <NavLink
-                to="/slider"
-                className={({ isActive }) =>
-                  `${navLinkClasses} ${
-                    isActive
-                      ? 'bg-[#4caf50] border-[#4caf50] text-white'
-                      : 'bg-white border-[#e0e0e0] text-[#212121] hover:border-[#4caf50]'
-                  }`
-                }
-              >
-                Ver. 4
               </NavLink>
               <NavLink
                 to="/combined"
@@ -99,10 +72,10 @@ export default function App() {
 
           <main className="bg-white/0">
             <Routes>
-              <Route path="/" element={<DropdownCheckoutPage />} />
+              {/* Start app on Version 6 */}
+              <Route path="/" element={<Navigate to="/combined-slider" replace />} />
               <Route path="/classic" element={<ClassicCheckoutPage />} />
               <Route path="/template" element={<TemplateCheckoutPage />} />
-              <Route path="/slider" element={<SliderCheckoutPage />} />
               <Route path="/combined" element={<CombinedCheckoutPage />} />
               <Route path="/combined-slider" element={<CombinedSliderCheckoutPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
