@@ -17,7 +17,7 @@ interface TemplateDonationWidgetProps {
   itemsCount?: number;
 }
 
-const presetOptions = [0.5, 1, 3];
+const presetOptions = [1, 2, 4];
 
 export default function TemplateDonationWidget({
   onDonationChange,
@@ -32,7 +32,7 @@ export default function TemplateDonationWidget({
     icon: 'heart',
     logo: 'https://youbehero.com/images/cause/265/l/arsis_logo.png',
   });
-  const [selectedAmount, setSelectedAmount] = useState(0.5);
+  const [selectedAmount, setSelectedAmount] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAmountSelectorOpen, setIsAmountSelectorOpen] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
@@ -50,9 +50,21 @@ export default function TemplateDonationWidget({
     [orderTotal, selectedAmount, isEnabled],
   );
 
+  const handleWidgetClick = (e: React.MouseEvent) => {
+    // Don't toggle if clicking on nested buttons or the checkbox
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('input[type="checkbox"]')) {
+      return;
+    }
+    setIsEnabled(!isEnabled);
+  };
+
   return (
     <>
-      <div className="bg-white rounded-[8px] border border-[#feeaea] mb-[24px] p-[20px] shadow-sm">
+      <div 
+        className="bg-white rounded-[8px] border border-[#feeaea] mb-[24px] p-[20px] shadow-sm cursor-pointer hover:bg-gray-50 transition-colors"
+        onClick={handleWidgetClick}
+      >
         <div className="flex items-start gap-[12px]">
           <div className="h-[48px] w-[48px] rounded-[12px] flex items-center justify-center shrink-0 overflow-hidden">
             {selectedNonprofit.logo ? (
@@ -70,8 +82,11 @@ export default function TemplateDonationWidget({
             <p className={`text-[#757575] text-[16px] transition-opacity ${!isEnabled ? 'opacity-50' : 'opacity-100'}`}>
               +<button
                 type="button"
-                onClick={() => setIsAmountSelectorOpen(true)}
-                className="underline decoration-[#212121] decoration-2 underline-offset-2 text-[#212121] font-semibold hover:text-[#0957e8] transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsAmountSelectorOpen(true);
+                }}
+                className="underline decoration-[#212121] decoration-2 underline-offset-2 text-[#212121] font-semibold hover:text-[#0957e8] transition-colors cursor-pointer"
                 disabled={!isEnabled}
               >
                 {formatAmount(selectedAmount)}€
@@ -79,8 +94,11 @@ export default function TemplateDonationWidget({
               στην οργάνωση{' '}
               <button
                 type="button"
-                onClick={() => setIsModalOpen(true)}
-                className="inline-block underline decoration-[#212121] decoration-2 underline-offset-2 text-[#212121] font-semibold hover:text-[#0957e8] transition-colors align-bottom"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsModalOpen(true);
+                }}
+                className="inline-block underline decoration-[#212121] decoration-2 underline-offset-2 text-[#212121] font-semibold hover:text-[#0957e8] transition-colors align-bottom cursor-pointer"
                 disabled={!isEnabled}
               >
                 {selectedNonprofit.name}
@@ -88,7 +106,7 @@ export default function TemplateDonationWidget({
               .
             </p>
           </div>
-          <label className="relative shrink-0 cursor-pointer">
+          <label className="relative shrink-0 cursor-pointer" onClick={(e) => e.stopPropagation()}>
             <input
               type="checkbox"
               checked={isEnabled}

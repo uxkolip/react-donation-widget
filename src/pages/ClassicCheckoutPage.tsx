@@ -60,8 +60,8 @@ export default function ClassicCheckoutPage() {
         </div>
       </section>
 
-      <button className="w-full bg-[#0957e8] text-white py-[14px] px-[24px] rounded-[8px] hover:bg-[#0745b8] transition-colors" style={{ marginTop: '32px' }}>
-        Ολοκλήρωση Παραγγελίας
+      <button className="w-full bg-[#212121] text-white py-[14px] px-[24px] rounded-[8px] hover:bg-[#1a1a1a] transition-colors" style={{ marginTop: '32px' }}>
+        Αποστολή παραγγελίας
       </button>
       <p className="text-center text-[#757575]" style={{ marginTop: '16px' }}>
         Οι συναλλαγές σας είναι ασφαλείς και κρυπτογραφημένες

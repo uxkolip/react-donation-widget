@@ -99,7 +99,7 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shouldAnimateDropdown, setShouldAnimateDropdown] = useState(false);
 
-  const presetAmounts = [0.5, 1, 3];
+  const presetAmounts = [1, 2, 4];
 
   const handleAmountClick = (amount: number) => {
     // Prevent selection if no nonprofit is selected
@@ -161,7 +161,7 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
         <h3 className="text-[#212121] text-[16px] font-bold">Θα θέλατε να κάνετε μια δωρεά;</h3>
           <button
             type="button"
-            className="donation-widget-badge text-white box-border content-stretch flex gap-[4px] items-center justify-center p-[4px] px-2 relative rounded-[4px] shrink-0 ml-[8px]"
+            className="donation-widget-badge text-white box-border content-stretch flex gap-[4px] items-center justify-center p-[4px] px-2 relative rounded-[4px] shrink-0 ml-[8px] bg-[#8320bd]"
           >
           <span
             aria-hidden="true"

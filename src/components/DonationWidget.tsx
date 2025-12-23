@@ -28,7 +28,7 @@ export default function DonationWidget({ onDonationChange }: DonationWidgetProps
     logo: 'https://youbehero.com/images/cause/265/l/arsis_logo.png'
   });
 
-  const presetAmounts = [0.5, 1, 3];
+  const presetAmounts = [1, 2, 4];
 
   const handleAmountClick = (amount: number) => {
     // Don't show spinner if this amount is already selected
@@ -91,19 +91,19 @@ export default function DonationWidget({ onDonationChange }: DonationWidgetProps
       <div className="bg-white relative rounded-[8px] size-full">
         <div className="content-stretch flex flex-col gap-[8px] items-center justify-center overflow-clip relative rounded-[inherit] size-full">
           {/* Header */}
-          <div className="bg-[#eeeeee] relative shrink-0 w-full">
+          <div className="bg-[#fcf5ff] relative shrink-0 w-full">
             <div className="flex flex-row items-center size-full">
               <div className="box-border content-stretch flex items-center justify-between p-[8px] relative w-full px-[20px] py-[8px]">
                 <div className="basis-0 content-stretch flex font-['Proxima_Nova:Regular',sans-serif] gap-[4px] grow items-center leading-[28px] min-h-px min-w-px not-italic relative shrink-0 text-[16px] text-nowrap">
-                  <p className="relative shrink-0 text-[#424242] whitespace-pre">Δωρεά στον φορέα:</p>
+                  <p className="relative shrink-0 text-[#424242] whitespace-pre font-bold">Δωρεά στον φορέα:</p>
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="[text-underline-position:from-font] [white-space-collapse:collapse] basis-0 decoration-solid grow min-h-px min-w-px overflow-ellipsis overflow-hidden relative shrink-0 text-[#0957e8] underline text-left hover:text-[#0745b8] transition-colors"
+                    className="[text-underline-position:from-font] font-bold [white-space-collapse:collapse] basis-0 decoration-solid grow min-h-px min-w-px overflow-ellipsis overflow-hidden relative shrink-0 text-[#0957e8] underline text-left hover:text-[#0745b8] transition-colors cursor-pointer"
                   >
                     {selectedNonprofit.name}
                   </button>
                 </div>
-                <div className="bg-[#212121] box-border content-stretch flex gap-[4px] items-center justify-center p-[4px] relative rounded-[4px] shrink-0">
+                <div className="bg-[#8320bd] box-border content-stretch flex gap-[4px] items-center justify-center p-[4px] relative rounded-[4px] shrink-0">
                   <span
                     aria-hidden="true"
                     style={{
@@ -153,8 +153,8 @@ export default function DonationWidget({ onDonationChange }: DonationWidgetProps
                         disabled={isLoading || loadingAmount !== null}
                         className={`basis-0 grow min-h-px min-w-px relative rounded-[8px] shrink-0 transition-all ${
                           isSelected || isLoading
-                            ? 'bg-[#212121]'
-                            : 'bg-white hover:bg-[#212121] group'
+                            ? 'bg-[#8320bd]'
+                            : 'bg-white hover:bg-[#8320bd] group'
                         } ${loadingAmount !== null && !isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <div

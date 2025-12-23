@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Heart, Dog, Users, TreePine, Stethoscope, ChevronDown } from 'lucide-react';
 import NonprofitSelector, { type Nonprofit } from './NonprofitSelector';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import confetti from 'canvas-confetti';
 
 const getIcon = (iconType: string) => {
   switch (iconType) {
@@ -101,8 +102,12 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
   const [shouldAnimateDropdown, setShouldAnimateDropdown] = useState(false);
   const [visualPosition, setVisualPosition] = useState<number | null>(null);
   const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [floatingEmojis, setFloatingEmojis] = useState<{ value: number; position: number; key: number; index: number }[]>([]);
+  const [floatingEmojis, setFloatingEmojis] = useState<{ value: number; position: number; key: number; index: number; animationId: number }[]>([]);
   const emojiKeyRef = useRef(0);
+  const animationIdRef = useRef(0);
+  const activeTimeoutsRef = useRef<Map<number, NodeJS.Timeout>>(new Map());
+  const handleRef = useRef<HTMLDivElement>(null);
+  const [isHandlePressed, setIsHandlePressed] = useState(false);
 
   const handleSliderChange = (value: number, isVisualOnly = false) => {
     // Ensure value is always a valid step value
@@ -194,6 +199,14 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
     };
   }, [selectedAmount, selectedNonprofit, onDonationChange]);
 
+  // Cleanup all emoji animation timeouts on unmount
+  useEffect(() => {
+    return () => {
+      activeTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      activeTimeoutsRef.current.clear();
+    };
+  }, []);
+
   const getTotalAmount = () => formatAmount(selectedAmount);
 
   // Convert range input value (0-3 index) to actual step value
@@ -221,25 +234,118 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
     return (index / (sliderSteps.length - 1)) * 100;
   };
 
+  const getAdjustedPositionPercent = (value: number) => {
+    const index = sliderSteps.indexOf(value);
+    if (index === -1) return 0;
+    let position = getPositionPercent(value);
+    
+    // Move first and last dots away from edges (same as step markers)
+    if (index === 0) {
+      position += 4; // Move first 4% to the right
+    } else if (index === sliderSteps.length - 1) {
+      position -= 4; // Move last 4% to the left
+    }
+    
+    return position;
+  };
+
   const triggerFloatingEmojis = (value: number) => {
     if (selectedNonprofit && value > 0) {
-      const position = getPositionPercent(value);
-      const emojiCount = 6;
-      const newEmojis = Array.from({ length: emojiCount }, (_, i) => ({
-        value,
-        position,
-        key: emojiKeyRef.current + i,
-        index: i,
-      }));
+      const basePosition = getAdjustedPositionPercent(value);
+      const emojiCount = 12;
+      const animationId = animationIdRef.current++;
+      
+      // Create new emojis with unique animation ID and randomized positions
+      const newEmojis = Array.from({ length: emojiCount }, (_, i) => {
+        // Randomize position within ±3% of handle position (not too far)
+        const positionOffset = (Math.random() - 0.5) * 6; // -3% to +3%
+        const position = Math.max(0, Math.min(100, basePosition + positionOffset));
+        
+        return {
+          value,
+          position,
+          key: emojiKeyRef.current + i,
+          index: i,
+          animationId,
+        };
+      });
       emojiKeyRef.current += emojiCount;
-      setFloatingEmojis(newEmojis);
-      setTimeout(() => setFloatingEmojis([]), 3000);
+      
+      // Append new emojis to existing ones (allow multiple animations)
+      setFloatingEmojis(prev => [...prev, ...newEmojis]);
+      
+      // Set timeout to remove only this animation's emojis
+      const timeout = setTimeout(() => {
+        setFloatingEmojis(prev => prev.filter(emoji => emoji.animationId !== animationId));
+        activeTimeoutsRef.current.delete(animationId);
+      }, 5000);
+      
+      // Store timeout reference for cleanup
+      activeTimeoutsRef.current.set(animationId, timeout);
+
+      // Trigger confetti if max donation (4) with a small delay (after handle stops and particles start)
+      if (value === 4 && handleRef.current) {
+        // First confetti pop
+        setTimeout(() => {
+          const handleRect = handleRef.current?.getBoundingClientRect();
+          if (handleRect) {
+            const handleX = handleRect.left + handleRect.width / 2;
+            const handleY = handleRect.top + handleRect.height / 2;
+            
+            confetti({
+              particleCount: 120 + Math.random() * 60, // Random between 120-180
+              spread: 50 + Math.random() * 20, // Random between 50-70
+              origin: {
+                x: handleX / window.innerWidth,
+                y: handleY / window.innerHeight,
+              },
+            });
+          }
+        }, 200); // Small delay after particles start (200ms)
+        
+        // Second confetti pop (closer to first)
+        setTimeout(() => {
+          const handleRect = handleRef.current?.getBoundingClientRect();
+          if (handleRect) {
+            const handleX = handleRect.left + handleRect.width / 2;
+            const handleY = handleRect.top + handleRect.height / 2;
+            
+            confetti({
+              particleCount: 120 + Math.random() * 60, // Random between 120-180
+              spread: 50 + Math.random() * 20, // Random between 50-70
+              origin: {
+                x: handleX / window.innerWidth,
+                y: handleY / window.innerHeight,
+              },
+            });
+          }
+        }, 350); // 150ms after first pop (closer together)
+        
+        // Third confetti pop (slightly delayed)
+        setTimeout(() => {
+          const handleRect = handleRef.current?.getBoundingClientRect();
+          if (handleRect) {
+            const handleX = handleRect.left + handleRect.width / 2;
+            const handleY = handleRect.top + handleRect.height / 2;
+            
+            confetti({
+              particleCount: 120 + Math.random() * 60, // Random between 120-180
+              spread: 50 + Math.random() * 20, // Random between 50-70
+              origin: {
+                x: handleX / window.innerWidth,
+                y: handleY / window.innerHeight,
+              },
+            });
+          }
+        }, 800); // 450ms after second pop (slightly delayed)
+      }
     }
   };
 
   // Use visual position for temporary movement, otherwise use actual selected amount
   const displayValue = visualPosition !== null ? visualPosition : validSelectedAmount;
   const progressPercent = getPositionPercent(displayValue);
+  const adjustedProgressPercent = getAdjustedPositionPercent(displayValue);
 
   return (
     <div className="donation-widget-bg rounded-[8px] border border-[#e0e0e0] p-[20px]" style={{ backgroundColor: 'white' }}>
@@ -333,8 +439,8 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
 
       {/* Slider - Enhanced fancy version */}
       <div className="relative">
-          <div className="px-[24px] h-fit w-full">
-            <div className="relative w-full" style={{ height: '60px', zIndex: 1, display: 'flex', alignItems: 'center' }}>
+          <div className="h-fit w-full">
+            <div className="relative w-full" style={{ height: '60px', zIndex: 1, display: 'flex', alignItems: 'center', touchAction: 'pan-x' }}>
               {/* Full-width gradient - always in place */}
               <div 
                 className="absolute left-0 w-full rounded-full"
@@ -342,7 +448,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                   height: '20px',
                   top: '30px',
                   transform: 'translateY(-50%)',
-                  background: 'linear-gradient(to right, hsl(3,90%,55%) 0%, hsl(63,90%,55%) 50%, hsl(123,90%,55%) 100%)',
+                  background: 'linear-gradient(270deg, rgb(230, 33, 23), rgb(230, 33, 23), rgb(230, 33, 23), rgb(230, 33, 23), rgb(214, 61, 101), rgb(214, 61, 101), rgb(230, 130, 49), rgb(230, 130, 49), rgb(247, 202, 80), rgb(247, 202, 80), rgb(29, 233, 182), rgb(0, 229, 255))',
                   zIndex: 1,
                   boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                 }}
@@ -363,8 +469,8 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
               />
 
               {/* Step markers - visible white dots on each step */}
-              {sliderSteps.map((step, index) => {
-                const position = getPositionPercent(step);
+              {sliderSteps.map((step) => {
+                const position = getAdjustedPositionPercent(step);
                 const isActive = validSelectedAmount >= step;
                 
                 return (
@@ -391,27 +497,28 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
 
               {/* Handle - large with emoji inside and colored border */}
               {(() => {
-                const emojiMap: Record<number, string> = { 0: '🙁', 1: '😊', 2: '😄', 4: '😍' };
-                const getEmoji = (value: number) => emojiMap[value] ?? '🙁';
+                const emojiMap: Record<number, string> = { 0: '🙂', 1: '😊', 2: '😄', 4: '😍' };
+                const getEmoji = (value: number) => emojiMap[value] ?? '🙂';
                 
                 const getHandleColor = (value: number) => {
                   if (value === 0) return '#212121';
                   if (value === 2) return '#f1c40f';
                   if (value === 4) return '#b94a48';
-                  return '#4bc67d';
+                  return '#4caf50';
                 };
                 
                 return (
                   <div
+                    ref={handleRef}
                     className="absolute rounded-full bg-white transition-all flex items-center justify-center font-bold shadow-lg cursor-pointer"
                     style={{
-                      left: `${progressPercent}%`,
+                      left: `${adjustedProgressPercent}%`,
                       top: '50%',
-                      transform: 'translate(-50%, -50%)',
+                      transform: `translate(-50%, -50%) scale(${isHandlePressed ? 1.2 : 1})`,
                       width: '48px',
                       height: '48px',
                       border: `4px solid ${getHandleColor(displayValue)}`,
-                      zIndex: 4,
+                      zIndex: 10000,
                       color: '#404040',
                       fontSize: '28px',
                       lineHeight: '1',
@@ -427,8 +534,8 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
 
               {/* Floating emoji animation */}
               {floatingEmojis.map((emoji) => {
-                const emojiMap: Record<number, string> = { 0: '🙁', 1: '😊', 2: '😄', 4: '😍' };
-                const emojiChar = emojiMap[emoji.value] ?? '🙁';
+                const emojiMap: Record<number, string> = { 0: '🙂', 1: '😊', 2: '😄', 4: '😍' };
+                const emojiChar = emojiMap[emoji.value] ?? '🙂';
                 return (
                   <div
                     key={emoji.key}
@@ -441,6 +548,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                   </div>
                 );
               })}
+
               
               {/* Range input for interaction - completely hidden */}
               <input
@@ -460,7 +568,9 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                   const stepValue = getStepValueFromIndex(index);
                   handleSliderChange(stepValue);
                 }}
+                onMouseDown={() => setIsHandlePressed(true)}
                 onMouseUp={(e) => {
+                  setIsHandlePressed(false);
                   if (!selectedNonprofit) {
                     const input = e.target as HTMLInputElement;
                     input.value = '0';
@@ -470,7 +580,10 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                     triggerFloatingEmojis(selectedAmount);
                   }
                 }}
+                onMouseLeave={() => setIsHandlePressed(false)}
+                onTouchStart={() => setIsHandlePressed(true)}
                 onTouchEnd={(e) => {
+                  setIsHandlePressed(false);
                   if (!selectedNonprofit) {
                     const input = e.target as HTMLInputElement;
                     input.value = '0';
@@ -480,6 +593,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                     triggerFloatingEmojis(selectedAmount);
                   }
                 }}
+                onTouchCancel={() => setIsHandlePressed(false)}
                 style={{
                   position: 'absolute',
                   left: 0,
@@ -496,15 +610,18 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                   WebkitAppearance: 'none',
                   appearance: 'none',
                   background: 'transparent',
+                  touchAction: 'pan-x', // Allow horizontal panning, prevent vertical scrolling
+                  WebkitTapHighlightColor: 'transparent', // Remove iOS tap highlight
                 }}
               />
             </div>
           </div>
 
           {/* Amount labels */}
-          <div className="mt-[8px] px-[20px] flex justify-between font-semibold text-[14px]">
+          <div className="mt-[8px] relative px-[20px] h-[20px] font-semibold text-[14px]">
             {sliderSteps.map((label) => {
               const isSelected = validSelectedAmount === label;
+              const position = getAdjustedPositionPercent(label);
               return (
                 <span
                   key={`label-${label}`}
@@ -514,7 +631,12 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                       triggerFloatingEmojis(label);
                     }
                   }}
-                  style={{ color: isSelected && label > 0 ? '#4bc67d' : '#212121' }}
+                  style={{ 
+                    color: isSelected && label > 0 ? '#4caf50' : '#212121',
+                    position: 'absolute',
+                    left: `${position}%`,
+                    transform: 'translateX(-50%)',
+                  }}
                   className="transition-colors cursor-pointer hover:opacity-80"
                 >
                   {label === 0 ? '0' : formatAmount(label)}€
