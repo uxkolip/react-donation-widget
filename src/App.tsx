@@ -4,6 +4,7 @@ import ClassicCheckoutPage from './pages/ClassicCheckoutPage';
 import TemplateCheckoutPage from './pages/TemplateCheckoutPage';
 import CombinedCheckoutPage from './pages/CombinedCheckoutPage';
 import CombinedSliderCheckoutPage from './pages/CombinedSliderCheckoutPage';
+import CombinedSliderCheckoutPageDE from './pages/CombinedSliderCheckoutPageDE';
 
 const navLinkClasses =
   'px-[16px] py-[8px] rounded-[999px] text-[14px] font-medium border transition-all truncate';
@@ -67,6 +68,18 @@ export default function App() {
               >
                 Ver. 6
               </NavLink>
+              <NavLink
+                to="/combined-slider-de"
+                className={({ isActive }) =>
+                  `${navLinkClasses} ${
+                    isActive
+                      ? 'bg-[#4caf50] border-[#4caf50] text-white'
+                      : 'bg-white border-[#e0e0e0] text-[#212121] hover:border-[#4caf50]'
+                  }`
+                }
+              >
+                Ver. 6 DE
+              </NavLink>
             </nav>
           </header>
 
@@ -78,6 +91,7 @@ export default function App() {
               <Route path="/template" element={<TemplateCheckoutPage />} />
               <Route path="/combined" element={<CombinedCheckoutPage />} />
               <Route path="/combined-slider" element={<CombinedSliderCheckoutPage />} />
+              <Route path="/combined-slider-de" element={<CombinedSliderCheckoutPageDE />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>

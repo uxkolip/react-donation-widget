@@ -21,7 +21,7 @@ const getIcon = (iconType: string) => {
   }
 };
 
-const euroFormatter = new Intl.NumberFormat('el-GR', {
+const euroFormatter = new Intl.NumberFormat('de-DE', {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
@@ -32,70 +32,70 @@ interface CombinedSliderDonationWidgetProps {
   onDonationChange?: (amount: number, nonprofit: Nonprofit | null) => void;
 }
 
-// Nonprofits list - matching the one from NonprofitSelector
+// German nonprofits list
 const nonprofits: Nonprofit[] = [
   {
-    id: 'arsis',
-    name: 'ΑΡΣΙΣ',
-    description: 'Παρέχει κοινωνική υποστήριξη και προστασία σε ευάλωτες ομάδες πληθυσμού.',
-    category: 'humans',
-    icon: 'heart',
-    logo: 'https://youbehero.com/images/cause/265/l/arsis_logo.png'
-  },
-  {
-    id: 'selianitika-ilios',
-    name: 'Πολιτιστικός Σύλλογος Σελιανιτίκων Ήλιος',
-    description: 'Προωθεί τον πολιτισμό, τις παραδόσεις και την ανάπτυξη της τοπικής κοινότητας.',
+    id: 'dkhw',
+    name: 'Deutsches Kinderhilfswerk',
+    description: 'Setzt sich für die Rechte von Kindern in Deutschland ein und fördert Beteiligungsmöglichkeiten.',
     category: 'humans',
     icon: 'users',
-    logo: 'https://youbehero.com/images/cause/389/l/politistikos-sillogos-selianitikon-logo.jpg'
+    logo: 'https://www.dkhw.de/_assets/c4df10ee17a02a1c68815e5308dd06af/Icons/dkhw-logo.svg'
   },
   {
-    id: 'kids-fair-collection',
-    name: 'Kids Fair Collection',
-    description: 'Ο κόσμος γίνεται πιο φωτεινός, όταν τα παιδιά δημιουργούν και προσφέρουν – με αγάπη, με χρώμα, με σκοπό.',
+    id: 'unicef-de',
+    name: 'UNICEF Deutschland',
+    description: 'Hilft Kindern weltweit und setzt sich für ihre Rechte, Gesundheit und Bildung ein.',
     category: 'humans',
     icon: 'users',
-    logo: 'https://youbehero.com/images/cause/394/l/kids-fair-collection-logo.png'
+    logo: 'https://asset.brandfetch.io/idNzMaMVSS/idQN31wJEr.jpeg?1668269150059'
   },
   {
-    id: 'anagennisi',
-    name: 'Σύλλογος Γονέων και Φίλων Αυτιστικών Ατόμων Αναγέννηση',
-    description: 'Υποστηρίζει άτομα με αυτισμό και τις οικογένειές τους, προσφέροντας εκπαίδευση, υποστήριξη και προστασία.',
+    id: 'nabu',
+    name: 'NABU',
+    description: 'Der Naturschutzbund Deutschland setzt sich für den Schutz von Natur und Umwelt ein.',
+    category: 'environment',
+    icon: 'tree',
+    logo: 'https://www.nabu.de/css_nabu/2014/images/logo.jpg'
+  },
+  {
+    id: 'bund',
+    name: 'BUND',
+    description: 'Bund für Umwelt und Naturschutz Deutschland - für eine nachhaltige und umweltfreundliche Zukunft.',
+    category: 'environment',
+    icon: 'tree',
+    logo: 'https://www.bund-leipzig.de/_assets/f79c34f38845eded732a54cf989b697f/Bund/Icons/Logo/bund_logo_sticker-m.png'
+  },
+  {
+    id: 'bagso',
+    name: 'BAGSO',
+    description: 'Bundesarbeitsgemeinschaft der Senioren-Organisationen - vertritt die Interessen älterer Menschen.',
     category: 'humans',
     icon: 'heart',
-    logo: 'https://youbehero.com/images/cause/176/l/anagennisi_logo_tn.png'
+    logo: 'https://www.bagso.de/_assets/52195e961218efe01df3560f31ee036c/Images/bagso_logo.svg'
   },
   {
-    id: 'espi',
-    name: 'Ελληνικός Σύλλογος Προστασίας Ιπποειδών',
-    description: 'Αφοσιωμένη στην προστασία και ευζωία των ιπποειδών (άλογα, γαϊδούρια, μουλάρια).',
-    category: 'animals',
-    icon: 'dog',
-    logo: 'https://youbehero.com/images/cause/183/l/espi_logo.jpg'
-  },
-  {
-    id: 'moiazw',
-    name: 'ΜΟΙΑΖΩ',
-    description: 'Υποστηρίζει άτομα με αυτισμό και τις οικογένειές τους, προωθώντας την ένταξη και την ποιότητα ζωής.',
+    id: 'caritas-altenhilfe',
+    name: 'Caritas Altenhilfe',
+    description: 'Unterstützt ältere Menschen mit Beratung, Betreuung und vielfältigen Angeboten für ein selbstbestimmtes Leben.',
     category: 'humans',
     icon: 'heart',
-    logo: 'https://youbehero.com/images/cause/221/l/moiazw_logo.png'
+    logo: 'https://www.caritas-altenhilfe.de/api/images/4629eb43-2ea5-42a5-a61d-3fd215aef4ae?format=jpg'
   },
   {
-    id: 'ariel',
-    name: '«Ariel» Φιλοζωϊκό-Πολιτιστικό Σωματείο',
-    description: 'Συνδυάζει την προστασία και φροντίδα ζώων με πολιτιστικές δραστηριότητες.',
-    category: 'animals',
-    icon: 'dog',
-    logo: 'https://youbehero.com/images/cause/197/l/logoariel.jpeg'
+    id: 'wwf-de',
+    name: 'WWF Deutschland',
+    description: 'World Wide Fund For Nature - setzt sich für den Erhalt der biologischen Vielfalt und den Klimaschutz ein.',
+    category: 'environment',
+    icon: 'tree',
+    logo: 'https://pluspng.com/img-png/wwf-logo-vector-png-filewwf-logosvg-wikipedia-884.png'
   }
 ];
 
 // Slider steps - 0, 1,00, 2,00, 4,00 €
 const sliderSteps: readonly number[] = [0, 1, 2, 4];
 
-export default function CombinedSliderDonationWidget({ onDonationChange }: CombinedSliderDonationWidgetProps) {
+export default function CombinedSliderDonationWidgetDE({ onDonationChange }: CombinedSliderDonationWidgetProps) {
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -351,7 +351,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
     <div className="donation-widget-bg rounded-[8px] border border-[#e0e0e0] p-[20px]" style={{ backgroundColor: 'white' }}>
       {/* Header with question and amount button */}
       <div className="flex items-center mb-[16px]">
-        <h3 className="text-[#212121] text-[16px] font-bold">Θα θέλατε να κάνετε μια δωρεά;</h3>
+        <h3 className="text-[#212121] text-[16px] font-bold">Möchten Sie eine Spende tätigen?</h3>
         <button
           type="button"
           className="donation-widget-badge text-white box-border content-stretch flex items-center justify-center relative rounded-[4px] shrink-0 ml-[8px] p-[4px] bg-[#212121]"
@@ -430,7 +430,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
               </div>
             )}
             <span className="text-left truncate" style={{ fontSize: '16px', fontWeight: 'bold' }}>
-              {selectedNonprofit ? selectedNonprofit.name : 'Επιλογή φορέα'}
+              {selectedNonprofit ? selectedNonprofit.name : 'Organisation auswählen'}
             </span>
           </div>
           <ChevronDown size={20} className="text-[#757575] shrink-0" />

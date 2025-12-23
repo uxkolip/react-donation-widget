@@ -339,6 +339,7 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
         onClose={() => setIsModalOpen(false)}
         onSelect={handleNonprofitSelect}
         selectedId={selectedNonprofit?.id}
+        nonprofits={nonprofits}
       />
     </div>
   );

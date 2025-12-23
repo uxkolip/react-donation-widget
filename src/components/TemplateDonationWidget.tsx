@@ -159,6 +159,7 @@ export default function TemplateDonationWidget({
           }
         }}
         selectedId={selectedNonprofit.id}
+        nonprofits={undefined}
       />
 
       <AmountSelector

@@ -16,9 +16,10 @@ interface NonprofitSelectorProps {
   onClose: () => void;
   onSelect: (nonprofit: Nonprofit) => void;
   selectedId?: string;
+  nonprofits?: Nonprofit[];
 }
 
-const nonprofits: Nonprofit[] = [
+const defaultNonprofits: Nonprofit[] = [
   {
     id: 'arsis',
     name: 'ΑΡΣΙΣ',
@@ -112,7 +113,7 @@ const getIcon = (iconType: string) => {
   }
 };
 
-export default function NonprofitSelector({ isOpen, onClose, onSelect, selectedId }: NonprofitSelectorProps) {
+export default function NonprofitSelector({ isOpen, onClose, onSelect, selectedId, nonprofits = defaultNonprofits }: NonprofitSelectorProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 

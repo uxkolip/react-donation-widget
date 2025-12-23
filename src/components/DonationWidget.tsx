@@ -228,6 +228,7 @@ export default function DonationWidget({ onDonationChange }: DonationWidgetProps
         onClose={() => setIsModalOpen(false)}
         onSelect={handleNonprofitSelect}
         selectedId={selectedNonprofit.id}
+        nonprofits={undefined}
       />
     </>
   );
