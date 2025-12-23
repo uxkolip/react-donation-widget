@@ -636,6 +636,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                     position: 'absolute',
                     left: `${position}%`,
                     transform: 'translateX(-50%)',
+                    fontWeight: isSelected && label > 0 ? 'bold' : 'normal',
                   }}
                   className="transition-colors cursor-pointer hover:opacity-80"
                 >
