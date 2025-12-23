@@ -108,6 +108,10 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
   const activeTimeoutsRef = useRef<Map<number, NodeJS.Timeout>>(new Map());
   const handleRef = useRef<HTMLDivElement>(null);
   const [isHandlePressed, setIsHandlePressed] = useState(false);
+  const lastConfettiTimeRef = useRef<number>(0);
+  const CONFETTI_DEBOUNCE_MS = 2000; // 2 seconds debounce to prevent overload
+  const lastEmojiTimeRef = useRef<Map<number, number>>(new Map()); // Track last trigger time per amount
+  const EMOJI_DEBOUNCE_MS = 1500; // 1.5 seconds debounce to prevent overload
 
   const handleSliderChange = (value: number, isVisualOnly = false) => {
     // Ensure value is always a valid step value
@@ -251,9 +255,18 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
 
   const triggerFloatingEmojis = (value: number) => {
     if (selectedNonprofit && value > 0) {
-      const basePosition = getAdjustedPositionPercent(value);
-      const emojiCount = 12;
-      const animationId = animationIdRef.current++;
+      const now = Date.now();
+      const lastTimeForThisValue = lastEmojiTimeRef.current.get(value) || 0;
+      const timeSinceLastEmoji = now - lastTimeForThisValue;
+      
+      // Debounce: only prevent the same amount from being triggered rapidly
+      // Different amounts can play immediately
+      if (timeSinceLastEmoji >= EMOJI_DEBOUNCE_MS) {
+        lastEmojiTimeRef.current.set(value, now);
+        
+        const basePosition = getAdjustedPositionPercent(value);
+        const emojiCount = 12;
+        const animationId = animationIdRef.current++;
       
       // Create new emojis with unique animation ID and randomized positions
       const newEmojis = Array.from({ length: emojiCount }, (_, i) => {
@@ -283,61 +296,70 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
       // Store timeout reference for cleanup
       activeTimeoutsRef.current.set(animationId, timeout);
 
-      // Trigger confetti if max donation (4) with a small delay (after handle stops and particles start)
+      // Trigger confetti if max donation (4) with debounce to prevent overload on older devices
       if (value === 4 && handleRef.current) {
-        // First confetti pop
-        setTimeout(() => {
-          const handleRect = handleRef.current?.getBoundingClientRect();
-          if (handleRect) {
-            const handleX = handleRect.left + handleRect.width / 2;
-            const handleY = handleRect.top + handleRect.height / 2;
-            
-            confetti({
-              particleCount: 120 + Math.random() * 60, // Random between 120-180
-              spread: 50 + Math.random() * 20, // Random between 50-70
-              origin: {
-                x: handleX / window.innerWidth,
-                y: handleY / window.innerHeight,
-              },
-            });
-          }
-        }, 200); // Small delay after particles start (200ms)
+        const now = Date.now();
+        const timeSinceLastConfetti = now - lastConfettiTimeRef.current;
         
-        // Second confetti pop (closer to first)
-        setTimeout(() => {
-          const handleRect = handleRef.current?.getBoundingClientRect();
-          if (handleRect) {
-            const handleX = handleRect.left + handleRect.width / 2;
-            const handleY = handleRect.top + handleRect.height / 2;
-            
-            confetti({
-              particleCount: 120 + Math.random() * 60, // Random between 120-180
-              spread: 50 + Math.random() * 20, // Random between 50-70
-              origin: {
-                x: handleX / window.innerWidth,
-                y: handleY / window.innerHeight,
-              },
-            });
-          }
-        }, 350); // 150ms after first pop (closer together)
-        
-        // Third confetti pop (slightly delayed)
-        setTimeout(() => {
-          const handleRect = handleRef.current?.getBoundingClientRect();
-          if (handleRect) {
-            const handleX = handleRect.left + handleRect.width / 2;
-            const handleY = handleRect.top + handleRect.height / 2;
-            
-            confetti({
-              particleCount: 120 + Math.random() * 60, // Random between 120-180
-              spread: 50 + Math.random() * 20, // Random between 50-70
-              origin: {
-                x: handleX / window.innerWidth,
-                y: handleY / window.innerHeight,
-              },
-            });
-          }
-        }, 800); // 450ms after second pop (slightly delayed)
+        // Debounce: only trigger confetti if enough time has passed since last trigger
+        if (timeSinceLastConfetti >= CONFETTI_DEBOUNCE_MS) {
+          lastConfettiTimeRef.current = now;
+          
+          // First confetti pop
+          setTimeout(() => {
+            const handleRect = handleRef.current?.getBoundingClientRect();
+            if (handleRect) {
+              const handleX = handleRect.left + handleRect.width / 2;
+              const handleY = handleRect.top + handleRect.height / 2;
+              
+              confetti({
+                particleCount: 120 + Math.random() * 60, // Random between 120-180
+                spread: 50 + Math.random() * 20, // Random between 50-70
+                origin: {
+                  x: handleX / window.innerWidth,
+                  y: handleY / window.innerHeight,
+                },
+              });
+            }
+          }, 200); // Small delay after particles start (200ms)
+          
+          // Second confetti pop (closer to first)
+          setTimeout(() => {
+            const handleRect = handleRef.current?.getBoundingClientRect();
+            if (handleRect) {
+              const handleX = handleRect.left + handleRect.width / 2;
+              const handleY = handleRect.top + handleRect.height / 2;
+              
+              confetti({
+                particleCount: 120 + Math.random() * 60, // Random between 120-180
+                spread: 50 + Math.random() * 20, // Random between 50-70
+                origin: {
+                  x: handleX / window.innerWidth,
+                  y: handleY / window.innerHeight,
+                },
+              });
+            }
+          }, 350); // 150ms after first pop (closer together)
+          
+          // Third confetti pop (slightly delayed)
+          setTimeout(() => {
+            const handleRect = handleRef.current?.getBoundingClientRect();
+            if (handleRect) {
+              const handleX = handleRect.left + handleRect.width / 2;
+              const handleY = handleRect.top + handleRect.height / 2;
+              
+              confetti({
+                particleCount: 120 + Math.random() * 60, // Random between 120-180
+                spread: 50 + Math.random() * 20, // Random between 50-70
+                origin: {
+                  x: handleX / window.innerWidth,
+                  y: handleY / window.innerHeight,
+                },
+              });
+            }
+          }, 800); // 450ms after second pop (slightly delayed)
+        }
+      }
       }
     }
   };
