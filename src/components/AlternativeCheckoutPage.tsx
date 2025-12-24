@@ -118,7 +118,7 @@ export default function AlternativeCheckoutPage({
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[#424242]">
-                    Δωρεά {selectedAmount > 0 ? `(${selectedNonprofit.name})` : ''}
+                    {selectedAmount > 0 ? `Δωρεά για ${selectedNonprofit.name}` : 'Δωρεά'}
                   </span>
                   <span
                     className={`font-semibold ${

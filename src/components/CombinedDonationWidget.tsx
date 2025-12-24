@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Loader2, Heart, Dog, Users, TreePine, Stethoscope, ChevronDown } from 'lucide-react';
-import NonprofitSelector, { type Nonprofit } from './NonprofitSelector';
+import { type Nonprofit } from './NonprofitSelector';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 const getIcon = (iconType: string) => {
@@ -96,20 +96,50 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
   const [loadingAmount, setLoadingAmount] = useState<number | null>(null);
   const [isClearing, setIsClearing] = useState(false);
   const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [shouldAnimateDropdown, setShouldAnimateDropdown] = useState(false);
+  const dropdownButtonRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [shakeKey, setShakeKey] = useState(0); // Force re-render for multiple shake triggers
 
   const presetAmounts = [1, 2, 4];
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   const handleAmountClick = (amount: number) => {
     // Prevent selection if no nonprofit is selected
     if (!selectedNonprofit) {
-      // Trigger animation if no nonprofit is selected
-      setShouldAnimateDropdown(true);
-      // Clear animation after it completes (1.4s for fade animation)
+      // Trigger animation - always allow multiple triggers
+      // First clear any existing animation state, then trigger new one
+      setShouldAnimateDropdown(false);
+      // Use requestAnimationFrame to ensure state clears before setting new animation
+      requestAnimationFrame(() => {
+        setShakeKey(prev => prev + 1); // Force re-render to allow multiple shakes
+        setShouldAnimateDropdown(true);
+        setTimeout(() => {
+          setShouldAnimateDropdown(false);
+        }, 300); // Match animation duration (0.3s)
+      });
+      
+      // Focus dropdown with small delay
       setTimeout(() => {
-        setShouldAnimateDropdown(false);
-      }, 1400);
+        dropdownButtonRef.current?.focus();
+      }, 100);
       return;
     }
     
@@ -141,6 +171,7 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
 
   const handleNonprofitSelect = (nonprofit: Nonprofit) => {
     setSelectedNonprofit(nonprofit);
+    setIsDropdownOpen(false);
     setShouldAnimateDropdown(false);
     if (selectedAmount) {
       onDonationChange?.(selectedAmount, nonprofit);
@@ -192,64 +223,98 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
         </button>
       </div>
 
-      {/* Organization Dropdown - styled like dropdown but opens modal */}
-      <div className="flex items-center gap-[16px] mb-[16px]">
-        <button
-          type="button"
-          onClick={() => {
-            setIsModalOpen(true);
-            setShouldAnimateDropdown(false);
-          }}
-          className={`w-full border border-[#e0e0e0] rounded-[8px] bg-white px-[16px] text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none flex items-center justify-between cursor-pointer hover:border-[#0957e8] transition-colors gap-[12px] ${
-            shouldAnimateDropdown ? 'animate-rainbow-glow' : ''
-          }`}
-          style={{ padding: '12px' }}
-        >
-          <div className="flex items-center gap-[12px] flex-1 min-w-0">
-            {selectedNonprofit ? (() => {
-              const Icon = getIcon(selectedNonprofit.icon);
-              const getIconBg = (category: string) => {
-                switch (category) {
-                  case 'animals':
-                    return 'bg-[#fee5e5]';
-                  case 'humans':
-                    return 'bg-[#e3f2fd]';
-                  case 'environment':
-                    return 'bg-[#e8f5e9]';
-                  default:
-                    return 'bg-[#fee5e5]';
-                }
-              };
-              return (
-                <div className={`w-[32px] h-[32px] rounded-full ${getIconBg(selectedNonprofit.category)} flex items-center justify-center shrink-0 overflow-hidden`}>
-                  {selectedNonprofit.logo ? (
-                    <ImageWithFallback
-                      src={selectedNonprofit.logo}
-                      alt={selectedNonprofit.name}
-                      className="w-full h-full object-contain"
-                    />
-                  ) : (
-                    <Icon size={18} className="text-[#0957e8]" />
-                  )}
+      {/* Organization Dropdown */}
+      <div ref={dropdownRef} className="relative flex items-center gap-[16px] mb-[16px]">
+        <div className="w-full relative">
+          {/* Selected Item / Trigger Button */}
+          <button
+            ref={dropdownButtonRef}
+            type="button"
+            key={shakeKey}
+            onClick={() => {
+              setIsDropdownOpen(!isDropdownOpen);
+              setShouldAnimateDropdown(false);
+            }}
+            className={`w-full border border-[#e0e0e0] rounded-[8px] bg-white text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none flex items-center justify-between cursor-pointer hover:border-[#0957e8] transition-colors gap-[12px] ${
+              shouldAnimateDropdown ? 'animate-rainbow-glow' : ''
+            } ${selectedNonprofit ? 'bg-[#f5f5f5]' : ''}`}
+            style={{ padding: '12px' }}
+          >
+            <div className="flex items-center gap-[12px] flex-1 min-w-0">
+              {selectedNonprofit ? (() => {
+                return (
+                  <div className="w-[32px] h-[32px] rounded-full flex items-center justify-center shrink-0 overflow-hidden">
+                    {selectedNonprofit.logo ? (
+                      <ImageWithFallback
+                        src={selectedNonprofit.logo}
+                        alt={selectedNonprofit.name}
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (() => {
+                      const Icon = getIcon(selectedNonprofit.icon);
+                      return <Icon size={18} className="text-[#0957e8]" />;
+                    })()}
+                  </div>
+                );
+              })() : (
+                <div className="w-[32px] h-[32px] flex items-center justify-center shrink-0">
+                  <svg width="24" height="25" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0.498535" y="0.606262" width="15" height="15" rx="1.5" fill="#212121"/>
+                    <rect x="0.498535" y="0.606262" width="15" height="15" rx="1.5" stroke="#212121"/>
+                    <path d="M11.9983 4.10626H9.70627V6.34446H11.9983V4.10626Z" fill="white"/>
+                    <path d="M6.29055 4.10626H3.99854V6.34446H6.29055V4.10626Z" fill="white"/>
+                    <path d="M9.70652 7.45257V7.76282C9.70652 9.13677 8.97925 9.9567 7.98752 9.9567C6.86355 9.9567 6.29055 8.95948 6.29055 7.76282V7.45257H3.99854V7.91795C3.99854 10.6215 5.60736 12.1063 7.98752 12.1063C10.566 12.1063 11.9985 10.4442 11.9985 7.91795V7.45257H9.70652Z" fill="white"/>
+                  </svg>
                 </div>
-              );
-            })() : (
-              <div className="w-[32px] h-[32px] flex items-center justify-center shrink-0">
-                <svg width="24" height="25" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0.498535" y="0.606262" width="15" height="15" rx="1.5" fill="#212121"/>
-                  <rect x="0.498535" y="0.606262" width="15" height="15" rx="1.5" stroke="#212121"/>
-                  <path d="M11.9983 4.10626H9.70627V6.34446H11.9983V4.10626Z" fill="white"/>
-                  <path d="M6.29055 4.10626H3.99854V6.34446H6.29055V4.10626Z" fill="white"/>
-                  <path d="M9.70652 7.45257V7.76282C9.70652 9.13677 8.97925 9.9567 7.98752 9.9567C6.86355 9.9567 6.29055 8.95948 6.29055 7.76282V7.45257H3.99854V7.91795C3.99854 10.6215 5.60736 12.1063 7.98752 12.1063C10.566 12.1063 11.9985 10.4442 11.9985 7.91795V7.45257H9.70652Z" fill="white"/>
-                </svg>
-              </div>
-            )}
-            <span className="text-left truncate" style={{ fontSize: '16px', fontWeight: 'bold' }}>
-              {selectedNonprofit ? selectedNonprofit.name : 'Επιλογή φορέα'}
-            </span>
-          </div>
-          <ChevronDown size={20} className="text-[#757575] shrink-0" />
-        </button>
+              )}
+              <span className="text-left truncate" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                {selectedNonprofit ? selectedNonprofit.name : 'Επιλογή φορέα'}
+              </span>
+            </div>
+            <ChevronDown 
+              size={20} 
+              className={`text-[#757575] shrink-0 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
+            />
+          </button>
+
+          {/* Dropdown List */}
+          {isDropdownOpen && (
+            <div className="absolute top-full left-0 right-0 mt-[4px] bg-white border border-[#e0e0e0] rounded-[8px] shadow-lg z-50 max-h-[400px] overflow-y-auto">
+              {nonprofits.map((nonprofit) => {
+                const isSelected = selectedNonprofit?.id === nonprofit.id;
+                return (
+                  <button
+                    key={nonprofit.id}
+                    type="button"
+                    onClick={() => handleNonprofitSelect(nonprofit)}
+                    className={`w-full flex items-center gap-[12px] px-[16px] py-[12px] text-left transition-colors hover:bg-[#f5f5f5] ${
+                      isSelected ? 'bg-[#f5f5f5]' : ''
+                    }`}
+                  >
+                    {/* Logo/Icon */}
+                    <div className="w-[32px] h-[32px] rounded-full flex items-center justify-center shrink-0 overflow-hidden">
+                      {nonprofit.logo ? (
+                        <ImageWithFallback
+                          src={nonprofit.logo}
+                          alt={nonprofit.name}
+                          className="w-full h-full object-contain"
+                        />
+                      ) : (() => {
+                        const Icon = getIcon(nonprofit.icon);
+                        return <Icon size={18} className="text-[#0957e8]" />;
+                      })()}
+                    </div>
+
+                    {/* Name */}
+                    <span className="text-[#212121] text-[16px] flex-1 truncate">
+                      {nonprofit.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Amount Selection - from version 2 (buttons + trash can) */}
@@ -334,13 +399,6 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
           </div>
         </div>
 
-      <NonprofitSelector
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSelect={handleNonprofitSelect}
-        selectedId={selectedNonprofit?.id}
-        nonprofits={nonprofits}
-      />
     </div>
   );
 }

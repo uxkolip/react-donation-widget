@@ -52,7 +52,7 @@ export default function CombinedSliderCheckoutPageDE() {
           </div>
           {donationAmount > 0 && (
             <div className="flex justify-between items-center text-[#0957e8]">
-              <span>Spende</span>
+              <span>Spende für {selectedNonprofit?.name || ''}</span>
               <span>+{formatCurrency(donationAmount)}</span>
             </div>
           )}

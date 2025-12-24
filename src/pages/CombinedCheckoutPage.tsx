@@ -52,7 +52,7 @@ export default function CombinedCheckoutPage() {
           </div>
           {donationAmount > 0 && (
             <div className="flex justify-between items-center text-[#0957e8]">
-              <span>Δωρεά</span>
+              <span>Δωρεά για {selectedNonprofit?.name || ''}</span>
               <span>+{formatCurrency(donationAmount)}</span>
             </div>
           )}

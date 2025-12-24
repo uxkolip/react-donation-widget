@@ -17,6 +17,7 @@ interface NonprofitSelectorProps {
   onSelect: (nonprofit: Nonprofit) => void;
   selectedId?: string;
   nonprofits?: Nonprofit[];
+  hideDescription?: boolean;
 }
 
 const defaultNonprofits: Nonprofit[] = [
@@ -113,7 +114,7 @@ const getIcon = (iconType: string) => {
   }
 };
 
-export default function NonprofitSelector({ isOpen, onClose, onSelect, selectedId, nonprofits = defaultNonprofits }: NonprofitSelectorProps) {
+export default function NonprofitSelector({ isOpen, onClose, onSelect, selectedId, nonprofits = defaultNonprofits, hideDescription = false }: NonprofitSelectorProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -206,9 +207,11 @@ export default function NonprofitSelector({ isOpen, onClose, onSelect, selectedI
                         <div className="text-[#212121] mb-[4px]">
                           {nonprofit.name}
                         </div>
-                        <div className="text-[#757575] text-[14px] truncate">
-                          {nonprofit.description}
-                        </div>
+                        {!hideDescription && (
+                          <div className="text-[#757575] text-[14px] truncate">
+                            {nonprofit.description}
+                          </div>
+                        )}
                       </div>
 
                       {/* Action Icon */}

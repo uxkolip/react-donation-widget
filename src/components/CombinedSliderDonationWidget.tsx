@@ -102,6 +102,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
   const [shouldAnimateDropdown, setShouldAnimateDropdown] = useState(false);
   const [visualPosition, setVisualPosition] = useState<number | null>(null);
   const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const previousAmountRef = useRef<number>(0); // Track previous amount to detect when user moves to 0
   const [floatingEmojis, setFloatingEmojis] = useState<{ value: number; position: number; key: number; index: number; animationId: number }[]>([]);
   const emojiKeyRef = useRef(0);
   const animationIdRef = useRef(0);
@@ -112,6 +113,8 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
   const CONFETTI_DEBOUNCE_MS = 2000; // 2 seconds debounce to prevent overload
   const lastEmojiTimeRef = useRef<Map<number, number>>(new Map()); // Track last trigger time per amount
   const EMOJI_DEBOUNCE_MS = 1500; // 1.5 seconds debounce to prevent overload
+  const dropdownButtonRef = useRef<HTMLButtonElement>(null);
+  const [shakeKey, setShakeKey] = useState(0); // Force re-render for multiple shake triggers
 
   const handleSliderChange = (value: number, isVisualOnly = false) => {
     // Ensure value is always a valid step value
@@ -119,13 +122,22 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
     
     // If no nonprofit is selected and trying to move forward
     if (!selectedNonprofit && validValue > 0) {
-      // Trigger animation
-      if (!shouldAnimateDropdown) {
+      // Trigger animation - always allow multiple triggers
+      // First clear any existing animation state, then trigger new one
+      setShouldAnimateDropdown(false);
+      // Use requestAnimationFrame to ensure state clears before setting new animation
+      requestAnimationFrame(() => {
+        setShakeKey(prev => prev + 1); // Force re-render to allow multiple shakes
         setShouldAnimateDropdown(true);
         setTimeout(() => {
           setShouldAnimateDropdown(false);
-        }, 1400);
-      }
+        }, 300); // Match animation duration (0.3s)
+      });
+      
+      // Focus dropdown with small delay
+      setTimeout(() => {
+        dropdownButtonRef.current?.focus();
+      }, 100);
       
       // Show visual movement temporarily
       setVisualPosition(validValue);
@@ -172,6 +184,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
   }, [selectedNonprofit]);
 
   // Reset organization dropdown when donation is 0 for more than 3 seconds
+  // Only reset if user explicitly moved amount to 0 (not if it was already 0)
   useEffect(() => {
     // Clear any existing timeout
     if (resetTimeoutRef.current) {
@@ -179,8 +192,11 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
       resetTimeoutRef.current = null;
     }
 
-    // If amount is 0 and an org is selected, start the 3-second timer
-    if (selectedAmount === 0 && selectedNonprofit) {
+    // Only start timer if:
+    // 1. Amount is 0
+    // 2. An org is selected
+    // 3. Previous amount was > 0 (user moved to 0, not starting at 0)
+    if (selectedAmount === 0 && selectedNonprofit && previousAmountRef.current > 0) {
       resetTimeoutRef.current = setTimeout(() => {
         // Check current state - if still 0 and org still selected, reset
         setSelectedNonprofit((currentNonprofit) => {
@@ -193,6 +209,9 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
         resetTimeoutRef.current = null;
       }, 3000);
     }
+
+    // Update previous amount ref
+    previousAmountRef.current = selectedAmount;
 
     // Cleanup timeout on unmount or when dependencies change
     return () => {
@@ -411,7 +430,9 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
       {/* Organization Dropdown - styled like dropdown but opens modal */}
       <div className="flex items-center gap-[16px] mb-[8px]">
         <button
+          ref={dropdownButtonRef}
           type="button"
+          key={shakeKey}
           onClick={() => {
             setIsModalOpen(true);
             setShouldAnimateDropdown(false);
@@ -675,6 +696,7 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
         onSelect={handleNonprofitSelect}
         selectedId={selectedNonprofit?.id}
         nonprofits={nonprofits}
+        hideDescription={true}
       />
     </div>
   );
