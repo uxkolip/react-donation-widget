@@ -97,12 +97,9 @@ const sliderSteps: readonly number[] = [0, 1, 2, 4];
 
 export default function CombinedSliderDonationWidget({ onDonationChange }: CombinedSliderDonationWidgetProps) {
   const [selectedAmount, setSelectedAmount] = useState(0);
-  const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(null);
+  const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(nonprofits[0]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [shouldAnimateDropdown, setShouldAnimateDropdown] = useState(false);
   const [visualPosition, setVisualPosition] = useState<number | null>(null);
-  const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const previousAmountRef = useRef<number>(0); // Track previous amount to detect when user moves to 0
   const [floatingEmojis, setFloatingEmojis] = useState<{ value: number; position: number; key: number; index: number; animationId: number }[]>([]);
   const emojiKeyRef = useRef(0);
   const animationIdRef = useRef(0);
@@ -113,48 +110,12 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
   const CONFETTI_DEBOUNCE_MS = 2000; // 2 seconds debounce to prevent overload
   const lastEmojiTimeRef = useRef<Map<number, number>>(new Map()); // Track last trigger time per amount
   const EMOJI_DEBOUNCE_MS = 1500; // 1.5 seconds debounce to prevent overload
-  const dropdownButtonRef = useRef<HTMLButtonElement>(null);
-  const [shakeKey, setShakeKey] = useState(0); // Force re-render for multiple shake triggers
 
   const handleSliderChange = (value: number, isVisualOnly = false) => {
     // Ensure value is always a valid step value
     const validValue = sliderSteps.includes(value) ? value : sliderSteps[0];
     
-    // If no nonprofit is selected and trying to move forward
-    if (!selectedNonprofit && validValue > 0) {
-      // Trigger animation - always allow multiple triggers
-      // First clear any existing animation state, then trigger new one
-      setShouldAnimateDropdown(false);
-      // Use requestAnimationFrame to ensure state clears before setting new animation
-      requestAnimationFrame(() => {
-        setShakeKey(prev => prev + 1); // Force re-render to allow multiple shakes
-        setShouldAnimateDropdown(true);
-        setTimeout(() => {
-          setShouldAnimateDropdown(false);
-        }, 300); // Match animation duration (0.3s)
-      });
-      
-      // Focus dropdown with small delay
-      setTimeout(() => {
-        dropdownButtonRef.current?.focus();
-      }, 100);
-      
-      // Show visual movement temporarily
-      setVisualPosition(validValue);
-      
-      // If not visual only (click on amount), snap back after brief delay
-      if (!isVisualOnly) {
-        setTimeout(() => {
-          setVisualPosition(null);
-          setSelectedAmount(0);
-          onDonationChange?.(0, null);
-        }, 300); // Brief visual feedback before snapping back
-      }
-      
-      return;
-    }
-    
-    // Normal update (org is selected or value is 0)
+    // Normal update
     setVisualPosition(null);
     setSelectedAmount(validValue);
     
@@ -167,7 +128,6 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
 
   const handleNonprofitSelect = (nonprofit: Nonprofit) => {
     setSelectedNonprofit(nonprofit);
-    setShouldAnimateDropdown(false);
     if (selectedAmount > 0) {
       onDonationChange?.(selectedAmount, nonprofit);
     } else {
@@ -175,52 +135,12 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
     }
   };
 
-  // Reset amount to 0 when nonprofit is cleared
+  // Notify parent of initial state with first nonprofit preselected
   useEffect(() => {
-    if (!selectedNonprofit && selectedAmount > 0) {
-      setSelectedAmount(0);
-      onDonationChange?.(0, null);
+    if (selectedNonprofit) {
+      onDonationChange?.(0, selectedNonprofit);
     }
-  }, [selectedNonprofit]);
-
-  // Reset organization dropdown when donation is 0 for more than 3 seconds
-  // Only reset if user explicitly moved amount to 0 (not if it was already 0)
-  useEffect(() => {
-    // Clear any existing timeout
-    if (resetTimeoutRef.current) {
-      clearTimeout(resetTimeoutRef.current);
-      resetTimeoutRef.current = null;
-    }
-
-    // Only start timer if:
-    // 1. Amount is 0
-    // 2. An org is selected
-    // 3. Previous amount was > 0 (user moved to 0, not starting at 0)
-    if (selectedAmount === 0 && selectedNonprofit && previousAmountRef.current > 0) {
-      resetTimeoutRef.current = setTimeout(() => {
-        // Check current state - if still 0 and org still selected, reset
-        setSelectedNonprofit((currentNonprofit) => {
-          if (currentNonprofit) {
-            onDonationChange?.(0, null);
-            return null;
-          }
-          return currentNonprofit;
-        });
-        resetTimeoutRef.current = null;
-      }, 3000);
-    }
-
-    // Update previous amount ref
-    previousAmountRef.current = selectedAmount;
-
-    // Cleanup timeout on unmount or when dependencies change
-    return () => {
-      if (resetTimeoutRef.current) {
-        clearTimeout(resetTimeoutRef.current);
-        resetTimeoutRef.current = null;
-      }
-    };
-  }, [selectedAmount, selectedNonprofit, onDonationChange]);
+  }, []); // Only run on mount
 
   // Cleanup all emoji animation timeouts on unmount
   useEffect(() => {
@@ -430,16 +350,11 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
       {/* Organization Dropdown - styled like dropdown but opens modal */}
       <div className="flex items-center gap-[16px] mb-[8px]">
         <button
-          ref={dropdownButtonRef}
           type="button"
-          key={shakeKey}
           onClick={() => {
             setIsModalOpen(true);
-            setShouldAnimateDropdown(false);
           }}
-          className={`w-full border border-[#e0e0e0] rounded-[8px] bg-white px-[16px] text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none flex items-center justify-between cursor-pointer hover:border-[#0957e8] transition-colors gap-[12px] ${
-            shouldAnimateDropdown ? 'animate-rainbow-glow' : ''
-          }`}
+          className="w-full border border-[#e0e0e0] rounded-[8px] bg-white px-[16px] text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none flex items-center justify-between cursor-pointer hover:border-[#0957e8] transition-colors gap-[12px]"
           style={{ padding: '12px' }}
         >
           <div className="flex items-center gap-[12px] flex-1 min-w-0">
@@ -612,27 +527,17 @@ export default function CombinedSliderDonationWidget({ onDonationChange }: Combi
                   handleSliderChange(stepValue);
                 }}
                 onMouseDown={() => setIsHandlePressed(true)}
-                onMouseUp={(e) => {
+                onMouseUp={() => {
                   setIsHandlePressed(false);
-                  if (!selectedNonprofit) {
-                    const input = e.target as HTMLInputElement;
-                    input.value = '0';
-                    setVisualPosition(null);
-                    handleSliderChange(0);
-                  } else if (selectedAmount > 0) {
+                  if (selectedAmount > 0) {
                     triggerFloatingEmojis(selectedAmount);
                   }
                 }}
                 onMouseLeave={() => setIsHandlePressed(false)}
                 onTouchStart={() => setIsHandlePressed(true)}
-                onTouchEnd={(e) => {
+                onTouchEnd={() => {
                   setIsHandlePressed(false);
-                  if (!selectedNonprofit) {
-                    const input = e.target as HTMLInputElement;
-                    input.value = '0';
-                    setVisualPosition(null);
-                    handleSliderChange(0);
-                  } else if (selectedAmount > 0) {
+                  if (selectedAmount > 0) {
                     triggerFloatingEmojis(selectedAmount);
                   }
                 }}

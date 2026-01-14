@@ -95,14 +95,25 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [loadingAmount, setLoadingAmount] = useState<number | null>(null);
   const [isClearing, setIsClearing] = useState(false);
-  const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(null);
+  const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(nonprofits[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [shouldAnimateDropdown, setShouldAnimateDropdown] = useState(false);
-  const dropdownButtonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [shakeKey, setShakeKey] = useState(0); // Force re-render for multiple shake triggers
+  const [floatingHearts, setFloatingHearts] = useState<{ amount: number; position: { x: number; y: number }; key: number; index: number; animationId: number; size: number; rotation: number; color: string }[]>([]);
+  const heartKeyRef = useRef(0);
+  const animationIdRef = useRef(0);
+  const activeTimeoutsRef = useRef<Map<number, NodeJS.Timeout>>(new Map());
+  const lastHeartTimeRef = useRef<Map<number, number>>(new Map()); // Track last trigger time per amount
+  const EMOJI_DEBOUNCE_MS = 1500; // 1.5 seconds debounce to prevent overload
+  const amountButtonRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
 
   const presetAmounts = [1, 2, 4];
+
+  // Notify parent of initial state with first nonprofit preselected
+  useEffect(() => {
+    if (selectedNonprofit) {
+      onDonationChange?.(0, selectedNonprofit);
+    }
+  }, []); // Only run on mount
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -121,39 +132,118 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
     };
   }, [isDropdownOpen]);
 
-  const handleAmountClick = (amount: number) => {
-    // Prevent selection if no nonprofit is selected
-    if (!selectedNonprofit) {
-      // Trigger animation - always allow multiple triggers
-      // First clear any existing animation state, then trigger new one
-      setShouldAnimateDropdown(false);
-      // Use requestAnimationFrame to ensure state clears before setting new animation
-      requestAnimationFrame(() => {
-        setShakeKey(prev => prev + 1); // Force re-render to allow multiple shakes
-        setShouldAnimateDropdown(true);
-        setTimeout(() => {
-          setShouldAnimateDropdown(false);
-        }, 300); // Match animation duration (0.3s)
-      });
+  // Cleanup all heart animation timeouts on unmount
+  useEffect(() => {
+    return () => {
+      activeTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      activeTimeoutsRef.current.clear();
+    };
+  }, []);
+
+  const triggerFloatingHearts = (amount: number) => {
+    if (selectedNonprofit && amount > 0) {
+      const now = Date.now();
+      const lastTimeForThisAmount = lastHeartTimeRef.current.get(amount) || 0;
+      const timeSinceLastHeart = now - lastTimeForThisAmount;
       
-      // Focus dropdown with small delay
-      setTimeout(() => {
-        dropdownButtonRef.current?.focus();
-      }, 100);
-      return;
+      // Debounce: only prevent the same amount from being triggered rapidly
+      if (timeSinceLastHeart >= EMOJI_DEBOUNCE_MS) {
+        lastHeartTimeRef.current.set(amount, now);
+        
+        const buttonRef = amountButtonRefs.current.get(amount);
+        if (!buttonRef) return;
+        
+        const buttonRect = buttonRef.getBoundingClientRect();
+        const buttonWrapper = buttonRef.parentElement;
+        if (!buttonWrapper) return;
+        
+        const wrapperRect = buttonWrapper.getBoundingClientRect();
+        
+        // Get button's background color
+        const computedStyle = window.getComputedStyle(buttonRef);
+        const buttonColor = computedStyle.backgroundColor || '#8320bd';
+        
+        // Parse RGB color to get individual values
+        const rgbMatch = buttonColor.match(/\d+/g);
+        let baseR = 131, baseG = 32, baseB = 189; // Default purple (#8320bd)
+        if (rgbMatch && rgbMatch.length >= 3) {
+          baseR = parseInt(rgbMatch[0]);
+          baseG = parseInt(rgbMatch[1]);
+          baseB = parseInt(rgbMatch[2]);
+        }
+        
+        // Calculate position relative to button wrapper (which contains the button)
+        const baseX = buttonRect.left + buttonRect.width / 2 - wrapperRect.left;
+        const baseY = buttonRect.top + buttonRect.height / 2 - wrapperRect.top;
+        
+        const heartCount = 6;
+        const animationId = animationIdRef.current++;
+        
+        // Create new hearts with unique animation ID and randomized properties
+        const newHearts = Array.from({ length: heartCount }, (_, i) => {
+          // Randomize position horizontally within ±10px of button center
+          const positionOffsetX = (Math.random() - 0.5) * 20; // -10px to +10px
+          // Position hearts only from the top of the button (negative Y offset)
+          const positionOffsetY = -buttonRect.height / 2 - Math.random() * 10; // Start from top, random 0-10px above
+          
+          // Random size between 12px and 24px
+          const size = 12 + Math.random() * 12;
+          
+          // Random rotation between -45deg and 45deg
+          const rotation = (Math.random() - 0.5) * 90;
+          
+          // Add slight color variation (±25 for each RGB channel)
+          const colorVariation = 25;
+          const r = Math.max(0, Math.min(255, baseR + (Math.random() - 0.5) * colorVariation * 2));
+          const g = Math.max(0, Math.min(255, baseG + (Math.random() - 0.5) * colorVariation * 2));
+          const b = Math.max(0, Math.min(255, baseB + (Math.random() - 0.5) * colorVariation * 2));
+          const heartColor = `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
+          
+          return {
+            amount,
+            position: {
+              x: baseX + positionOffsetX,
+              y: baseY + positionOffsetY,
+            },
+            key: heartKeyRef.current + i,
+            index: i,
+            animationId,
+            size,
+            rotation,
+            color: heartColor,
+          };
+        });
+        heartKeyRef.current += heartCount;
+        
+        // Append new hearts to existing ones (allow multiple animations)
+        setFloatingHearts(prev => [...prev, ...newHearts]);
+        
+        // Set timeout to remove only this animation's hearts
+        const timeout = setTimeout(() => {
+          setFloatingHearts(prev => prev.filter(heart => heart.animationId !== animationId));
+          activeTimeoutsRef.current.delete(animationId);
+        }, 3500);
+        
+        // Store timeout reference for cleanup
+        activeTimeoutsRef.current.set(animationId, timeout);
+      }
     }
-    
+  };
+
+  const handleAmountClick = (amount: number) => {
     // Don't show spinner if this amount is already selected
     if (selectedAmount === amount) {
       return;
     }
+    
+    // Trigger floating hearts animation immediately
+    triggerFloatingHearts(amount);
     
     setLoadingAmount(amount);
     
     setTimeout(() => {
       setSelectedAmount(amount);
       onDonationChange?.(amount, selectedNonprofit);
-      setShouldAnimateDropdown(false);
       setLoadingAmount(null);
     }, 800);
   };
@@ -163,8 +253,8 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
     
     setTimeout(() => {
       setSelectedAmount(null);
-      setSelectedNonprofit(null);
-      onDonationChange?.(0, null);
+      // Keep nonprofit selected - never clear it
+      onDonationChange?.(0, selectedNonprofit);
       setIsClearing(false);
     }, 800);
   };
@@ -172,7 +262,6 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
   const handleNonprofitSelect = (nonprofit: Nonprofit) => {
     setSelectedNonprofit(nonprofit);
     setIsDropdownOpen(false);
-    setShouldAnimateDropdown(false);
     if (selectedAmount) {
       onDonationChange?.(selectedAmount, nonprofit);
     } else {
@@ -186,7 +275,7 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
   };
 
   return (
-    <div className="donation-widget-bg rounded-[8px] border border-[#e0e0e0] p-[20px]">
+    <div className="donation-widget-bg rounded-[8px] border border-[#e0e0e0] p-[20px] relative">
       {/* Header with question and amount button */}
       <div className="flex items-center mb-[16px]">
         <h3 className="text-[#212121] text-[16px] font-bold">Θα θέλατε να κάνετε μια δωρεά;</h3>
@@ -228,16 +317,13 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
         <div className="w-full relative">
           {/* Selected Item / Trigger Button */}
           <button
-            ref={dropdownButtonRef}
             type="button"
-            key={shakeKey}
             onClick={() => {
               setIsDropdownOpen(!isDropdownOpen);
-              setShouldAnimateDropdown(false);
             }}
             className={`w-full border border-[#e0e0e0] rounded-[8px] bg-white text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none flex items-center justify-between cursor-pointer hover:border-[#0957e8] transition-colors gap-[12px] ${
-              shouldAnimateDropdown ? 'animate-rainbow-glow' : ''
-            } ${selectedNonprofit ? 'bg-[#f5f5f5]' : ''}`}
+              selectedNonprofit ? 'bg-[#f5f5f5]' : ''
+            }`}
             style={{ padding: '12px' }}
           >
             <div className="flex items-center gap-[12px] flex-1 min-w-0">
@@ -318,27 +404,65 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
       </div>
 
       {/* Amount Selection - from version 2 (buttons + trash can) */}
-      <div className="relative shrink-0 w-full">
-        <div className="size-full">
-          <div className="box-border content-stretch flex flex-col gap-[12px] items-start relative w-full py-[8px] mt-[0px] mr-[0px] mb-[8px] ml-[0px]">
-            <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full">
+      <div className="relative shrink-0 w-full overflow-visible">
+        <div className="size-full overflow-visible">
+          <div className="box-border content-stretch flex flex-col gap-[12px] items-start relative w-full py-[8px] mt-[0px] mr-[0px] mb-[8px] ml-[0px] overflow-visible">
+            <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full overflow-visible">
                 {/* Preset amounts */}
                 {presetAmounts.map((amount) => {
                   const isLoading = loadingAmount === amount;
                   const isSelected = selectedAmount === amount && selectedNonprofit !== null;
                   
                   return (
-                    <button
-                      key={amount}
-                      type="button"
-                      onClick={() => handleAmountClick(amount)}
-                      disabled={isLoading || loadingAmount !== null}
-                      className={`basis-0 grow min-h-px min-w-px relative rounded-[8px] shrink-0 transition-all ${
-                        isSelected || isLoading
-                          ? 'donation-widget-button-selected'
-                          : 'donation-widget-button-default'
-                      } ${loadingAmount !== null && !isLoading ? 'opacity-50 cursor-not-allowed' : ''} ${!selectedNonprofit ? 'opacity-60' : ''}`}
-                    >
+                    <div key={amount} className="relative basis-0 grow min-h-px min-w-px shrink-0 overflow-visible" style={{ zIndex: 1 }}>
+                      {/* Floating hearts for this button */}
+                      {floatingHearts
+                        .filter(heart => heart.amount === amount)
+                        .map((heart) => {
+                          return (
+                            <div
+                              key={heart.key}
+                              className={`heart-float heart-float-${heart.index}`}
+                              style={{
+                                left: `${heart.position.x}px`,
+                                top: `${heart.position.y}px`,
+                                transform: `translate(-50%, -50%) rotate(${heart.rotation}deg)`,
+                                zIndex: 0,
+                                '--heart-rotate': `${heart.rotation}deg`,
+                              } as React.CSSProperties & {
+                                '--heart-rotate': string;
+                              }}
+                            >
+                              <svg
+                                width={heart.size}
+                                height={heart.size * 0.9}
+                                viewBox="0 0 20 18"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M0 5.85223C0 10.7152 4.02 13.3062 6.962 15.6262C8 16.4442 9 17.2152 10 17.2152C11 17.2152 12 16.4452 13.038 15.6252C15.981 13.3072 20 10.7152 20 5.85323C20 0.991225 14.5 -2.45977 10 2.21623C5.5 -2.45977 0 0.989226 0 5.85223Z"
+                                  fill={heart.color}
+                                />
+                              </svg>
+                            </div>
+                          );
+                        })}
+                      <button
+                        ref={(el) => {
+                          if (el) amountButtonRefs.current.set(amount, el);
+                          else amountButtonRefs.current.delete(amount);
+                        }}
+                        type="button"
+                        onClick={() => handleAmountClick(amount)}
+                        disabled={isLoading || loadingAmount !== null}
+                        className={`w-full h-full relative rounded-[8px] shrink-0 transition-all ${
+                          isSelected || isLoading
+                            ? 'donation-widget-button-selected'
+                            : 'donation-widget-button-default'
+                        } ${loadingAmount !== null && !isLoading ? 'opacity-50 cursor-not-allowed' : ''} ${!selectedNonprofit ? 'opacity-60' : ''}`}
+                        style={{ zIndex: 1 }}
+                      >
                       <div
                         aria-hidden="true"
                         className={`absolute border border-solid inset-0 pointer-events-none rounded-[8px] ${
@@ -366,6 +490,7 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
                         </div>
                       </div>
                     </button>
+                    </div>
                   );
                 })}
 

@@ -21,7 +21,7 @@ const getIcon = (iconType: string) => {
   }
 };
 
-const euroFormatter = new Intl.NumberFormat('de-DE', {
+const euroFormatter = new Intl.NumberFormat('el-GR', {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
@@ -32,129 +32,91 @@ interface CombinedSliderDonationWidgetProps {
   onDonationChange?: (amount: number, nonprofit: Nonprofit | null) => void;
 }
 
-// German nonprofits list
+// Greek nonprofits list
 const nonprofits: Nonprofit[] = [
   {
-    id: 'dkhw',
-    name: 'Deutsches Kinderhilfswerk',
-    description: 'Setzt sich für die Rechte von Kindern in Deutschland ein und fördert Beteiligungsmöglichkeiten.',
-    category: 'humans',
-    icon: 'users',
-    logo: 'https://www.dkhw.de/_assets/c4df10ee17a02a1c68815e5308dd06af/Icons/dkhw-logo.svg'
-  },
-  {
-    id: 'unicef-de',
-    name: 'UNICEF Deutschland',
-    description: 'Hilft Kindern weltweit und setzt sich für ihre Rechte, Gesundheit und Bildung ein.',
-    category: 'humans',
-    icon: 'users',
-    logo: 'https://asset.brandfetch.io/idNzMaMVSS/idQN31wJEr.jpeg?1668269150059'
-  },
-  {
-    id: 'nabu',
-    name: 'NABU',
-    description: 'Der Naturschutzbund Deutschland setzt sich für den Schutz von Natur und Umwelt ein.',
-    category: 'environment',
-    icon: 'tree',
-    logo: 'https://www.nabu.de/css_nabu/2014/images/logo.jpg'
-  },
-  {
-    id: 'bund',
-    name: 'BUND',
-    description: 'Bund für Umwelt und Naturschutz Deutschland - für eine nachhaltige und umweltfreundliche Zukunft.',
-    category: 'environment',
-    icon: 'tree',
-    logo: 'https://www.bund-leipzig.de/_assets/f79c34f38845eded732a54cf989b697f/Bund/Icons/Logo/bund_logo_sticker-m.png'
-  },
-  {
-    id: 'bagso',
-    name: 'BAGSO',
-    description: 'Bundesarbeitsgemeinschaft der Senioren-Organisationen - vertritt die Interessen älterer Menschen.',
+    id: 'arsis',
+    name: 'ΑΡΣΙΣ',
+    description: 'Παρέχει κοινωνική υποστήριξη και προστασία σε ευάλωτες ομάδες πληθυσμού.',
     category: 'humans',
     icon: 'heart',
-    logo: 'https://www.bagso.de/_assets/52195e961218efe01df3560f31ee036c/Images/bagso_logo.svg'
+    logo: 'https://youbehero.com/images/cause/265/l/arsis_logo.png'
   },
   {
-    id: 'caritas-altenhilfe',
-    name: 'Caritas Altenhilfe',
-    description: 'Unterstützt ältere Menschen mit Beratung, Betreuung und vielfältigen Angeboten für ein selbstbestimmtes Leben.',
+    id: 'selianitika-ilios',
+    name: 'Πολιτιστικός Σύλλογος Σελιανιτίκων Ήλιος',
+    description: 'Προωθεί τον πολιτισμό, τις παραδόσεις και την ανάπτυξη της τοπικής κοινότητας.',
+    category: 'humans',
+    icon: 'users',
+    logo: 'https://youbehero.com/images/cause/389/l/politistikos-sillogos-selianitikon-logo.jpg'
+  },
+  {
+    id: 'kids-fair-collection',
+    name: 'Kids Fair Collection',
+    description: 'Ο κόσμος γίνεται πιο φωτεινός, όταν τα παιδιά δημιουργούν και προσφέρουν – με αγάπη, με χρώμα, με σκοπό.',
+    category: 'humans',
+    icon: 'users',
+    logo: 'https://youbehero.com/images/cause/394/l/kids-fair-collection-logo.png'
+  },
+  {
+    id: 'anagennisi',
+    name: 'Σύλλογος Γονέων και Φίλων Αυτιστικών Ατόμων Αναγέννηση',
+    description: 'Υποστηρίζει άτομα με αυτισμό και τις οικογένειές τους, προσφέροντας εκπαίδευση, υποστήριξη και προστασία.',
     category: 'humans',
     icon: 'heart',
-    logo: 'https://www.caritas-altenhilfe.de/api/images/4629eb43-2ea5-42a5-a61d-3fd215aef4ae?format=jpg'
+    logo: 'https://youbehero.com/images/cause/176/l/anagennisi_logo_tn.png'
   },
   {
-    id: 'wwf-de',
-    name: 'WWF Deutschland',
-    description: 'World Wide Fund For Nature - setzt sich für den Erhalt der biologischen Vielfalt und den Klimaschutz ein.',
-    category: 'environment',
-    icon: 'tree',
-    logo: 'https://pluspng.com/img-png/wwf-logo-vector-png-filewwf-logosvg-wikipedia-884.png'
+    id: 'espi',
+    name: 'Ελληνικός Σύλλογος Προστασίας Ιπποειδών',
+    description: 'Αφοσιωμένη στην προστασία και ευζωία των ιπποειδών (άλογα, γαϊδούρια, μουλάρια).',
+    category: 'animals',
+    icon: 'dog',
+    logo: 'https://youbehero.com/images/cause/183/l/espi_logo.jpg'
+  },
+  {
+    id: 'moiazw',
+    name: 'ΜΟΙΑΖΩ',
+    description: 'Υποστηρίζει άτομα με αυτισμό και τις οικογένειές τους, προωθώντας την ένταξη και την ποιότητα ζωής.',
+    category: 'humans',
+    icon: 'heart',
+    logo: 'https://youbehero.com/images/cause/221/l/moiazw_logo.png'
+  },
+  {
+    id: 'ariel',
+    name: '«Ariel» Φιλοζωϊκό-Πολιτιστικό Σωματείο',
+    description: 'Συνδυάζει την προστασία και φροντίδα ζώων με πολιτιστικές δραστηριότητες.',
+    category: 'animals',
+    icon: 'dog',
+    logo: 'https://youbehero.com/images/cause/197/l/logoariel.jpeg'
   }
 ];
 
 // Slider steps - 0, 1,00, 2,00, 4,00 €
 const sliderSteps: readonly number[] = [0, 1, 2, 4];
 
-export default function CombinedSliderDonationWidgetDE({ onDonationChange }: CombinedSliderDonationWidgetProps) {
+export default function CombinedSliderDonationWidgetDE7({ onDonationChange }: CombinedSliderDonationWidgetProps) {
   const [selectedAmount, setSelectedAmount] = useState(0);
-  const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(null);
+  const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(nonprofits[0]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [shouldAnimateDropdown, setShouldAnimateDropdown] = useState(false);
   const [visualPosition, setVisualPosition] = useState<number | null>(null);
-  const resetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const previousAmountRef = useRef<number>(0); // Track previous amount to detect when user moves to 0
-  const [floatingEmojis, setFloatingEmojis] = useState<{ value: number; position: number; key: number; index: number; animationId: number }[]>([]);
-  const emojiKeyRef = useRef(0);
+  const [floatingHearts, setFloatingHearts] = useState<{ value: number; position: { x: number; y: number }; key: number; index: number; animationId: number; size: number; rotation: number; color: string }[]>([]);
+  const heartKeyRef = useRef(0);
   const animationIdRef = useRef(0);
   const activeTimeoutsRef = useRef<Map<number, NodeJS.Timeout>>(new Map());
   const handleRef = useRef<HTMLDivElement>(null);
+  const sliderTrackRef = useRef<HTMLDivElement>(null);
   const [isHandlePressed, setIsHandlePressed] = useState(false);
   const lastConfettiTimeRef = useRef<number>(0);
   const CONFETTI_DEBOUNCE_MS = 2000; // 2 seconds debounce to prevent overload
-  const lastEmojiTimeRef = useRef<Map<number, number>>(new Map()); // Track last trigger time per amount
-  const EMOJI_DEBOUNCE_MS = 1500; // 1.5 seconds debounce to prevent overload
-  const dropdownButtonRef = useRef<HTMLButtonElement>(null);
-  const [shakeKey, setShakeKey] = useState(0); // Force re-render for multiple shake triggers
+  const lastHeartTimeRef = useRef<Map<number, number>>(new Map()); // Track last trigger time per amount
+  const HEART_DEBOUNCE_MS = 1500; // 1.5 seconds debounce to prevent overload
 
   const handleSliderChange = (value: number, isVisualOnly = false) => {
     // Ensure value is always a valid step value
     const validValue = sliderSteps.includes(value) ? value : sliderSteps[0];
     
-    // If no nonprofit is selected and trying to move forward
-    if (!selectedNonprofit && validValue > 0) {
-      // Trigger animation - always allow multiple triggers
-      // First clear any existing animation state, then trigger new one
-      setShouldAnimateDropdown(false);
-      // Use requestAnimationFrame to ensure state clears before setting new animation
-      requestAnimationFrame(() => {
-        setShakeKey(prev => prev + 1); // Force re-render to allow multiple shakes
-        setShouldAnimateDropdown(true);
-        setTimeout(() => {
-          setShouldAnimateDropdown(false);
-        }, 300); // Match animation duration (0.3s)
-      });
-      
-      // Focus dropdown with small delay
-      setTimeout(() => {
-        dropdownButtonRef.current?.focus();
-      }, 100);
-      
-      // Show visual movement temporarily
-      setVisualPosition(validValue);
-      
-      // If not visual only (click on amount), snap back after brief delay
-      if (!isVisualOnly) {
-        setTimeout(() => {
-          setVisualPosition(null);
-          setSelectedAmount(0);
-          onDonationChange?.(0, null);
-        }, 300); // Brief visual feedback before snapping back
-      }
-      
-      return;
-    }
-    
-    // Normal update (org is selected or value is 0)
+    // Normal update
     setVisualPosition(null);
     setSelectedAmount(validValue);
     
@@ -167,7 +129,6 @@ export default function CombinedSliderDonationWidgetDE({ onDonationChange }: Com
 
   const handleNonprofitSelect = (nonprofit: Nonprofit) => {
     setSelectedNonprofit(nonprofit);
-    setShouldAnimateDropdown(false);
     if (selectedAmount > 0) {
       onDonationChange?.(selectedAmount, nonprofit);
     } else {
@@ -175,54 +136,14 @@ export default function CombinedSliderDonationWidgetDE({ onDonationChange }: Com
     }
   };
 
-  // Reset amount to 0 when nonprofit is cleared
+  // Notify parent of initial state with first nonprofit preselected
   useEffect(() => {
-    if (!selectedNonprofit && selectedAmount > 0) {
-      setSelectedAmount(0);
-      onDonationChange?.(0, null);
+    if (selectedNonprofit) {
+      onDonationChange?.(0, selectedNonprofit);
     }
-  }, [selectedNonprofit]);
+  }, []); // Only run on mount
 
-  // Reset organization dropdown when donation is 0 for more than 3 seconds
-  // Only reset if user explicitly moved amount to 0 (not if it was already 0)
-  useEffect(() => {
-    // Clear any existing timeout
-    if (resetTimeoutRef.current) {
-      clearTimeout(resetTimeoutRef.current);
-      resetTimeoutRef.current = null;
-    }
-
-    // Only start timer if:
-    // 1. Amount is 0
-    // 2. An org is selected
-    // 3. Previous amount was > 0 (user moved to 0, not starting at 0)
-    if (selectedAmount === 0 && selectedNonprofit && previousAmountRef.current > 0) {
-      resetTimeoutRef.current = setTimeout(() => {
-        // Check current state - if still 0 and org still selected, reset
-        setSelectedNonprofit((currentNonprofit) => {
-          if (currentNonprofit) {
-            onDonationChange?.(0, null);
-            return null;
-          }
-          return currentNonprofit;
-        });
-        resetTimeoutRef.current = null;
-      }, 3000);
-    }
-
-    // Update previous amount ref
-    previousAmountRef.current = selectedAmount;
-
-    // Cleanup timeout on unmount or when dependencies change
-    return () => {
-      if (resetTimeoutRef.current) {
-        clearTimeout(resetTimeoutRef.current);
-        resetTimeoutRef.current = null;
-      }
-    };
-  }, [selectedAmount, selectedNonprofit, onDonationChange]);
-
-  // Cleanup all emoji animation timeouts on unmount
+  // Cleanup all heart animation timeouts on unmount
   useEffect(() => {
     return () => {
       activeTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
@@ -272,113 +193,211 @@ export default function CombinedSliderDonationWidgetDE({ onDonationChange }: Com
     return position;
   };
 
-  const triggerFloatingEmojis = (value: number) => {
+  const triggerFloatingHearts = (value: number) => {
+    console.log('🎯 triggerFloatingHearts called with value:', value);
     if (selectedNonprofit && value > 0) {
       const now = Date.now();
-      const lastTimeForThisValue = lastEmojiTimeRef.current.get(value) || 0;
-      const timeSinceLastEmoji = now - lastTimeForThisValue;
+      const lastTimeForThisValue = lastHeartTimeRef.current.get(value) || 0;
+      const timeSinceLastHeart = now - lastTimeForThisValue;
       
       // Debounce: only prevent the same amount from being triggered rapidly
-      // Different amounts can play immediately
-      if (timeSinceLastEmoji >= EMOJI_DEBOUNCE_MS) {
-        lastEmojiTimeRef.current.set(value, now);
+      if (timeSinceLastHeart >= HEART_DEBOUNCE_MS) {
+        lastHeartTimeRef.current.set(value, now);
+        console.log('✅ Debounce passed, setting timeout...');
         
-        const basePosition = getAdjustedPositionPercent(value);
-        const emojiCount = 12;
-        const animationId = animationIdRef.current++;
-      
-      // Create new emojis with unique animation ID and randomized positions
-      const newEmojis = Array.from({ length: emojiCount }, (_, i) => {
-        // Randomize position within ±3% of handle position (not too far)
-        const positionOffset = (Math.random() - 0.5) * 6; // -3% to +3%
-        const position = Math.max(0, Math.min(100, basePosition + positionOffset));
+        // Calculate position based on the step position, not the handle
+        console.log('⏰ Calculating positions based on step position...');
         
-        return {
-          value,
-          position,
-          key: emojiKeyRef.current + i,
-          index: i,
-          animationId,
-        };
-      });
-      emojiKeyRef.current += emojiCount;
-      
-      // Append new emojis to existing ones (allow multiple animations)
-      setFloatingEmojis(prev => [...prev, ...newEmojis]);
-      
-      // Set timeout to remove only this animation's emojis
-      const timeout = setTimeout(() => {
-        setFloatingEmojis(prev => prev.filter(emoji => emoji.animationId !== animationId));
-        activeTimeoutsRef.current.delete(animationId);
-      }, 5000);
-      
-      // Store timeout reference for cleanup
-      activeTimeoutsRef.current.set(animationId, timeout);
-
-      // Trigger confetti if max donation (4) with debounce to prevent overload on older devices
-      if (value === 4 && handleRef.current) {
-        const now = Date.now();
-        const timeSinceLastConfetti = now - lastConfettiTimeRef.current;
-        
-        // Debounce: only trigger confetti if enough time has passed since last trigger
-        if (timeSinceLastConfetti >= CONFETTI_DEBOUNCE_MS) {
-          lastConfettiTimeRef.current = now;
-          
-          // First confetti pop
-          setTimeout(() => {
-            const handleRect = handleRef.current?.getBoundingClientRect();
-            if (handleRect) {
-              const handleX = handleRect.left + handleRect.width / 2;
-              const handleY = handleRect.top + handleRect.height / 2;
-              
-              confetti({
-                particleCount: 120 + Math.random() * 60, // Random between 120-180
-                spread: 50 + Math.random() * 20, // Random between 50-70
-                origin: {
-                  x: handleX / window.innerWidth,
-                  y: handleY / window.innerHeight,
-                },
-              });
-            }
-          }, 200); // Small delay after particles start (200ms)
-          
-          // Second confetti pop (closer to first)
-          setTimeout(() => {
-            const handleRect = handleRef.current?.getBoundingClientRect();
-            if (handleRect) {
-              const handleX = handleRect.left + handleRect.width / 2;
-              const handleY = handleRect.top + handleRect.height / 2;
-              
-              confetti({
-                particleCount: 120 + Math.random() * 60, // Random between 120-180
-                spread: 50 + Math.random() * 20, // Random between 50-70
-                origin: {
-                  x: handleX / window.innerWidth,
-                  y: handleY / window.innerHeight,
-                },
-              });
-            }
-          }, 350); // 150ms after first pop (closer together)
-          
-          // Third confetti pop (slightly delayed)
-          setTimeout(() => {
-            const handleRect = handleRef.current?.getBoundingClientRect();
-            if (handleRect) {
-              const handleX = handleRect.left + handleRect.width / 2;
-              const handleY = handleRect.top + handleRect.height / 2;
-              
-              confetti({
-                particleCount: 120 + Math.random() * 60, // Random between 120-180
-                spread: 50 + Math.random() * 20, // Random between 50-70
-                origin: {
-                  x: handleX / window.innerWidth,
-                  y: handleY / window.innerHeight,
-                },
-              });
-            }
-          }, 800); // 450ms after second pop (slightly delayed)
+        // Use the slider track ref to get the correct container
+        if (!sliderTrackRef.current) {
+          console.error('❌ sliderTrackRef.current is null');
+          return;
         }
-      }
+        
+        const sliderTrackRect = sliderTrackRef.current.getBoundingClientRect();
+        console.log('📦 Slider track position:', {
+          left: sliderTrackRect.left,
+          top: sliderTrackRect.top,
+          width: sliderTrackRect.width,
+          height: sliderTrackRect.height,
+        });
+        
+        // Get the step position percentage
+        const stepPositionPercent = getAdjustedPositionPercent(value);
+        console.log('📍 Step position percent:', stepPositionPercent, 'for value:', value);
+        
+        // Get handle's border color based on value
+        const getHandleColor = (val: number) => {
+          if (val === 0) return '#212121';
+          if (val === 2) return '#f1c40f';
+          if (val === 4) return '#b94a48';
+          return '#4caf50';
+        };
+        const handleColorHex = getHandleColor(value);
+        
+        // Convert hex to RGB
+        const hex = handleColorHex.replace('#', '');
+        let baseR = 131, baseG = 32, baseB = 189; // Default purple (#8320bd)
+        if (hex.length === 6) {
+          baseR = parseInt(hex.substring(0, 2), 16);
+          baseG = parseInt(hex.substring(2, 4), 16);
+          baseB = parseInt(hex.substring(4, 6), 16);
+        }
+        
+        // Calculate position relative to slider track container based on step position
+        // X position: use the step's percentage position on the track
+        const baseX = (stepPositionPercent / 100) * sliderTrackRect.width;
+        // Y position: center of the slider track (30px from top, which is 50% of 60px height)
+        const baseY = 30; // Center of the 60px high slider track
+        console.log('💝 Base heart position (relative to slider track):', {
+          baseX,
+          baseY,
+          calculation: {
+            stepPositionPercent,
+            trackWidth: sliderTrackRect.width,
+            trackHeight: sliderTrackRect.height,
+          },
+        });
+        
+        // Number of hearts based on donation amount: 1€ = less, 4€ = most
+        const getHeartCount = (val: number) => {
+          if (val === 0) return 0;
+          if (val === 1) return 5; // Less hearts for 1€
+          if (val === 2) return 7; // Medium hearts for 2€
+          if (val === 4) return 10; // Most hearts for 4€
+          return 5;
+        };
+        const heartCount = getHeartCount(value);
+        const animationId = animationIdRef.current++;
+        console.log(`❤️ Creating ${heartCount} hearts with animationId: ${animationId} for value: ${value}`);
+        
+        // Create new hearts with unique animation ID and randomized properties
+        const newHearts = Array.from({ length: heartCount }, (_, i) => {
+          // Randomize position horizontally within ±10px of step center
+          const positionOffsetX = (Math.random() - 0.5) * 20; // -10px to +10px
+          // Position hearts only from the top of the step position (negative Y offset)
+          const positionOffsetY = -24 - Math.random() * 10; // Start from top (handle is ~48px, so -24px to center), random 0-10px above
+          
+          // Random size between 16px and 28px (slightly larger)
+          const size = 16 + Math.random() * 12;
+          
+          // Random rotation between -45deg and 45deg
+          const rotation = (Math.random() - 0.5) * 90;
+          
+          // Add slight color variation (±25 for each RGB channel)
+          const colorVariation = 25;
+          const r = Math.max(0, Math.min(255, baseR + (Math.random() - 0.5) * colorVariation * 2));
+          const g = Math.max(0, Math.min(255, baseG + (Math.random() - 0.5) * colorVariation * 2));
+          const b = Math.max(0, Math.min(255, baseB + (Math.random() - 0.5) * colorVariation * 2));
+          const heartColor = `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
+          
+          const heartPosition = {
+            x: baseX + positionOffsetX,
+            y: baseY + positionOffsetY,
+          };
+          
+          if (i === 0) {
+            console.log(`💖 Heart ${i} position:`, {
+              ...heartPosition,
+              offsetX: positionOffsetX,
+              offsetY: positionOffsetY,
+            });
+          }
+          
+          return {
+            value,
+            position: heartPosition,
+            key: heartKeyRef.current + i,
+            index: i,
+            animationId,
+            size,
+            rotation,
+            color: heartColor,
+          };
+        });
+        heartKeyRef.current += heartCount;
+        
+        console.log(`✨ Adding ${newHearts.length} hearts to state`);
+        // Append new hearts to existing ones (allow multiple animations)
+        setFloatingHearts(prev => {
+          const updated = [...prev, ...newHearts];
+          console.log(`📊 Total hearts in state: ${updated.length}`);
+          return updated;
+        });
+        
+        // Set timeout to remove only this animation's hearts
+        const timeout = setTimeout(() => {
+          setFloatingHearts(prev => prev.filter(heart => heart.animationId !== animationId));
+          activeTimeoutsRef.current.delete(animationId);
+        }, 3500);
+        
+        // Store timeout reference for cleanup
+        activeTimeoutsRef.current.set(animationId, timeout);
+
+        // Trigger confetti if max donation (4) with debounce to prevent overload on older devices
+        if (value === 4 && handleRef.current) {
+          const now = Date.now();
+          const timeSinceLastConfetti = now - lastConfettiTimeRef.current;
+          
+          // Debounce: only trigger confetti if enough time has passed since last trigger
+          if (timeSinceLastConfetti >= CONFETTI_DEBOUNCE_MS) {
+            lastConfettiTimeRef.current = now;
+            
+            // First confetti pop
+            setTimeout(() => {
+              const handleRect = handleRef.current?.getBoundingClientRect();
+              if (handleRect) {
+                const handleX = handleRect.left + handleRect.width / 2;
+                const handleY = handleRect.top + handleRect.height / 2;
+                
+                confetti({
+                  particleCount: 120 + Math.random() * 60, // Random between 120-180
+                  spread: 50 + Math.random() * 20, // Random between 50-70
+                  origin: {
+                    x: handleX / window.innerWidth,
+                    y: handleY / window.innerHeight,
+                  },
+                });
+              }
+            }, 200); // Small delay after particles start (200ms)
+            
+            // Second confetti pop (closer to first)
+            setTimeout(() => {
+              const handleRect = handleRef.current?.getBoundingClientRect();
+              if (handleRect) {
+                const handleX = handleRect.left + handleRect.width / 2;
+                const handleY = handleRect.top + handleRect.height / 2;
+                
+                confetti({
+                  particleCount: 120 + Math.random() * 60, // Random between 120-180
+                  spread: 50 + Math.random() * 20, // Random between 50-70
+                  origin: {
+                    x: handleX / window.innerWidth,
+                    y: handleY / window.innerHeight,
+                  },
+                });
+              }
+            }, 350); // 150ms after first pop (closer together)
+            
+            // Third confetti pop (slightly delayed)
+            setTimeout(() => {
+              const handleRect = handleRef.current?.getBoundingClientRect();
+              if (handleRect) {
+                const handleX = handleRect.left + handleRect.width / 2;
+                const handleY = handleRect.top + handleRect.height / 2;
+                
+                confetti({
+                  particleCount: 120 + Math.random() * 60, // Random between 120-180
+                  spread: 50 + Math.random() * 20, // Random between 50-70
+                  origin: {
+                    x: handleX / window.innerWidth,
+                    y: handleY / window.innerHeight,
+                  },
+                });
+              }
+            }, 800); // 450ms after second pop (slightly delayed)
+          }
+        }
       }
     }
   };
@@ -389,10 +408,10 @@ export default function CombinedSliderDonationWidgetDE({ onDonationChange }: Com
   const adjustedProgressPercent = getAdjustedPositionPercent(displayValue);
 
   return (
-    <div className="donation-widget-bg rounded-[8px] border border-[#e0e0e0] p-[20px]" style={{ backgroundColor: 'white' }}>
+    <div className="donation-widget-bg rounded-[8px] border border-[#e0e0e0] p-[20px] relative" style={{ backgroundColor: 'white' }}>
       {/* Header with question and amount button */}
       <div className="flex items-center mb-[16px]">
-        <h3 className="text-[#212121] text-[16px] font-bold">Möchten Sie Spender*in werden?</h3>
+        <h3 className="text-[#212121] text-[16px] font-bold">Θα θέλατε να κάνετε μια δωρεά;</h3>
         <button
           type="button"
           className="donation-widget-badge text-white box-border content-stretch flex items-center justify-center relative rounded-[4px] shrink-0 ml-[8px] p-[4px] bg-[#212121]"
@@ -430,16 +449,11 @@ export default function CombinedSliderDonationWidgetDE({ onDonationChange }: Com
       {/* Organization Dropdown - styled like dropdown but opens modal */}
       <div className="flex items-center gap-[16px] mb-[8px]">
         <button
-          ref={dropdownButtonRef}
           type="button"
-          key={shakeKey}
           onClick={() => {
             setIsModalOpen(true);
-            setShouldAnimateDropdown(false);
           }}
-          className={`w-full border border-[#e0e0e0] rounded-[8px] bg-white px-[16px] text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none flex items-center justify-between cursor-pointer hover:border-[#0957e8] transition-colors gap-[12px] ${
-            shouldAnimateDropdown ? 'animate-rainbow-glow' : ''
-          }`}
+          className="w-full border border-[#e0e0e0] rounded-[8px] bg-white px-[16px] text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none flex items-center justify-between cursor-pointer hover:border-[#0957e8] transition-colors gap-[12px]"
           style={{ padding: '12px' }}
         >
           <div className="flex items-center gap-[12px] flex-1 min-w-0">
@@ -473,7 +487,7 @@ export default function CombinedSliderDonationWidgetDE({ onDonationChange }: Com
               </div>
             )}
             <span className="text-left truncate" style={{ fontSize: '16px', fontWeight: 'bold' }}>
-              {selectedNonprofit ? selectedNonprofit.name : 'Organisation auswählen'}
+              {selectedNonprofit ? selectedNonprofit.name : 'Επιλέξτε οργανισμό'}
             </span>
           </div>
           <ChevronDown size={20} className="text-[#757575] shrink-0" />
@@ -481,9 +495,9 @@ export default function CombinedSliderDonationWidgetDE({ onDonationChange }: Com
       </div>
 
       {/* Slider - Enhanced fancy version */}
-      <div className="relative">
+      <div className="relative overflow-visible">
           <div className="h-fit w-full">
-            <div className="relative w-full" style={{ height: '60px', zIndex: 1, display: 'flex', alignItems: 'center', touchAction: 'pan-x' }}>
+            <div ref={sliderTrackRef} className="relative w-full" style={{ height: '60px', zIndex: 1, display: 'flex', alignItems: 'center', touchAction: 'pan-x' }}>
               {/* Full-width gradient - always in place */}
               <div 
                 className="absolute left-0 w-full rounded-full"
@@ -538,11 +552,8 @@ export default function CombinedSliderDonationWidgetDE({ onDonationChange }: Com
                 );
               })}
 
-              {/* Handle - large with emoji inside and colored border */}
+              {/* Handle - large with donation amount number inside and colored border */}
               {(() => {
-                const emojiMap: Record<number, string> = { 0: '🙂', 1: '😊', 2: '😄', 4: '😍' };
-                const getEmoji = (value: number) => emojiMap[value] ?? '🙂';
-                
                 const getHandleColor = (value: number) => {
                   if (value === 0) return '#212121';
                   if (value === 2) return '#f1c40f';
@@ -550,44 +561,79 @@ export default function CombinedSliderDonationWidgetDE({ onDonationChange }: Com
                   return '#4caf50';
                 };
                 
+                const getHandleBackground = (value: number) => {
+                  if (value === 0) return '#212121';
+                  if (value === 1) return '#4caf50';
+                  if (value === 2) return '#f1c40f';
+                  if (value === 4) return '#b94a48';
+                  return '#4caf50';
+                };
+                
+                const getHandleTextColor = (value: number) => {
+                  if (value === 0) return '#ffffff';
+                  if (value === 1) return '#ffffff';
+                  if (value === 2) return '#212121'; // Dark text on yellow for contrast
+                  if (value === 4) return '#ffffff';
+                  return '#ffffff';
+                };
+                
                 return (
                   <div
                     ref={handleRef}
-                    className="absolute rounded-full bg-white transition-all flex items-center justify-center font-bold shadow-lg cursor-pointer"
+                    className="absolute rounded-full transition-all flex items-center justify-center font-bold shadow-lg cursor-pointer"
                     style={{
                       left: `${adjustedProgressPercent}%`,
                       top: '50%',
                       transform: `translate(-50%, -50%) scale(${isHandlePressed ? 1.2 : 1})`,
                       width: '48px',
                       height: '48px',
+                      backgroundColor: getHandleBackground(displayValue),
                       border: `4px solid ${getHandleColor(displayValue)}`,
                       zIndex: 10000,
-                      color: '#404040',
-                      fontSize: '28px',
+                      color: getHandleTextColor(displayValue),
+                      fontSize: '20px',
                       lineHeight: '1',
                       userSelect: 'none',
                       WebkitUserSelect: 'none',
                       pointerEvents: 'none',
+                      fontWeight: 'bold',
                     }}
                   >
-                    {getEmoji(displayValue)}
+                    {displayValue}€
                   </div>
                 );
               })()}
 
-              {/* Floating emoji animation */}
-              {floatingEmojis.map((emoji) => {
-                const emojiMap: Record<number, string> = { 0: '🙂', 1: '😊', 2: '😄', 4: '😍' };
-                const emojiChar = emojiMap[emoji.value] ?? '🙂';
+              {/* Floating heart animation */}
+              {floatingHearts.map((heart) => {
                 return (
                   <div
-                    key={emoji.key}
-                    className={`emoji-float emoji-float-${emoji.index}`}
+                    key={heart.key}
+                    className={`heart-float heart-float-${heart.index}`}
                     style={{
-                      left: `${emoji.position}%`,
+                      left: `${heart.position.x}px`,
+                      top: `${heart.position.y}px`,
+                      transform: `translate(-50%, -50%) rotate(${heart.rotation}deg)`,
+                      zIndex: 0,
+                      '--heart-rotate': `${heart.rotation}deg`,
+                    } as React.CSSProperties & {
+                      '--heart-rotate': string;
                     }}
                   >
-                    <span className="emoji-float-inner">{emojiChar}</span>
+                    <svg
+                      width={heart.size}
+                      height={heart.size * 0.9}
+                      viewBox="0 0 20 18"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M0 5.85223C0 10.7152 4.02 13.3062 6.962 15.6262C8 16.4442 9 17.2152 10 17.2152C11 17.2152 12 16.4452 13.038 15.6252C15.981 13.3072 20 10.7152 20 5.85323C20 0.991225 14.5 -2.45977 10 2.21623C5.5 -2.45977 0 0.989226 0 5.85223Z"
+                        fill={heart.color}
+                        stroke="white"
+                        strokeWidth="1"
+                      />
+                    </svg>
                   </div>
                 );
               })}
@@ -612,28 +658,18 @@ export default function CombinedSliderDonationWidgetDE({ onDonationChange }: Com
                   handleSliderChange(stepValue);
                 }}
                 onMouseDown={() => setIsHandlePressed(true)}
-                onMouseUp={(e) => {
+                onMouseUp={() => {
                   setIsHandlePressed(false);
-                  if (!selectedNonprofit) {
-                    const input = e.target as HTMLInputElement;
-                    input.value = '0';
-                    setVisualPosition(null);
-                    handleSliderChange(0);
-                  } else if (selectedAmount > 0) {
-                    triggerFloatingEmojis(selectedAmount);
+                  if (selectedAmount > 0) {
+                    triggerFloatingHearts(selectedAmount);
                   }
                 }}
                 onMouseLeave={() => setIsHandlePressed(false)}
                 onTouchStart={() => setIsHandlePressed(true)}
-                onTouchEnd={(e) => {
+                onTouchEnd={() => {
                   setIsHandlePressed(false);
-                  if (!selectedNonprofit) {
-                    const input = e.target as HTMLInputElement;
-                    input.value = '0';
-                    setVisualPosition(null);
-                    handleSliderChange(0);
-                  } else if (selectedAmount > 0) {
-                    triggerFloatingEmojis(selectedAmount);
+                  if (selectedAmount > 0) {
+                    triggerFloatingHearts(selectedAmount);
                   }
                 }}
                 onTouchCancel={() => setIsHandlePressed(false)}
@@ -671,7 +707,7 @@ export default function CombinedSliderDonationWidgetDE({ onDonationChange }: Com
                   onClick={() => {
                     handleSliderChange(label);
                     if (selectedNonprofit && label > 0) {
-                      triggerFloatingEmojis(label);
+                      triggerFloatingHearts(label);
                     }
                   }}
                   style={{ 

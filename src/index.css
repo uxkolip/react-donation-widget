@@ -1480,43 +1480,6 @@ input[type="range"]::-moz-range-thumb {
   border: none;
 }
 
-/* Rainbow border glow animation for organization dropdown */
-@property --glow-deg {
-  syntax: "<angle>";
-  inherits: true;
-  initial-value: -90deg;
-}
-
-@property --clr-1 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: red;
-}
-
-@property --clr-2 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: yellow;
-}
-
-@property --clr-3 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: green;
-}
-
-@property --clr-4 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: blue;
-}
-
-@property --clr-5 {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: purple;
-}
-
 @keyframes cheerful-bounce {
   0%, 100% {
     transform: translateY(0) scale(1);
@@ -1530,75 +1493,6 @@ input[type="range"]::-moz-range-thumb {
   75% {
     transform: translateY(-1px) scale(1.005);
   }
-}
-
-/* Rainbow Glow Animations */
-@keyframes glow-rotate {
-  to {
-    --glow-deg: 270deg;
-  }
-}
-
-@keyframes glow-fade {
-  0%, 100% {
-    opacity: 0;
-  }
-  10%, 50% {
-    opacity: var(--glow-intensity);
-  }
-}
-
-@keyframes shake {
-  25%, 75% {
-    transform: translateX(4px);
-  }
-  50% {
-    transform: translateX(-4px);
-  }
-}
-
-.animate-rainbow-glow {
-  /* CSS Variables */
-  --gradient-glow: var(--clr-1), var(--clr-2), var(--clr-3), var(--clr-4), var(--clr-5), var(--clr-1);
-  --border-width: 2px;
-  --glow-size: 0.5rem;
-  --glow-intensity: 0.2;
-  --surface: white;
-
-  /* Layout */
-  position: relative;
-  isolation: isolate;
-  
-  /* Styling */
-  border: var(--border-width) solid var(--border-color, #e0e0e0);
-  background: var(--surface);
-  
-  /* Animation */
-  animation: shake 0.3s ease-in-out;
-}
-
-.animate-rainbow-glow::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  pointer-events: none;
-  background: var(--surface);
-}
-
-.animate-rainbow-glow::after {
-  content: "";
-  position: absolute;
-  inset: calc(-1 * var(--glow-size));
-  z-index: -2;
-  border-radius: inherit;
-  pointer-events: none;
-  background: conic-gradient(from var(--glow-deg), var(--gradient-glow));
-  filter: blur(var(--glow-size));
-  animation: 
-    glow-rotate 1.5s infinite linear,
-    glow-fade 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Donation Widget Colors */
@@ -1747,6 +1641,126 @@ input[type="range"]::-moz-range-thumb {
 
 @keyframes emoji-float-fade {
   0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Floating heart animation */
+.heart-float {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  background: transparent;
+  opacity: 0; /* Start invisible */
+  animation: heart-float-up 3.5s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  transform-origin: center center;
+}
+
+.heart-float svg {
+  display: block;
+  opacity: 0; /* Start invisible */
+  animation: heart-float-fade 3.5s linear forwards;
+}
+
+/* Different horizontal offsets and delays for each heart */
+/* Using negative delays so animation starts before hearts appear */
+.heart-float-0 {
+  margin-left: -2.5rem;
+  animation-delay: -0.1s;
+  --heart-rotate: -20deg;
+}
+
+.heart-float-1 {
+  margin-left: -1rem;
+  animation-delay: 0.15s;
+  --heart-rotate: 15deg;
+}
+
+.heart-float-2 {
+  margin-left: 0;
+  animation-delay: 0.05s;
+  --heart-rotate: -10deg;
+}
+
+.heart-float-3 {
+  margin-left: 1rem;
+  animation-delay: 0.25s;
+  --heart-rotate: 20deg;
+}
+
+.heart-float-4 {
+  margin-left: -1.5rem;
+  animation-delay: 0.4s;
+  --heart-rotate: -15deg;
+}
+
+.heart-float-5 {
+  margin-left: 0.5rem;
+  animation-delay: 0.1s;
+  --heart-rotate: 10deg;
+}
+
+.heart-float-6 {
+  margin-left: -2rem;
+  animation-delay: 0.2s;
+  --heart-rotate: -25deg;
+}
+
+.heart-float-7 {
+  margin-left: 1.5rem;
+  animation-delay: 0.35s;
+  --heart-rotate: 18deg;
+}
+
+.heart-float-8 {
+  margin-left: -0.5rem;
+  animation-delay: 0s;
+  --heart-rotate: -12deg;
+}
+
+.heart-float-9 {
+  margin-left: 2rem;
+  animation-delay: 0.45s;
+  --heart-rotate: 22deg;
+}
+
+.heart-float-10 {
+  margin-left: -1.2rem;
+  animation-delay: 0.3s;
+  --heart-rotate: -18deg;
+}
+
+.heart-float-11 {
+  margin-left: 0.8rem;
+  animation-delay: 0.08s;
+  --heart-rotate: 14deg;
+}
+
+@keyframes heart-float-up {
+  0% {
+    transform: translate(-50%, -50%) translateY(30px) rotate(var(--heart-rotate, 0deg)) scale(0.7);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translateY(-150px) rotate(var(--heart-rotate, 0deg)) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes heart-float-fade {
+  0% {
+    opacity: 0;
+  }
+  15% {
     opacity: 1;
   }
   50% {
