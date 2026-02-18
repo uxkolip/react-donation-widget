@@ -821,7 +821,7 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
                 >
                   <div
                     aria-hidden="true"
-                    className="absolute border border-[#bdbdbd] border-solid inset-0 pointer-events-none rounded-[8px]"
+                    className="donation-widget-amount-btn-inner absolute border border-[#bdbdbd] border-solid inset-0 pointer-events-none rounded-[8px]"
                   />
                   <div className="h-[19px] relative shrink-0 w-[16.625px] flex items-center justify-center">
                     {isClearing ? (

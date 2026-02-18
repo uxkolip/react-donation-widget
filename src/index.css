@@ -1842,11 +1842,24 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .trash-button:hover {
-  background-color: #f0e5ff !important;
+  background-color: var(--widget-accent, #8320bd);
+}
+
+.trash-button:hover .donation-widget-amount-btn-inner {
+  border-color: var(--widget-accent, #8320bd);
+}
+
+.trash-button:hover svg path,
+.trash-button:active svg path {
+  stroke: white;
 }
 
 .trash-button:active {
-  background-color: #e8d5ff !important;
+  background-color: var(--widget-accent, #8320bd);
+}
+
+.trash-button:active .donation-widget-amount-btn-inner {
+  border-color: var(--widget-accent, #8320bd);
 }
 
 /* Success animation styles */
