@@ -1,7 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import * as ReactDOM from 'react-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Loader2, Heart, Dog, Users, TreePine, Stethoscope, ChevronDown } from 'lucide-react';
 import { type Nonprofit } from './NonprofitSelector';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import nonprofitsData from '../pages/nonprofits.json';
 
 const getIcon = (iconType: string) => {
   switch (iconType) {
@@ -29,74 +32,211 @@ const formatAmount = (value: number) => euroFormatter.format(value);
 
 interface CombinedDonationWidgetProps {
   onDonationChange?: (amount: number, nonprofit: Nonprofit | null) => void;
+  /** When true, one org is shown at a time (cycled via pagination) and dropdown/chevron are hidden */
+  singleOrg?: boolean;
+  /** When set, pagination is rendered into this container (e.g. bottom of page) instead of below the widget */
+  paginationContainerRef?: React.RefObject<HTMLDivElement | null>;
 }
 
-// Nonprofits list - matching the one from NonprofitSelector
-const nonprofits: Nonprofit[] = [
-  {
-    id: 'arsis',
-    name: 'ΑΡΣΙΣ',
-    description: 'Παρέχει κοινωνική υποστήριξη και προστασία σε ευάλωτες ομάδες πληθυσμού.',
-    category: 'humans',
-    icon: 'heart',
-    logo: 'https://youbehero.com/images/cause/265/l/arsis_logo.png'
-  },
-  {
-    id: 'selianitika-ilios',
-    name: 'Πολιτιστικός Σύλλογος Σελιανιτίκων Ήλιος',
-    description: 'Προωθεί τον πολιτισμό, τις παραδόσεις και την ανάπτυξη της τοπικής κοινότητας.',
-    category: 'humans',
-    icon: 'users',
-    logo: 'https://youbehero.com/images/cause/389/l/politistikos-sillogos-selianitikon-logo.jpg'
-  },
-  {
-    id: 'kids-fair-collection',
-    name: 'Kids Fair Collection',
-    description: 'Ο κόσμος γίνεται πιο φωτεινός, όταν τα παιδιά δημιουργούν και προσφέρουν – με αγάπη, με χρώμα, με σκοπό.',
-    category: 'humans',
-    icon: 'users',
-    logo: 'https://youbehero.com/images/cause/394/l/kids-fair-collection-logo.png'
-  },
-  {
-    id: 'anagennisi',
-    name: 'Σύλλογος Γονέων και Φίλων Αυτιστικών Ατόμων Αναγέννηση',
-    description: 'Υποστηρίζει άτομα με αυτισμό και τις οικογένειές τους, προσφέροντας εκπαίδευση, υποστήριξη και προστασία.',
-    category: 'humans',
-    icon: 'heart',
-    logo: 'https://youbehero.com/images/cause/176/l/anagennisi_logo_tn.png'
-  },
-  {
-    id: 'espi',
-    name: 'Ελληνικός Σύλλογος Προστασίας Ιπποειδών',
-    description: 'Αφοσιωμένη στην προστασία και ευζωία των ιπποειδών (άλογα, γαϊδούρια, μουλάρια).',
-    category: 'animals',
-    icon: 'dog',
-    logo: 'https://youbehero.com/images/cause/183/l/espi_logo.jpg'
-  },
-  {
-    id: 'moiazw',
-    name: 'ΜΟΙΑΖΩ',
-    description: 'Υποστηρίζει άτομα με αυτισμό και τις οικογένειές τους, προωθώντας την ένταξη και την ποιότητα ζωής.',
-    category: 'humans',
-    icon: 'heart',
-    logo: 'https://youbehero.com/images/cause/221/l/moiazw_logo.png'
-  },
-  {
-    id: 'ariel',
-    name: '«Ariel» Φιλοζωϊκό-Πολιτιστικό Σωματείο',
-    description: 'Συνδυάζει την προστασία και φροντίδα ζώων με πολιτιστικές δραστηριότητες.',
-    category: 'animals',
-    icon: 'dog',
-    logo: 'https://youbehero.com/images/cause/197/l/logoariel.jpeg'
-  }
-];
+type NonprofitsJsonItem = {
+  cta: string;
+  name: string;
+  logo: string;
+};
 
-export default function CombinedDonationWidget({ onDonationChange }: CombinedDonationWidgetProps) {
+const slugify = (value: string) => {
+  const base = value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return base || 'org';
+};
+
+/** Resolve logo path to full URL (local paths get app base URL). */
+function resolveLogoUrl(logo: string | undefined): string {
+  if (!logo) return '';
+  if (logo.startsWith('http://') || logo.startsWith('https://')) return logo;
+  const meta = typeof import.meta !== 'undefined' ? (import.meta as { env?: { BASE_URL?: string } }) : undefined;
+  const base = meta?.env?.BASE_URL ?? '/';
+  return `${base.replace(/\/$/, '')}/${logo.replace(/^\//, '')}`;
+}
+
+// Nonprofits list sourced from `src/pages/nonprofits.json`
+// We store CTA in `description` so existing UI can display/search it.
+const nonprofits: Nonprofit[] = (nonprofitsData as NonprofitsJsonItem[]).map((item, idx) => {
+  const idBase = slugify(item.name);
+  return {
+    id: `${idBase}-${idx + 1}`,
+    name: item.name,
+    description: item.cta,
+    category: 'humans',
+    icon: 'heart',
+    logo: item.logo,
+  };
+});
+
+const NUM_ORGS_WITH_ONE_AMOUNT = 10;
+const PROBABILITY_THREE_AMOUNTS = 0.7; // of the rest, most get 3
+const MIN_AMOUNT = 0.5;
+const MAX_AMOUNT = 5.0;
+const MAX_FIRST_AMOUNT_TWO = 2.0; // when 2 amounts: the first (smaller) must be in [0.50€, 2.00€]
+const MAX_AMOUNT_DIFF = 1.0; // amounts at most 1€ apart
+
+const generateRandomDonationAmounts = (count: number) => {
+  const step = Math.random() < 0.5 ? 0.5 : 1.0;
+  // First (smaller) amount range: when 2 amounts use [0.50, 2.00]; else [0.50, 4.00] so window fits in [0.50, 5.00]
+  const maxStart = count === 2 ? MAX_FIRST_AMOUNT_TWO : MAX_AMOUNT - MAX_AMOUNT_DIFF;
+  const possibleStarts: number[] = [];
+  for (let s = MIN_AMOUNT; s <= maxStart + 1e-9; s += 0.5) {
+    possibleStarts.push(Number(s.toFixed(2)));
+  }
+  const windowStart = possibleStarts[Math.floor(Math.random() * possibleStarts.length)];
+  const windowEnd = windowStart + MAX_AMOUNT_DIFF;
+
+  const values: number[] = [];
+  for (let v = windowStart; v <= windowEnd + 1e-9; v += step) {
+    values.push(Number(v.toFixed(2)));
+  }
+
+  // Fisher–Yates shuffle, then take `count` and sort
+  for (let i = values.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [values[i], values[j]] = [values[j], values[i]];
+  }
+  const take = Math.max(1, Math.min(count, values.length));
+  return values.slice(0, take).sort((a, b) => a - b);
+};
+
+const DEFAULT_WIDGET_BG = '#fcf5ff';
+const DEFAULT_ACCENT = '#8320bd';
+
+/** Use CORS proxy for cross-origin logo URLs so canvas pixel read is allowed. */
+function getLogoUrlForColorExtraction(url: string): string {
+  try {
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const imgOrigin = new URL(url, origin).origin;
+    if (imgOrigin === origin) return url;
+  } catch {
+    /* invalid URL */
+  }
+  return 'https://corsproxy.io/?' + encodeURIComponent(url);
+}
+
+function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) h = ((b - r) / d + 2) / 6;
+    else h = ((r - g) / d + 4) / 6;
+  }
+  return [h * 360, s * 100, l * 100];
+}
+
+function hslToRgb(h: number, s: number, l: number): [number, number, number] {
+  h /= 360; s /= 100; l /= 100;
+  let r: number, g: number, b: number;
+  if (s === 0) r = g = b = l;
+  else {
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1 / 3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1 / 3);
+  }
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+function hue2rgb(p: number, q: number, t: number): number {
+  if (t < 0) t += 1;
+  if (t > 1) t -= 1;
+  if (t < 1 / 6) return p + (q - p) * 6 * t;
+  if (t < 1 / 2) return q;
+  if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+  return p;
+}
+
+export type LogoColors = { background: string; accent: string };
+
+/** Extract light background tint and dark accent from logo image. */
+function getLogoColors(imageUrl: string): Promise<LogoColors> {
+  return new Promise((resolve) => {
+    if (!imageUrl?.trim()) {
+      resolve({ background: DEFAULT_WIDGET_BG, accent: DEFAULT_ACCENT });
+      return;
+    }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const size = 32;
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          resolve({ background: DEFAULT_WIDGET_BG, accent: DEFAULT_ACCENT });
+          return;
+        }
+        ctx.drawImage(img, 0, 0, size, size);
+        const data = ctx.getImageData(0, 0, size, size).data;
+        let r = 0, g = 0, b = 0, n = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          const a = data[i + 3];
+          if (a > 128) {
+            r += data[i];
+            g += data[i + 1];
+            b += data[i + 2];
+            n++;
+          }
+        }
+        if (n === 0) {
+          resolve({ background: DEFAULT_WIDGET_BG, accent: DEFAULT_ACCENT });
+          return;
+        }
+        r = Math.round(r / n);
+        g = Math.round(g / n);
+        b = Math.round(b / n);
+
+        // Light background: mix with white
+        const mix = 0.88;
+        const bgR = Math.round(mix * 255 + (1 - mix) * r);
+        const bgG = Math.round(mix * 255 + (1 - mix) * g);
+        const bgB = Math.round(mix * 255 + (1 - mix) * b);
+        const background = `rgb(${bgR}, ${bgG}, ${bgB})`;
+
+        // Dark accent: same hue/saturation, low lightness for buttons/badge
+        const [h, s, l] = rgbToHsl(r, g, b);
+        const [acR, acG, acB] = hslToRgb(h, Math.min(100, s * 0.9 + 20), 28);
+        const accent = `rgb(${acR}, ${acG}, ${acB})`;
+
+        resolve({ background, accent });
+      } catch {
+        resolve({ background: DEFAULT_WIDGET_BG, accent: DEFAULT_ACCENT });
+      }
+    };
+    img.onerror = () => resolve({ background: DEFAULT_WIDGET_BG, accent: DEFAULT_ACCENT });
+    img.src = getLogoUrlForColorExtraction(imageUrl);
+  });
+}
+
+export default function CombinedDonationWidget({ onDonationChange, singleOrg = false, paginationContainerRef }: CombinedDonationWidgetProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [loadingAmount, setLoadingAmount] = useState<number | null>(null);
   const [isClearing, setIsClearing] = useState(false);
-  const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(nonprofits[0]);
+  const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(nonprofits[0] ?? null);
+  const [currentNonprofitIndex, setCurrentNonprofitIndex] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCycling, setIsCycling] = useState(false);
+  const cycleIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const currentIndexRef = useRef(currentNonprofitIndex);
+  const handlePaginateRef = useRef<(direction: 'prev' | 'next') => void>(() => {});
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [floatingHearts, setFloatingHearts] = useState<{ amount: number; position: { x: number; y: number }; key: number; index: number; animationId: number; size: number; rotation: number; color: string }[]>([]);
   const heartKeyRef = useRef(0);
@@ -106,12 +246,64 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
   const EMOJI_DEBOUNCE_MS = 1500; // 1.5 seconds debounce to prevent overload
   const amountButtonRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
 
-  const presetAmounts = [1, 2, 4];
+  // One set of random donation amounts per org + which one is pre-selected (varies per org)
+  const { presetAmountsByOrg, selectedAmountIndexByOrg } = useMemo(() => {
+    const n = nonprofits.length;
+    const indices = Array.from({ length: n }, (_, i) => i);
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    const oneAmountSet = new Set(indices.slice(0, Math.min(NUM_ORGS_WITH_ONE_AMOUNT, n)));
+    const counts = Array.from({ length: n }, (_, i) =>
+      oneAmountSet.has(i) ? 1 : (Math.random() < PROBABILITY_THREE_AMOUNTS ? 3 : 2)
+    );
+    const amounts = nonprofits.map((_, i) => generateRandomDonationAmounts(counts[i]));
+    const selectedIndex = amounts.map((arr) => Math.floor(Math.random() * arr.length));
+    return { presetAmountsByOrg: amounts, selectedAmountIndexByOrg: selectedIndex };
+  }, []);
+  const presetAmounts = presetAmountsByOrg[currentNonprofitIndex] ?? presetAmountsByOrg[0] ?? [];
 
-  // Notify parent of initial state with first nonprofit preselected
+  const [logoBgColor, setLogoBgColor] = useState<string>(DEFAULT_WIDGET_BG);
+  const [logoAccentColor, setLogoAccentColor] = useState<string>(DEFAULT_ACCENT);
+
+  // Derive widget background and dark accent from current org logo
   useEffect(() => {
-    if (selectedNonprofit) {
-      onDonationChange?.(0, selectedNonprofit);
+    const logoUrl = resolveLogoUrl(selectedNonprofit?.logo);
+    if (!logoUrl) {
+      setLogoBgColor(DEFAULT_WIDGET_BG);
+      setLogoAccentColor(DEFAULT_ACCENT);
+      return;
+    }
+    let cancelled = false;
+    getLogoColors(logoUrl).then(({ background, accent }) => {
+      if (!cancelled) {
+        setLogoBgColor(background);
+        setLogoAccentColor(accent);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedNonprofit?.logo]);
+
+  // On mount: sync from URL ?org= or preselect first org
+  useEffect(() => {
+    const n = nonprofits.length;
+    const orgParam = searchParams.get('org');
+    const orgNum = parseInt(orgParam ?? '', 10);
+    if (Number.isFinite(orgNum) && orgNum >= 1 && orgNum <= n) {
+      goToOrgByIndex(orgNum - 1);
+    } else {
+      const idx = selectedAmountIndexByOrg[0] ?? 0;
+      const defaultAmount = presetAmountsByOrg[0]?.[idx] ?? 0;
+      setSelectedAmount(defaultAmount);
+      if (selectedNonprofit) {
+        onDonationChange?.(defaultAmount, selectedNonprofit);
+      }
+      if (singleOrg && n > 0) {
+        setSearchParams({ org: '1' }, { replace: true });
+      }
     }
   }, []); // Only run on mount
 
@@ -132,11 +324,18 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
     };
   }, [isDropdownOpen]);
 
-  // Cleanup all heart animation timeouts on unmount
+  // Keep ref in sync for cycle interval
+  currentIndexRef.current = currentNonprofitIndex;
+
+  // Cleanup all heart animation timeouts and cycle interval on unmount
   useEffect(() => {
     return () => {
       activeTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
       activeTimeoutsRef.current.clear();
+      if (cycleIntervalRef.current) {
+        clearInterval(cycleIntervalRef.current);
+        cycleIntervalRef.current = null;
+      }
     };
   }, []);
 
@@ -259,14 +458,84 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
     }, 800);
   };
 
+  const clearFloatingHearts = () => {
+    activeTimeoutsRef.current.forEach((t) => clearTimeout(t));
+    activeTimeoutsRef.current.clear();
+    setFloatingHearts([]);
+  };
+
   const handleNonprofitSelect = (nonprofit: Nonprofit) => {
     setSelectedNonprofit(nonprofit);
     setIsDropdownOpen(false);
-    if (selectedAmount) {
-      onDonationChange?.(selectedAmount, nonprofit);
-    } else {
-      onDonationChange?.(0, nonprofit);
+    const idx = nonprofits.findIndex((n) => n.id === nonprofit.id);
+    if (idx >= 0) {
+      setCurrentNonprofitIndex(idx);
+      if (singleOrg) setSearchParams({ org: String(idx + 1) }, { replace: true });
     }
+    const selIdx = idx >= 0 ? selectedAmountIndexByOrg[idx] ?? 0 : 0;
+    const defaultAmount = presetAmountsByOrg[idx]?.[selIdx] ?? 0;
+    setSelectedAmount(defaultAmount);
+    clearFloatingHearts();
+    onDonationChange?.(defaultAmount, nonprofit);
+  };
+
+  const goToOrgByIndex = (nextIndex: number) => {
+    if (!nonprofits.length) return;
+    const nextNonprofit = nonprofits[nextIndex] ?? null;
+    const selIdx = selectedAmountIndexByOrg[nextIndex] ?? 0;
+    const defaultAmount = presetAmountsByOrg[nextIndex]?.[selIdx] ?? 0;
+    setCurrentNonprofitIndex(nextIndex);
+    setSelectedNonprofit(nextNonprofit);
+    setSelectedAmount(defaultAmount);
+    clearFloatingHearts();
+    onDonationChange?.(defaultAmount, nextNonprofit ?? null);
+    if (singleOrg) {
+      setSearchParams({ org: String(nextIndex + 1) }, { replace: true });
+    }
+  };
+
+  const handlePaginate = (direction: 'prev' | 'next') => {
+    if (!nonprofits.length) return;
+    const nextIndex =
+      direction === 'next'
+        ? (currentNonprofitIndex + 1) % nonprofits.length
+        : (currentNonprofitIndex - 1 + nonprofits.length) % nonprofits.length;
+    goToOrgByIndex(nextIndex);
+  };
+  handlePaginateRef.current = handlePaginate;
+
+  // Arrow keys to cycle orgs in single-org mode
+  useEffect(() => {
+    if (!singleOrg || nonprofits.length <= 1) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        handlePaginateRef.current('prev');
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        handlePaginateRef.current('next');
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [singleOrg]);
+
+  const toggleCycle = () => {
+    if (isCycling) {
+      if (cycleIntervalRef.current) {
+        clearInterval(cycleIntervalRef.current);
+        cycleIntervalRef.current = null;
+      }
+      setIsCycling(false);
+      return;
+    }
+    setIsCycling(true);
+    cycleIntervalRef.current = setInterval(() => {
+      const n = nonprofits.length;
+      if (n === 0) return;
+      const nextIndex = (currentIndexRef.current + 1) % n;
+      goToOrgByIndex(nextIndex);
+    }, 500);
   };
 
   const getTotalAmount = () => {
@@ -275,13 +544,23 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
   };
 
   return (
-    <div className="donation-widget-bg rounded-[8px] border border-[#e0e0e0] p-[20px] relative">
-      {/* Header with question and amount button */}
+    <>
+    <div
+      className="donation-widget-bg rounded-[8px] p-[12px] relative"
+      style={{
+        backgroundColor: logoBgColor,
+        ['--widget-accent']: logoAccentColor,
+      } as React.CSSProperties & { '--widget-accent': string }}
+    >
+      {/* Header: CTA from selected org (or default) and amount badge */}
       <div className="flex items-center mb-[16px]">
-        <h3 className="text-[#212121] text-[16px] font-bold">Θα θέλατε να κάνετε μια δωρεά;</h3>
+        <h3 className="text-[#212121] text-[16px] font-bold">
+          {selectedNonprofit?.description ?? 'Θα θέλατε να κάνετε μια δωρεά;'}
+        </h3>
           <button
             type="button"
-            className="donation-widget-badge text-white box-border content-stretch flex gap-[4px] items-center justify-center p-[4px] px-2 relative rounded-[4px] shrink-0 ml-[8px] bg-[#8320bd]"
+            className="donation-widget-badge text-white box-border content-stretch flex gap-[4px] items-center justify-center p-[4px] px-2 relative rounded-[4px] shrink-0 ml-[8px]"
+            style={{ backgroundColor: logoAccentColor }}
           >
           <span
             aria-hidden="true"
@@ -312,27 +591,21 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
         </button>
       </div>
 
-      {/* Organization Dropdown */}
-      <div ref={dropdownRef} className="relative flex items-center gap-[16px] mb-[16px]">
+      {/* Organization Dropdown or single-org display */}
+      <div ref={dropdownRef} className="relative flex items-center gap-[16px] mb-[8px]">
         <div className="w-full relative">
-          {/* Selected Item / Trigger Button */}
-          <button
-            type="button"
-            onClick={() => {
-              setIsDropdownOpen(!isDropdownOpen);
-            }}
-            className={`w-full border border-[#e0e0e0] rounded-[8px] bg-white text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none flex items-center justify-between cursor-pointer hover:border-[#0957e8] transition-colors gap-[12px] ${
-              selectedNonprofit ? 'bg-[#f5f5f5]' : ''
-            }`}
-            style={{ padding: '12px' }}
-          >
-            <div className="flex items-center gap-[12px] flex-1 min-w-0">
-              {selectedNonprofit ? (() => {
-                return (
-                  <div className="w-[32px] h-[32px] rounded-full flex items-center justify-center shrink-0 overflow-hidden">
+          {singleOrg ? (
+            /* Single org: static display, no dropdown, no chevron */
+            <div
+              className="w-full border border-[#e0e0e0] bg-white rounded-[8px] text-[14px] text-[#212121] flex items-center gap-[12px] min-w-0"
+              style={{ padding: '12px', boxShadow: '0 0 4px #0000001a' }}
+            >
+              {selectedNonprofit ? (
+                <>
+                  <div className="max-w-[90px] h-[32px] flex items-center justify-center shrink-0 overflow-hidden">
                     {selectedNonprofit.logo ? (
                       <ImageWithFallback
-                        src={selectedNonprofit.logo}
+                        src={resolveLogoUrl(selectedNonprofit.logo)}
                         alt={selectedNonprofit.name}
                         className="w-full h-full object-contain"
                       />
@@ -341,64 +614,97 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
                       return <Icon size={18} className="text-[#0957e8]" />;
                     })()}
                   </div>
-                );
-              })() : (
-                <div className="w-[32px] h-[32px] flex items-center justify-center shrink-0">
-                  <svg width="24" height="25" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0.498535" y="0.606262" width="15" height="15" rx="1.5" fill="#212121"/>
-                    <rect x="0.498535" y="0.606262" width="15" height="15" rx="1.5" stroke="#212121"/>
-                    <path d="M11.9983 4.10626H9.70627V6.34446H11.9983V4.10626Z" fill="white"/>
-                    <path d="M6.29055 4.10626H3.99854V6.34446H6.29055V4.10626Z" fill="white"/>
-                    <path d="M9.70652 7.45257V7.76282C9.70652 9.13677 8.97925 9.9567 7.98752 9.9567C6.86355 9.9567 6.29055 8.95948 6.29055 7.76282V7.45257H3.99854V7.91795C3.99854 10.6215 5.60736 12.1063 7.98752 12.1063C10.566 12.1063 11.9985 10.4442 11.9985 7.91795V7.45257H9.70652Z" fill="white"/>
-                  </svg>
+                  <span className="text-left truncate" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                    {selectedNonprofit.name}
+                  </span>
+                </>
+              ) : null}
+            </div>
+          ) : (
+            <>
+              {/* Selected Item / Trigger Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDropdownOpen(!isDropdownOpen);
+                }}
+                className={`w-full border border-[#e0e0e0] rounded-[8px] bg-white text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none flex items-center justify-between cursor-pointer hover:border-[#0957e8] transition-colors gap-[12px] ${
+                  selectedNonprofit ? 'bg-[#f5f5f5]' : ''
+                }`}
+                style={{ padding: '12px' }}
+              >
+                <div className="flex items-center gap-[12px] flex-1 min-w-0">
+                  {selectedNonprofit ? (() => {
+                    return (
+                      <div className="w-[32px] h-[32px] rounded-full flex items-center justify-center shrink-0 overflow-hidden">
+                        {selectedNonprofit.logo ? (
+                          <ImageWithFallback
+                            src={resolveLogoUrl(selectedNonprofit.logo)}
+                            alt={selectedNonprofit.name}
+                            className="w-full h-full object-contain"
+                          />
+                        ) : (() => {
+                          const Icon = getIcon(selectedNonprofit.icon);
+                          return <Icon size={18} className="text-[#0957e8]" />;
+                        })()}
+                      </div>
+                    );
+                  })() : (
+                    <div className="w-[32px] h-[32px] flex items-center justify-center shrink-0">
+                      <svg width="24" height="25" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0.498535" y="0.606262" width="15" height="15" rx="1.5" fill="#212121"/>
+                        <rect x="0.498535" y="0.606262" width="15" height="15" rx="1.5" stroke="#212121"/>
+                        <path d="M11.9983 4.10626H9.70627V6.34446H11.9983V4.10626Z" fill="white"/>
+                        <path d="M6.29055 4.10626H3.99854V6.34446H6.29055V4.10626Z" fill="white"/>
+                        <path d="M9.70652 7.45257V7.76282C9.70652 9.13677 8.97925 9.9567 7.98752 9.9567C6.86355 9.9567 6.29055 8.95948 6.29055 7.76282V7.45257H3.99854V7.91795C3.99854 10.6215 5.60736 12.1063 7.98752 12.1063C10.566 12.1063 11.9985 10.4442 11.9985 7.91795V7.45257H9.70652Z" fill="white"/>
+                      </svg>
+                    </div>
+                  )}
+                  <span className="text-left truncate" style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                    {selectedNonprofit ? selectedNonprofit.name : 'Επιλογή φορέα'}
+                  </span>
+                </div>
+                <ChevronDown 
+                  size={20} 
+                  className={`text-[#757575] shrink-0 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
+                />
+              </button>
+
+              {/* Dropdown List */}
+              {isDropdownOpen && (
+                <div className="absolute top-full left-0 right-0 mt-[4px] bg-white border border-[#e0e0e0] rounded-[8px] shadow-lg z-50 max-h-[400px] overflow-y-auto">
+                  {nonprofits.map((nonprofit) => {
+                    const isSelected = selectedNonprofit?.id === nonprofit.id;
+                    return (
+                      <button
+                        key={nonprofit.id}
+                        type="button"
+                        onClick={() => handleNonprofitSelect(nonprofit)}
+                        className={`w-full flex items-center gap-[12px] px-[16px] py-[12px] text-left transition-colors hover:bg-[#f5f5f5] ${
+                          isSelected ? 'bg-[#f5f5f5]' : ''
+                        }`}
+                      >
+                        <div className="w-[32px] h-[32px] rounded-full flex items-center justify-center shrink-0 overflow-hidden">
+                          {nonprofit.logo ? (
+                            <ImageWithFallback
+                              src={resolveLogoUrl(nonprofit.logo)}
+                              alt={nonprofit.name}
+                              className="w-full h-full object-contain"
+                            />
+                          ) : (() => {
+                            const Icon = getIcon(nonprofit.icon);
+                            return <Icon size={18} className="text-[#0957e8]" />;
+                          })()}
+                        </div>
+                        <span className="text-[#212121] text-[16px] flex-1 truncate">
+                          {nonprofit.name}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               )}
-              <span className="text-left truncate" style={{ fontSize: '16px', fontWeight: 'bold' }}>
-                {selectedNonprofit ? selectedNonprofit.name : 'Επιλογή φορέα'}
-              </span>
-            </div>
-            <ChevronDown 
-              size={20} 
-              className={`text-[#757575] shrink-0 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
-            />
-          </button>
-
-          {/* Dropdown List */}
-          {isDropdownOpen && (
-            <div className="absolute top-full left-0 right-0 mt-[4px] bg-white border border-[#e0e0e0] rounded-[8px] shadow-lg z-50 max-h-[400px] overflow-y-auto">
-              {nonprofits.map((nonprofit) => {
-                const isSelected = selectedNonprofit?.id === nonprofit.id;
-                return (
-                  <button
-                    key={nonprofit.id}
-                    type="button"
-                    onClick={() => handleNonprofitSelect(nonprofit)}
-                    className={`w-full flex items-center gap-[12px] px-[16px] py-[12px] text-left transition-colors hover:bg-[#f5f5f5] ${
-                      isSelected ? 'bg-[#f5f5f5]' : ''
-                    }`}
-                  >
-                    {/* Logo/Icon */}
-                    <div className="w-[32px] h-[32px] rounded-full flex items-center justify-center shrink-0 overflow-hidden">
-                      {nonprofit.logo ? (
-                        <ImageWithFallback
-                          src={nonprofit.logo}
-                          alt={nonprofit.name}
-                          className="w-full h-full object-contain"
-                        />
-                      ) : (() => {
-                        const Icon = getIcon(nonprofit.icon);
-                        return <Icon size={18} className="text-[#0957e8]" />;
-                      })()}
-                    </div>
-
-                    {/* Name */}
-                    <span className="text-[#212121] text-[16px] flex-1 truncate">
-                      {nonprofit.name}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            </>
           )}
         </div>
       </div>
@@ -406,15 +712,15 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
       {/* Amount Selection - from version 2 (buttons + trash can) */}
       <div className="relative shrink-0 w-full overflow-visible">
         <div className="size-full overflow-visible">
-          <div className="box-border content-stretch flex flex-col gap-[12px] items-start relative w-full py-[8px] mt-[0px] mr-[0px] mb-[8px] ml-[0px] overflow-visible">
-            <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full overflow-visible">
-                {/* Preset amounts */}
+          <div className="box-border content-stretch flex flex-col gap-[12px] items-start relative w-full py-[8px] mt-[0px] mx-0 overflow-visible">
+            <div className="content-stretch flex gap-[8px] items-stretch relative shrink-0 w-full overflow-visible">
+                {/* Preset amounts – each slot equal width */}
                 {presetAmounts.map((amount) => {
                   const isLoading = loadingAmount === amount;
                   const isSelected = selectedAmount === amount && selectedNonprofit !== null;
                   
                   return (
-                    <div key={amount} className="relative basis-0 grow min-h-px min-w-px shrink-0 overflow-visible" style={{ zIndex: 1 }}>
+                    <div key={amount} className="relative flex-1 min-w-0 overflow-visible" style={{ zIndex: 1 }}>
                       {/* Floating hearts for this button */}
                       {floatingHearts
                         .filter(heart => heart.amount === amount)
@@ -456,18 +762,26 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
                         type="button"
                         onClick={() => handleAmountClick(amount)}
                         disabled={isLoading || loadingAmount !== null}
-                        className={`w-full h-full relative rounded-[8px] shrink-0 transition-all ${
+                        className={`w-full h-full relative rounded-[8px] shrink-0 transition-all group ${
                           isSelected || isLoading
                             ? 'donation-widget-button-selected'
                             : 'donation-widget-button-default'
                         } ${loadingAmount !== null && !isLoading ? 'opacity-50 cursor-not-allowed' : ''} ${!selectedNonprofit ? 'opacity-60' : ''}`}
-                        style={{ zIndex: 1 }}
+                        style={{
+                          zIndex: 1,
+                          ...((isSelected || isLoading) && { backgroundColor: logoAccentColor }),
+                        }}
                       >
                       <div
                         aria-hidden="true"
-                        className={`absolute border border-solid inset-0 pointer-events-none rounded-[8px] ${
-                          isSelected || isLoading ? 'border-[#8320bd]' : 'border-[#bdbdbd] group-hover:border-[#8320bd]'
+                        className={`donation-widget-amount-btn-inner absolute border border-solid inset-0 pointer-events-none rounded-[8px] ${
+                          isSelected || isLoading ? '' : 'border-[#bdbdbd]'
                         }`}
+                        style={
+                          isSelected || isLoading
+                            ? { borderColor: logoAccentColor }
+                            : undefined
+                        }
                       />
                       <div className="flex flex-col items-center justify-end size-full">
                         <div className="box-border content-stretch flex flex-col gap-[16px] items-center justify-end px-[5px] py-[14px] relative w-full">
@@ -494,13 +808,13 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
                   );
                 })}
 
-                {/* Trash icon to clear selection */}
-                <button
-                  type="button"
-                  onClick={handleClearAll}
-                  disabled={isClearing || loadingAmount !== null}
-                  style={{ width: '100px' }}
-                  className={`donation-widget-button-default trash-button box-border content-stretch flex flex-col gap-[16px] items-center justify-end px-[5px] py-[14px] relative rounded-[8px] shrink-0 transition-colors ${
+                {/* Trash icon to clear selection – same width as amount buttons */}
+                <div className="flex-1 min-w-0 flex">
+                  <button
+                    type="button"
+                    onClick={handleClearAll}
+                    disabled={isClearing || loadingAmount !== null}
+                    className={`donation-widget-button-default trash-button w-full box-border content-stretch flex flex-col gap-[16px] items-center justify-end px-[5px] py-[14px] relative rounded-[8px] transition-colors ${
                     isClearing || loadingAmount !== null ? 'opacity-50 cursor-not-allowed' : ''
                   } ${!selectedNonprofit ? 'opacity-60' : ''}`}
                   aria-label="Καθαρισμός επιλογής"
@@ -519,12 +833,56 @@ export default function CombinedDonationWidget({ onDonationChange }: CombinedDon
                     )}
                   </div>
                 </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
     </div>
+      {/* Pagination (single-org mode): in-place or portaled into paginationContainerRef */}
+      {singleOrg && nonprofits.length > 1 ? (() => {
+        const paginationEl = (
+          <div className="flex items-center justify-between gap-[12px]">
+            <button
+              type="button"
+              onClick={() => handlePaginate('prev')}
+              className="px-[12px] py-[8px] rounded-[8px] border border-[#e0e0e0] bg-white text-[14px] text-[#212121] hover:border-[#8320bd] transition-colors"
+            >
+              Προηγούμενο
+            </button>
+            <div className="flex items-center gap-[12px]">
+              <button
+                type="button"
+                onClick={toggleCycle}
+                className={`px-[12px] py-[8px] rounded-[8px] border text-[14px] transition-colors ${
+                  isCycling
+                    ? 'border-[#8320bd] bg-[#8320bd] text-white hover:opacity-90'
+                    : 'border-[#e0e0e0] bg-white text-[#212121] hover:border-[#8320bd]'
+                }`}
+                style={isCycling ? { borderColor: logoAccentColor, backgroundColor: logoAccentColor } : undefined}
+              >
+                {isCycling ? 'Σταμάτα' : 'Αυτόματη'}
+              </button>
+              <div className="text-[12px] text-[#757575]">
+                {currentNonprofitIndex + 1} / {nonprofits.length}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => handlePaginate('next')}
+              className="px-[12px] py-[8px] rounded-[8px] border border-[#e0e0e0] bg-white text-[14px] text-[#212121] hover:border-[#8320bd] transition-colors"
+            >
+              Επόμενο
+            </button>
+          </div>
+        );
+        if (paginationContainerRef?.current) {
+          return ReactDOM.createPortal(paginationEl, paginationContainerRef.current);
+        }
+        return <div className="mt-[120px]">{paginationEl}</div>;
+      })() : null}
+    </>
   );
 }
 

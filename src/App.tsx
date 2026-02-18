@@ -6,20 +6,23 @@ import CombinedCheckoutPage from './pages/CombinedCheckoutPage';
 import CombinedSliderCheckoutPage from './pages/CombinedSliderCheckoutPage';
 import CombinedSliderCheckoutPageDE7 from './pages/CombinedSliderCheckoutPageDE7';
 import SimpleCheckoutPage from './pages/SimpleCheckoutPage';
+import DonationWidgetOnlyPage from './pages/DonationWidgetOnlyPage';
+import HomestoreCheckoutPage from './pages/HomestoreCheckoutPage';
 
 const navLinkClasses =
   'px-[16px] py-[8px] rounded-[999px] text-[14px] font-medium border transition-all truncate';
 
 export default function App() {
-  // Set basename based on deployment
   const basename = window.location.hostname === 'localhost' ? '/' : '/react-donation-widget/';
-  
+
   return (
     <BrowserRouter basename={basename}>
+      <Routes>
+        <Route path="/homestore-checkout" element={<HomestoreCheckoutPage />} />
+        <Route path="*" element={
       <div className="min-h-screen bg-[#f5f5f5] py-[40px] px-[16px] md:px-[24px]">
         <div className="max-w-[800px] mx-auto">
           <header className="mb-[24px]">
-            
             <nav className="mt-[20px] flex flex-wrap gap-[12px]">
               <NavLink
                 to="/simple"
@@ -58,6 +61,18 @@ export default function App() {
                 Ver. 3
               </NavLink>
               <NavLink
+                to="/donation-only"
+                className={({ isActive }) =>
+                  `${navLinkClasses} ${
+                    isActive
+                      ? 'bg-[#4caf50] border-[#4caf50] text-white'
+                      : 'bg-white border-[#e0e0e0] text-[#212121] hover:border-[#4caf50]'
+                  }`
+                }
+              >
+                Ver. 4
+              </NavLink>
+              <NavLink
                 to="/combined"
                 className={({ isActive }) =>
                   `${navLinkClasses} ${
@@ -93,16 +108,28 @@ export default function App() {
               >
                 Ver. 7
               </NavLink>
+              <NavLink
+                to="/homestore-checkout"
+                className={({ isActive }) =>
+                  `${navLinkClasses} ${
+                    isActive
+                      ? 'bg-[#4caf50] border-[#4caf50] text-white'
+                      : 'bg-white border-[#e0e0e0] text-[#212121] hover:border-[#4caf50]'
+                  }`
+                }
+              >
+                Homestore
+              </NavLink>
             </nav>
           </header>
 
           <main className="bg-white/0">
             <Routes>
-              {/* Start app on Version 6 */}
               <Route path="/" element={<Navigate to="/combined-slider" replace />} />
               <Route path="/simple" element={<SimpleCheckoutPage />} />
               <Route path="/classic" element={<ClassicCheckoutPage />} />
               <Route path="/template" element={<TemplateCheckoutPage />} />
+              <Route path="/donation-only" element={<DonationWidgetOnlyPage />} />
               <Route path="/combined" element={<CombinedCheckoutPage />} />
               <Route path="/combined-slider" element={<CombinedSliderCheckoutPage />} />
               <Route path="/combined-slider-de7" element={<CombinedSliderCheckoutPageDE7 />} />
@@ -111,6 +138,8 @@ export default function App() {
           </main>
         </div>
       </div>
+        } />
+      </Routes>
     </BrowserRouter>
   );
 }

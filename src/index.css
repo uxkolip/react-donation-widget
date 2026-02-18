@@ -1830,11 +1830,15 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .donation-widget-button-default:hover {
-  background-color: #8320bd;
+  background-color: var(--widget-accent, #8320bd);
 }
 
 .donation-widget-button-default:hover p {
   color: white;
+}
+
+.donation-widget-button-default:hover .donation-widget-amount-btn-inner {
+  border-color: var(--widget-accent, #8320bd);
 }
 
 .trash-button:hover {
