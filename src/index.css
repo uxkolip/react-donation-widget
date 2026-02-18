@@ -1771,6 +1771,51 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
+/* Skeleton text styling */
+.skeleton-text {
+  background-color: #e0e0e0;
+  color: transparent !important;
+  border-radius: 4px;
+  display: inline-block;
+  min-height: 1em;
+}
+
+/* Skeleton placeholder styling - replace placeholder with ::after skeleton */
+.skeleton-placeholder-wrapper {
+  position: relative;
+}
+
+.skeleton-placeholder-wrapper input::placeholder {
+  color: transparent !important;
+}
+
+.skeleton-placeholder-wrapper::after {
+  content: '';
+  position: absolute;
+  left: 12px; /* Match input padding */
+  top: 50%;
+  transform: translateY(-50%);
+  height: 1em;
+  width: min(120px, calc(100% - 24px)); /* Responsive width - fits within input minus padding, max 120px for shorter placeholders */
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  pointer-events: none;
+  display: block;
+}
+
+/* Hide skeleton when input is focused or has value */
+.skeleton-placeholder-wrapper:focus-within::after,
+.skeleton-placeholder-wrapper.has-value::after {
+  display: none;
+}
+
+/* Hide skeleton when input has value (using :has if supported) */
+@supports selector(:has(*)) {
+  .skeleton-placeholder-wrapper:has(input:not(:placeholder-shown))::after {
+    display: none;
+  }
+}
+
 .donation-widget-button-selected {
   background-color: #8320bd;
 }
