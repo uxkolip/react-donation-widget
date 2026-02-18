@@ -1880,8 +1880,20 @@ input[type="range"]::-moz-range-thumb {
 
 .success-checkmark {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.success-message {
+  animation: fadeInMessage 0.5s ease-out 1.1s forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInMessage {
+  to {
+    opacity: 1;
+  }
 }
 
 .checkmark-circle {

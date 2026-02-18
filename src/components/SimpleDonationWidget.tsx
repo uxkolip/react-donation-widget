@@ -134,6 +134,14 @@ export default function SimpleDonationWidget({ onDonationChange }: SimpleDonatio
     setIsEnabled(checked);
     
     if (checked) {
+      // Scroll to bottom when toggle is turned ON
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth'
+        });
+      }, 100);
+      
       // Trigger hearts animation when switch is turned ON
       // Use setTimeout to ensure the switch has rendered in its checked state
       setTimeout(() => {
@@ -149,7 +157,7 @@ export default function SimpleDonationWidget({ onDonationChange }: SimpleDonatio
   };
 
   return (
-    <div ref={wrapperRef} className="donation-widget-bg rounded-[8px] border border-[#e0e0e0] p-[20px] relative overflow-visible" style={{ backgroundColor: 'rgba(28, 89, 229, 0.08)' }}>
+    <div ref={wrapperRef} className="donation-widget-bg rounded-[8px] p-[20px] relative overflow-visible" style={{ backgroundColor: isEnabled ? 'rgba(28, 89, 229, 0.08)' : '#e5e5e5' }}>
       {/* Header with question and switch in one line */}
       <div className="relative overflow-visible">
         {/* Floating hearts */}
@@ -186,7 +194,7 @@ export default function SimpleDonationWidget({ onDonationChange }: SimpleDonatio
         
         {/* Question and Switch in one line */}
         <label htmlFor="donation-switch" className="flex items-center justify-between cursor-pointer w-full">
-          <h3 className="text-[#1c59e5] text-[16px] font-bold">Είμαι και εγώ εδώ.</h3>
+          <h3 className="text-[#1c59e5] text-[16px] font-bold">Στηρίζω ενεργά</h3>
           <div ref={switchContainerRef} className="flex items-center" style={{ zIndex: 1 }}>
             <Switch
               id="donation-switch"
