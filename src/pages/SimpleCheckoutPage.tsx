@@ -9,6 +9,8 @@ const ORDER_TOTAL = 149.99;
 export default function SimpleCheckoutPage() {
   const [donationAmount, setDonationAmount] = useState(0);
   const [selectedNonprofit, setSelectedNonprofit] = useState<Nonprofit | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const finalTotal = ORDER_TOTAL + donationAmount;
 
@@ -22,8 +24,43 @@ export default function SimpleCheckoutPage() {
     }
   };
 
+  const handleSubmit = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsSubmitted(true);
+    }, 1000);
+  };
+
   return (
-    <div className="max-w-[800px] mx-auto">
+    <div className="max-w-[800px] mx-auto relative">
+      {isSubmitted && (
+        <div className="success-overlay">
+          <div className="success-checkmark">
+            <svg className="checkmark-circle" width="120" height="120" viewBox="0 0 120 120">
+              <circle
+                className="circle-bg"
+                cx="60"
+                cy="60"
+                r="55"
+                fill="none"
+                stroke="#0957e8"
+                strokeWidth="3"
+              />
+              <path
+                className="checkmark-path"
+                d="M35 60 L52 77 L85 44"
+                fill="none"
+                stroke="#0957e8"
+                strokeWidth="5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+      )}
+      <div className={`checkout-content ${isSubmitted ? 'fade-out' : ''}`}>
       <header className="mb-[32px]">
         <h1 className="text-[#212121] mb-[8px] text-[24px] font-semibold">Ολοκλήρωση Παραγγελίας</h1>
         <p className="text-[#757575]">
@@ -70,18 +107,20 @@ export default function SimpleCheckoutPage() {
         </div>
       </section>
 
-      <button className="w-full bg-[#212121] text-white py-[14px] px-[24px] rounded-[8px] hover:bg-[#1a1a1a] transition-colors">
-        Αποστολή παραγγελίας
-      </button>
-      <div className="flex flex-col items-center">
-        <p className="skeleton-text text-center text-[#757575] mt-[16px] leading-tight">
-          Οι συναλλαγές σας είναι ασφαλείς και κρυπτογραφημένες
-        </p>
-        {selectedNonprofit && (
-          <p className="skeleton-text text-center text-[#9e9e9e] text-[12px] mt-[8px]">
-            Επιλεγμένη οργάνωση: {selectedNonprofit.name}
-          </p>
+      <button 
+        onClick={handleSubmit}
+        disabled={isLoading}
+        className="w-full bg-[#212121] text-white py-[14px] px-[24px] rounded-[8px] hover:bg-[#1a1a1a] transition-colors disabled:opacity-75 disabled:cursor-not-allowed flex items-center justify-center gap-[8px]"
+      >
+        {isLoading ? (
+          <svg className="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle className="spinner-circle" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+          </svg>
+        ) : (
+          'Αποστολή παραγγελίας'
         )}
+      </button>
+      
       </div>
     </div>
   );

@@ -1844,3 +1844,100 @@ input[type="range"]::-moz-range-thumb {
 .trash-button:active {
   background-color: #e8d5ff !important;
 }
+
+/* Success animation styles */
+.checkout-content {
+  transition: opacity 0.5s ease-out;
+}
+
+.checkout-content.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.success-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  background-color: #ffffff;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.success-checkmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkmark-circle {
+  filter: drop-shadow(0 4px 12px rgba(9, 87, 232, 0.3));
+}
+
+.circle-bg {
+  stroke-dasharray: 345.575;
+  stroke-dashoffset: 345.575;
+  animation: drawCircle 0.6s ease-out forwards;
+}
+
+.checkmark-path {
+  stroke-dasharray: 75;
+  stroke-dashoffset: 75;
+  animation: drawCheckmark 0.5s ease-out 0.6s forwards;
+}
+
+@keyframes drawCircle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes drawCheckmark {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Spinner styles */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+.spinner-circle {
+  stroke-dasharray: 62.83;
+  stroke-dashoffset: 62.83;
+  stroke-linecap: round;
+  animation: spinnerDraw 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinnerDraw {
+  0% {
+    stroke-dashoffset: 62.83;
+  }
+  50% {
+    stroke-dashoffset: 15.7;
+  }
+  100% {
+    stroke-dashoffset: 62.83;
+  }
+}
