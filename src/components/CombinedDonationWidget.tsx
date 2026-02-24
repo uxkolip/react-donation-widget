@@ -54,15 +54,22 @@ const slugify = (value: string) => {
   return base || 'org';
 };
 
-/** Resolve logo path to full URL (local paths get app base URL). Production is under /react-donation-widget/. */
+/** Resolve logo path to full URL (local paths get app base URL). On GitHub Pages etc. app lives at /react-donation-widget/. */
 function resolveLogoUrl(logo: string | undefined): string {
   if (!logo) return '';
   if (logo.startsWith('http://') || logo.startsWith('https://')) return logo;
-  const meta = typeof import.meta !== 'undefined' ? (import.meta as { env?: { BASE_URL?: string } }) : undefined;
-  let base = meta?.env?.BASE_URL ?? '/';
-  const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
-  if (isProduction && (base === '/' || base === '')) {
-    base = '/react-donation-widget/';
+  let base = '/';
+  if (typeof window !== 'undefined') {
+    const pathname = window.location.pathname || '';
+    if (pathname.startsWith('/react-donation-widget')) {
+      base = '/react-donation-widget/';
+    } else {
+      const meta = typeof import.meta !== 'undefined' ? (import.meta as { env?: { BASE_URL?: string } }) : undefined;
+      base = meta?.env?.BASE_URL ?? '/';
+    }
+  } else {
+    const meta = typeof import.meta !== 'undefined' ? (import.meta as { env?: { BASE_URL?: string } }) : undefined;
+    base = meta?.env?.BASE_URL ?? '/';
   }
   return `${base.replace(/\/$/, '')}/${logo.replace(/^\//, '')}`;
 }
