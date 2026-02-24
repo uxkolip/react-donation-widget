@@ -194,7 +194,7 @@ export default function SimpleDonationWidget({ onDonationChange }: SimpleDonatio
         
         {/* Question and Switch in one line */}
         <label htmlFor="donation-switch" className="flex items-center justify-between cursor-pointer w-full">
-          <h3 className="text-[#1c59e5] text-[16px] font-bold">Στηρίζω ενεργά</h3>
+          <h3 className="text-[#1c59e5] text-[16px] font-bold">Στηρίζω ενεργά.</h3>
           <div ref={switchContainerRef} className="flex items-center" style={{ zIndex: 1 }}>
             <Switch
               id="donation-switch"
