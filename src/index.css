@@ -1818,6 +1818,7 @@ input[type="range"]::-moz-range-thumb {
 
 .donation-widget-button-selected {
   background-color: #8320bd;
+  transition: none;
 }
 
 
@@ -1827,6 +1828,7 @@ input[type="range"]::-moz-range-thumb {
 
 .donation-widget-button-default {
   background-color: white;
+  transition: none;
 }
 
 .donation-widget-button-default:hover {
@@ -1839,6 +1841,10 @@ input[type="range"]::-moz-range-thumb {
 
 .donation-widget-button-default:hover .donation-widget-amount-btn-inner {
   border-color: var(--widget-accent, #8320bd);
+}
+
+.trash-button {
+  transition: none;
 }
 
 .trash-button:hover {

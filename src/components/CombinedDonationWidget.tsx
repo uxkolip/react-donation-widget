@@ -277,8 +277,32 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
 
   const [logoBgColor, setLogoBgColor] = useState<string>(DEFAULT_WIDGET_BG);
   const [logoAccentColor, setLogoAccentColor] = useState<string>(DEFAULT_ACCENT);
+  const [logoColorsByOrgId, setLogoColorsByOrgId] = useState<Map<string, { background: string; accent: string }>>(new Map());
 
-  // Derive widget background and dark accent from current org logo
+  // Preload all logo images and precompute colors for every org so cycling is instant
+  useEffect(() => {
+    nonprofits.forEach((n) => {
+      const url = resolveLogoUrl(n.logo);
+      if (!url) return;
+      const img = new Image();
+      img.src = url;
+    });
+    let cancelled = false;
+    nonprofits.forEach((n) => {
+      const url = resolveLogoUrl(n.logo);
+      if (!url) return;
+      getLogoColors(url).then((colors) => {
+        if (!cancelled) {
+          setLogoColorsByOrgId((prev) => new Map(prev).set(n.id, colors));
+        }
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Fallback: derive current org colors when not yet in precomputed map (e.g. first paint)
   useEffect(() => {
     const logoUrl = resolveLogoUrl(selectedNonprofit?.logo);
     if (!logoUrl) {
@@ -297,6 +321,9 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
       cancelled = true;
     };
   }, [selectedNonprofit?.logo]);
+
+  const effectiveLogoBgColor = logoColorsByOrgId.get(selectedNonprofit?.id ?? '')?.background ?? logoBgColor;
+  const effectiveLogoAccentColor = logoColorsByOrgId.get(selectedNonprofit?.id ?? '')?.accent ?? logoAccentColor;
 
   // On mount: sync from URL ?org= or preselect first org
   useEffect(() => {
@@ -495,14 +522,32 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
     const nextNonprofit = nonprofits[nextIndex] ?? null;
     const selIdx = selectedAmountIndexByOrg[nextIndex] ?? 0;
     const defaultAmount = presetAmountsByOrg[nextIndex]?.[selIdx] ?? 0;
-    setCurrentNonprofitIndex(nextIndex);
-    setSelectedNonprofit(nextNonprofit);
-    setSelectedAmount(defaultAmount);
-    clearFloatingHearts();
-    onDonationChange?.(defaultAmount, nextNonprofit ?? null);
-    if (singleOrg) {
-      setSearchParams({ org: String(nextIndex + 1) }, { replace: true });
+
+    const applySwitch = () => {
+      setCurrentNonprofitIndex(nextIndex);
+      setSelectedNonprofit(nextNonprofit);
+      setSelectedAmount(defaultAmount);
+      clearFloatingHearts();
+      onDonationChange?.(defaultAmount, nextNonprofit ?? null);
+      if (singleOrg) {
+        setSearchParams({ org: String(nextIndex + 1) }, { replace: true });
+      }
+    };
+
+    const logoUrl = resolveLogoUrl(nextNonprofit?.logo);
+    if (!logoUrl) {
+      applySwitch();
+      return;
     }
+
+    const img = new Image();
+    img.onload = () => {
+      applySwitch();
+    };
+    img.onerror = () => {
+      applySwitch();
+    };
+    img.src = logoUrl;
   };
 
   const handlePaginate = (direction: 'prev' | 'next') => {
@@ -559,19 +604,19 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
     <div
       className="donation-widget-bg rounded-[8px] p-[12px] relative"
       style={{
-        backgroundColor: logoBgColor,
-        ['--widget-accent']: logoAccentColor,
+        backgroundColor: effectiveLogoBgColor,
+        ['--widget-accent']: effectiveLogoAccentColor,
       } as React.CSSProperties & { '--widget-accent': string }}
     >
       {/* Header: CTA from selected org (or default) and amount badge */}
-      <div className="flex items-center mb-[16px]">
+      <div className="flex items-start mb-[16px]">
         <h3 className="text-[#212121] text-[16px] font-bold">
           {selectedNonprofit?.description ?? 'Θα θέλατε να κάνετε μια δωρεά;'}
         </h3>
           <button
             type="button"
             className="donation-widget-badge text-white box-border content-stretch flex gap-[4px] items-center justify-center p-[4px] px-2 relative rounded-[4px] shrink-0 ml-[8px]"
-            style={{ backgroundColor: logoAccentColor }}
+            style={{ backgroundColor: effectiveLogoAccentColor }}
           >
           <span
             aria-hidden="true"
@@ -639,7 +684,7 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
                 onClick={() => {
                   setIsDropdownOpen(!isDropdownOpen);
                 }}
-                className={`w-full border border-[#e0e0e0] rounded-[8px] bg-white text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none flex items-center justify-between cursor-pointer hover:border-[#0957e8] transition-colors gap-[12px] ${
+                className={`w-full border border-[#e0e0e0] rounded-[8px] bg-white text-[14px] text-[#212121] shadow-sm focus:outline-none focus:border-[#0957e8] appearance-none flex items-center justify-between cursor-pointer hover:border-[#0957e8] gap-[12px] ${
                   selectedNonprofit ? 'bg-[#f5f5f5]' : ''
                 }`}
                 style={{ padding: '12px' }}
@@ -677,7 +722,7 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
                 </div>
                 <ChevronDown 
                   size={20} 
-                  className={`text-[#757575] shrink-0 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
+                  className={`text-[#757575] shrink-0 ${isDropdownOpen ? 'rotate-180' : ''}`} 
                 />
               </button>
 
@@ -691,7 +736,7 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
                         key={nonprofit.id}
                         type="button"
                         onClick={() => handleNonprofitSelect(nonprofit)}
-                        className={`w-full flex items-center gap-[12px] px-[16px] py-[12px] text-left transition-colors hover:bg-[#f5f5f5] ${
+                        className={`w-full flex items-center gap-[12px] px-[16px] py-[12px] text-left hover:bg-[#f5f5f5] ${
                           isSelected ? 'bg-[#f5f5f5]' : ''
                         }`}
                       >
@@ -773,14 +818,14 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
                         type="button"
                         onClick={() => handleAmountClick(amount)}
                         disabled={isLoading || loadingAmount !== null}
-                        className={`w-full h-full relative rounded-[8px] shrink-0 transition-all group ${
+                        className={`w-full h-full relative rounded-[8px] shrink-0 group ${
                           isSelected || isLoading
                             ? 'donation-widget-button-selected'
                             : 'donation-widget-button-default'
                         } ${loadingAmount !== null && !isLoading ? 'opacity-50 cursor-not-allowed' : ''} ${!selectedNonprofit ? 'opacity-60' : ''}`}
                         style={{
                           zIndex: 1,
-                          ...((isSelected || isLoading) && { backgroundColor: logoAccentColor }),
+                          ...((isSelected || isLoading) && { backgroundColor: effectiveLogoAccentColor }),
                         }}
                       >
                       <div
@@ -790,7 +835,7 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
                         }`}
                         style={
                           isSelected || isLoading
-                            ? { borderColor: logoAccentColor }
+                            ? { borderColor: effectiveLogoAccentColor }
                             : undefined
                         }
                       />
@@ -825,7 +870,7 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
                     type="button"
                     onClick={handleClearAll}
                     disabled={isClearing || loadingAmount !== null}
-                    className={`donation-widget-button-default trash-button w-full box-border content-stretch flex flex-col gap-[16px] items-center justify-end px-[5px] py-[14px] relative rounded-[8px] transition-colors ${
+                    className={`donation-widget-button-default trash-button w-full box-border content-stretch flex flex-col gap-[16px] items-center justify-end px-[5px] py-[14px] relative rounded-[8px] ${
                     isClearing || loadingAmount !== null ? 'opacity-50 cursor-not-allowed' : ''
                   } ${!selectedNonprofit ? 'opacity-60' : ''}`}
                   aria-label="Καθαρισμός επιλογής"
@@ -858,7 +903,7 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
             <button
               type="button"
               onClick={() => handlePaginate('prev')}
-              className="px-[12px] py-[8px] rounded-[8px] border border-[#e0e0e0] bg-white text-[14px] text-[#212121] hover:border-[#8320bd] transition-colors"
+              className="px-[12px] py-[8px] rounded-[8px] border border-[#e0e0e0] bg-white text-[14px] text-[#212121] hover:border-[#8320bd]"
             >
               Προηγούμενο
             </button>
@@ -866,12 +911,12 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
               <button
                 type="button"
                 onClick={toggleCycle}
-                className={`px-[12px] py-[8px] rounded-[8px] border text-[14px] transition-colors ${
+                className={`px-[12px] py-[8px] rounded-[8px] border text-[14px] ${
                   isCycling
                     ? 'border-[#8320bd] bg-[#8320bd] text-white hover:opacity-90'
                     : 'border-[#e0e0e0] bg-white text-[#212121] hover:border-[#8320bd]'
                 }`}
-                style={isCycling ? { borderColor: logoAccentColor, backgroundColor: logoAccentColor } : undefined}
+                style={isCycling ? { borderColor: effectiveLogoAccentColor, backgroundColor: effectiveLogoAccentColor } : undefined}
               >
                 {isCycling ? 'Σταμάτα' : 'Αυτόματη'}
               </button>
@@ -882,7 +927,7 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
             <button
               type="button"
               onClick={() => handlePaginate('next')}
-              className="px-[12px] py-[8px] rounded-[8px] border border-[#e0e0e0] bg-white text-[14px] text-[#212121] hover:border-[#8320bd] transition-colors"
+              className="px-[12px] py-[8px] rounded-[8px] border border-[#e0e0e0] bg-white text-[14px] text-[#212121] hover:border-[#8320bd]"
             >
               Επόμενο
             </button>
