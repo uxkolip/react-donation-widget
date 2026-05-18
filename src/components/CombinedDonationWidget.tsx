@@ -936,7 +936,7 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
         if (paginationContainerRef?.current) {
           return ReactDOM.createPortal(paginationEl, paginationContainerRef.current);
         }
-        return <div className="mt-[120px]">{paginationEl}</div>;
+        return <div className="mt-[120px] hidden">{paginationEl}</div>;
       })() : null}
     </>
   );

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cause Logos Carousel</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #111111;
+      --muted: #6b7280;
+      --card-bg: #ffffff;
+      --card-border: rgba(17, 17, 17, 0.08);
+      --shadow: 0 8px 30px rgba(0,0,0,0.04);
+      --logo-height: 54px;
+      --row-gap: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px 24px 56px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+    }
+
+    .header p {
+      margin: 0 auto;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .carousel {
+      display: grid;
+      gap: var(--row-gap);
+      position: relative;
+    }
+
+    .row {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+
+    .track {
+      width: max-content;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 10px 0;
+      will-change: transform;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    .row[data-direction="left"] .track { animation-name: marquee-left; }
+    .row[data-direction="right"] .track { animation-name: marquee-right; }
+
+    .card {
+      width: 168px;
+      height: 96px;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      flex: 0 0 auto;
+    }
+
+    .card img {
+      max-width: 100%;
+      max-height: var(--logo-height);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      filter: saturate(1);
+    }
+
+    @keyframes marquee-left {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @keyframes marquee-right {
+      from { transform: translateX(-50%); }
+      to { transform: translateX(0); }
+    }
+
+    @media (max-width: 900px) {
+      .wrap { padding: 28px 16px 36px; }
+      .card { width: 140px; height: 84px; padding: 14px; border-radius: 14px; }
+      :root { --logo-height: 46px; --row-gap: 14px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .track { animation: none !important; }
+      .row { overflow-x: auto; mask-image: none; -webkit-mask-image: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>Organizations we support</h1>
+      <p>A continuous 4-row logo wall with alternating motion for a calm, premium visual effect on a white background.</p>
+    </div>
+
+    <section class="carousel" id="carousel"></section>
+  </div>
+
+  <script>
+    const logos = [
+      "https://youbehero.com/images/cause/1/l/agalia_logo.jpg",
+      "https://youbehero.com/images/cause/101/l/filozoikos-sillogos-chiou-logo.png",
+      "https://youbehero.com/images/cause/103/l/ankaa-logo.jpeg",
+      "https://youbehero.com/images/cause/104/l/women-do-business.png",
+      "https://youbehero.com/images/cause/105/l/skopos-zois-logo.jpeg",
+      "https://youbehero.com/images/cause/108/l/sthie-logo.jpeg",
+      "https://youbehero.com/images/cause/112/l/poamskp-logo.jpeg",
+      "https://youbehero.com/images/cause/113/l/zwes-logo.jpg",
+      "https://youbehero.com/images/cause/116/l/iliachtida.jpeg",
+      "https://youbehero.com/images/cause/117/l/include-diepistimoniko-diktio-idikis-kai-diapolitismikis-agogis.jfif",
+      "https://youbehero.com/images/cause/118/l/iasis-logo.png",
+      "https://youbehero.com/images/cause/120/l/Apicco-logo.jpeg",
+      "https://youbehero.com/images/cause/121/l/soma_filon_drasi-gia-to-kati_allo.jpeg",
+      "https://youbehero.com/images/cause/126/l/prostasia-adespoton-i-agapi.jpg",
+      "https://youbehero.com/images/cause/127/l/elpida-grevenon-logo.png",
+      "https://youbehero.com/images/cause/128/l/aggeloi-logo.png",
+      "https://youbehero.com/images/cause/132/l/greek-eco-project-logo.png",
+      "https://youbehero.com/images/cause/133/l/Socialinnov-logo.png",
+      "https://youbehero.com/images/cause/134/l/kinoniki-merimna-moschatou-logo.jpeg",
+      "https://youbehero.com/images/cause/135/l/Visit-Agiasos-logo.png",
+      "https://youbehero.com/images/cause/137/l/kivotos-mitilinis.jpeg",
+      "https://youbehero.com/images/cause/139/l/promitheas_logo.png",
+      "https://youbehero.com/images/cause/14/l/zeil_logo.png",
+      "https://youbehero.com/images/cause/140/l/scholi-skilon-odigon-lara-logo.jpg",
+      "https://youbehero.com/images/cause/141/l/pnoi-elpidas-logo.jpg",
+      "https://youbehero.com/images/cause/142/l/naomi.jpg",
+      "https://youbehero.com/images/cause/143/l/foteino-asteri.jpeg",
+      "https://youbehero.com/images/cause/155/l/the-bee-camp-logo.png",
+      "https://youbehero.com/images/cause/170/l/incommon_logo.png",
+      "https://youbehero.com/images/cause/171/l/tharros-kai-zoi-logo.jpeg",
+      "https://youbehero.com/images/cause/173/l/ontheway_logo.jpg",
+      "https://youbehero.com/images/cause/175/l/adespotos_planitis_logo.png",
+      "https://youbehero.com/images/cause/176/l/anagennisi_logo_tn.png",
+      "https://youbehero.com/images/cause/177/l/gi-therapainis-logo.png",
+      "https://youbehero.com/images/cause/178/l/diktio_gia_ta_dikaiomata_tou_paidiou_logo.png",
+      "https://youbehero.com/images/cause/179/l/epomea_logo.png",
+      "https://youbehero.com/images/cause/181/l/mamagea_logo.png",
+      "https://youbehero.com/images/cause/183/l/espi_logo.jpg",
+      "https://youbehero.com/images/cause/184/l/desmos_logo.jpg",
+      "https://youbehero.com/images/cause/185/l/medasset-logo.jpg",
+      "https://youbehero.com/images/cause/186/l/openous_logo.png",
+      "https://youbehero.com/images/cause/191/l/logo.png",
+      "https://youbehero.com/images/cause/193/l/save_your_hood_logo.png",
+      "https://youbehero.com/images/cause/194/l/oikanos-logo.png",
+      "https://youbehero.com/images/cause/197/l/logoariel.jpeg",
+      "https://youbehero.com/images/cause/199/l/adespotoulia_logo.jpeg",
+      "https://youbehero.com/images/cause/2/l/arcturos_logo.jpeg",
+      "https://youbehero.com/images/cause/203/l/sedip_logo.png",
+      "https://youbehero.com/images/cause/204/l/oak_logo.png",
+      "https://youbehero.com/images/cause/206/l/edny_logo.png",
+      "https://youbehero.com/images/cause/207/l/spartanStrays_logo.jpeg",
+      "https://youbehero.com/images/cause/209/l/axept_logo.png",
+      "https://youbehero.com/images/cause/210/l/humanity_logo.png",
+      "https://youbehero.com/images/cause/212/l/sege_logo.jpeg",
+      "https://youbehero.com/images/cause/218/l/aegean_sails_logo_jpg.jpeg",
+      "https://youbehero.com/images/cause/220/l/keepea-orizontes.png",
+      "https://youbehero.com/images/cause/221/l/moiazw_logo.png",
+      "https://youbehero.com/images/cause/222/l/e-aimodotes-youbehero.png",
+      "https://youbehero.com/images/cause/224/l/siva_om_logo.jpg",
+      "https://youbehero.com/images/cause/225/l/kentroPaidioukaiEfivouLogo.jpg",
+      "https://youbehero.com/images/cause/226/l/co2gether-cotogethero-logo.jpg",
+      "https://youbehero.com/images/cause/228/l/sopsi_patras_logo.jpg",
+      "https://youbehero.com/images/cause/229/l/SamosAnimalWelfareAssociation_logo.jpeg",
+      "https://youbehero.com/images/cause/230/l/drasi_gia_agria_zoi_logo.jpeg",
+      "https://youbehero.com/images/cause/235/l/weneedbooks_logo.png",
+      "https://youbehero.com/images/cause/258/l/career_sign_logo.png",
+      "https://youbehero.com/images/cause/259/l/prassin-aloga_logo.jpg",
+      "https://youbehero.com/images/cause/26/l/kivotos_logo.jpeg",
+      "https://youbehero.com/images/cause/262/l/oasis_logo.jpg",
+      "https://youbehero.com/images/cause/264/l/50kai_logo.png",
+      "https://youbehero.com/images/cause/265/l/arsis_logo.png",
+      "https://youbehero.com/images/cause/267/l/margarita_logo.jpg",
+      "https://youbehero.com/images/cause/268/l/antama_logo.jpg",
+      "https://youbehero.com/images/cause/269/l/chistinianiki_stegi_agia_anna_logo.jpg",
+      "https://youbehero.com/images/cause/27/l/pnoi_agapis_logo.png",
+      "https://youbehero.com/images/cause/270/l/technodromo_logo.jpg",
+      "https://youbehero.com/images/cause/271/l/prota-to-paidi-logo.jpeg",
+      "https://youbehero.com/images/cause/28/l/labyrinth-of-senses-logo.png",
+      "https://youbehero.com/images/cause/29/l/make_a_wish_logo.png",
+      "https://youbehero.com/images/cause/295/l/eod_logo.png",
+      "https://youbehero.com/images/cause/296/l/kimolistes_logo.jpg",
+      "https://youbehero.com/images/cause/3/l/elpidohori_logo.png",
+      "https://youbehero.com/images/cause/31/l/Eliza-FB2.jpeg",
+      "https://youbehero.com/images/cause/312/l/amke_agkalia_logo.png",
+      "https://youbehero.com/images/cause/313/l/spoudaia-events-logo.png",
+      "https://youbehero.com/images/cause/315/l/cosmus_logo.jpg",
+      "https://youbehero.com/images/cause/316/l/kapa3_logo.png",
+      "https://youbehero.com/images/cause/317/l/erasmos-logo-youbehero.jpg",
+      "https://youbehero.com/images/cause/32/l/givemed_logo.jpeg",
+      "https://youbehero.com/images/cause/320/l/filarakia-aigialeias-logo.jpg",
+      "https://youbehero.com/images/cause/321/l/fainareti-logo.png",
+      "https://youbehero.com/images/cause/325/l/jenny-karezi-foundation-logo.png",
+      "https://youbehero.com/images/cause/326/l/fairlifelcc_logo.jpeg",
+      "https://youbehero.com/images/cause/328/l/alma-zois-thess.png",
+      "https://youbehero.com/images/cause/330/l/agia-sofia-logo.png",
+      "https://youbehero.com/images/cause/333/l/startagers-logo.png",
+      "https://youbehero.com/images/cause/335/l/paidiki-agkalia-logo.png",
+      "https://youbehero.com/images/cause/336/l/oikologiki-etaireia-anakiklosis.png",
+      "https://youbehero.com/images/cause/342/l/she-tells-logo.png",
+      "https://youbehero.com/images/cause/344/l/karkinaki-logo.jpg",
+      "https://youbehero.com/images/cause/345/l/kentro-autismou-sos.png",
+      "https://youbehero.com/images/cause/351/l/homestart-logo.png",
+      "https://youbehero.com/images/cause/386/l/arodamos-logo-youbehero.jpg",
+      "https://youbehero.com/images/cause/388/l/sillogos-alkioni-logo.jpg",
+      "https://youbehero.com/images/cause/389/l/politistikos-sillogos-selianitikon-logo.jpg",
+      "https://youbehero.com/images/cause/39/l/social-hachers-academy-logo.png",
+      "https://youbehero.com/images/cause/390/l/omada-diasosis-voreion-sporadon.jpg",
+      "https://youbehero.com/images/cause/394/l/kids-fair-collection-logo.png",
+      "https://youbehero.com/images/cause/395/l/cleaningans-logo-youbehero.png",
+      "https://youbehero.com/images/cause/397/l/caritas-logo.jpg",
+      "https://youbehero.com/images/cause/405/l/logo-siniparxo.jpg",
+      "https://youbehero.com/images/cause/41/l/ActionAid-Logo.jpeg",
+      "https://youbehero.com/images/cause/412/l/akako-logo-youbehero.png",
+      "https://youbehero.com/images/cause/42/l/ithaca-logo.jpeg",
+      "https://youbehero.com/images/cause/43/l/nosileia_logo.png",
+      "https://youbehero.com/images/cause/44/l/higgs-logo.png",
+      "https://youbehero.com/images/cause/45/l/seanamoni_logo.jpeg",
+      "https://youbehero.com/images/cause/46/l/emfasis-foundation.jpg",
+      "https://youbehero.com/images/cause/47/l/alma-zois-logo.jpeg",
+      "https://youbehero.com/images/cause/48/l/be-visible-be-you-logo.png",
+      "https://youbehero.com/images/cause/49/l/dose-zoi-logo.png",
+      "https://youbehero.com/images/cause/5/l/frodida_logo.png",
+      "https://youbehero.com/images/cause/50/l/sillogos-skeletikis-ygeias-petalouda.png",
+      "https://youbehero.com/images/cause/52/l/frontizo_logo.png",
+      "https://youbehero.com/images/cause/54/l/enosi-kirion-dramas-logo.jpeg",
+      "https://youbehero.com/images/cause/55/l/benjamin-orphans-logo.png",
+      "https://youbehero.com/images/cause/59/l/gia_tous_allous_logo.png",
+      "https://youbehero.com/images/cause/60/l/art-hub-athens.png",
+      "https://youbehero.com/images/cause/61/l/spin-logo.png",
+      "https://youbehero.com/images/cause/62/l/SciFY_logo.jpg",
+      "https://youbehero.com/images/cause/63/l/amimoni-logo.jpeg",
+      "https://youbehero.com/images/cause/65/l/sillogos-orizontas-logo.png",
+      "https://youbehero.com/images/cause/67/l/merina-logo-youbehero.png",
+      "https://youbehero.com/images/cause/68/l/oi-filoi-tou-paidiou-logo.png",
+      "https://youbehero.com/images/cause/69/l/eyes-of-light.jpg",
+      "https://youbehero.com/images/cause/7/l/giatroi-xoris-sinora-logo.jpeg",
+      "https://youbehero.com/images/cause/70/l/People-behind-logo.jpg",
+      "https://youbehero.com/images/cause/72/l/cheering-logo.png",
+      "https://youbehero.com/images/cause/73/l/fix-in-art-logo.jpeg",
+      "https://youbehero.com/images/cause/74/l/lalibela-logo.png",
+      "https://youbehero.com/images/cause/76/l/enable-greece-logo.jpg",
+      "https://youbehero.com/images/cause/77/l/isea_com_gr_logo.png",
+      "https://youbehero.com/images/cause/79/l/katheti-logo.png",
+      "https://youbehero.com/images/cause/80/l/my-artist-logo.png",
+      "https://youbehero.com/images/cause/82/l/alzheimer-xalkidas.jpeg",
+      "https://youbehero.com/images/cause/85/l/proskopoi-logo.png",
+      "https://youbehero.com/images/cause/86/l/praksis-logo.jpg",
+      "https://youbehero.com/images/cause/88/l/scars.jpeg",
+      "https://youbehero.com/images/cause/90/l/a21-logo.jpg",
+      "https://youbehero.com/images/cause/93/l/gefira-zois-logo.png",
+      "https://youbehero.com/images/cause/94/l/aspida-logo.jpg",
+      "https://youbehero.com/images/cause/96/l/genderhood_logo.jpeg",
+      "https://youbehero.com/images/cause/97/l/eodia-logo.png",
+      "https://youbehero.com/images/cause/98/l/politistikos-filozoikos-sillogos-tripolis-logo.png"
+    ];
+
+    const rowsCount = 4;
+    const carousel = document.getElementById('carousel');
+
+    function splitIntoRows(items, rowCount) {
+      const rows = Array.from({ length: rowCount }, () => []);
+      items.forEach((item, index) => rows[index % rowCount].push(item));
+      return rows;
+    }
+
+    function createCard(url) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = 'Organization logo';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.onerror = () => { card.style.display = 'none'; };
+      card.appendChild(img);
+      return card;
+    }
+
+    const rows = splitIntoRows(logos, rowsCount);
+    const durations = [42, 36, 40, 34];
+
+    rows.forEach((rowLogos, index) => {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.dataset.direction = index % 2 === 0 ? 'left' : 'right';
+
+      const track = document.createElement('div');
+      track.className = 'track';
+      track.style.animationDuration = `${durations[index % durations.length]}s`;
+
+      const doubled = rowLogos.concat(rowLogos);
+      doubled.forEach(url => track.appendChild(createCard(url)));
+
+      row.appendChild(track);
+      carousel.appendChild(row);
+    });
+  </script>
+</body>
+</html>

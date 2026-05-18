@@ -21,8 +21,8 @@ export default function App() {
         <Route path="/homestore-checkout" element={<HomestoreCheckoutPage />} />
         <Route path="*" element={
       <div className="min-h-screen bg-[#ffffff] py-[40px] px-[16px] md:px-[24px]">
-        <div className="max-w-[800px] mx-auto">
-          <header className="mb-[24px]">
+        <div className="mx-auto">
+          <header className="mb-[24px] hidden">
             <nav className="mt-[20px] flex flex-wrap gap-[12px]">
               <NavLink
                 to="/simple"

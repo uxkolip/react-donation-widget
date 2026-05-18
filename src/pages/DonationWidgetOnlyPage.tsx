@@ -17,7 +17,7 @@ export default function DonationWidgetOnlyPage() {
   };
 
   return (
-    <div className="max-w-[800px] mx-auto">
+    <div className=" mx-auto">
       <div className="mb-[24px]">
         <CombinedDonationWidget onDonationChange={handleDonationChange} singleOrg />
       </div>
