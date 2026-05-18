@@ -90,6 +90,10 @@ const nonprofits: Nonprofit[] = (nonprofitsData as NonprofitsJsonItem[]).map((it
 
 const NUM_ORGS_WITH_ONE_AMOUNT = 10;
 const PROBABILITY_THREE_AMOUNTS = 0.7; // of the rest, most get 3
+/** URL ?org=10 (1-based) → fixed preset amounts and default selection */
+const ORG_10_INDEX = 9;
+const ORG_10_PRESET_AMOUNTS = [0.3, 0.5, 1.0];
+const ORG_10_SELECTED_AMOUNT_INDEX = 2; // 1,00€
 const MIN_AMOUNT = 0.5;
 const MAX_AMOUNT = 5.0;
 const MAX_FIRST_AMOUNT_TWO = 2.0; // when 2 amounts: the first (smaller) must be in [0.50€, 2.00€]
@@ -269,8 +273,12 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
     const counts = Array.from({ length: n }, (_, i) =>
       oneAmountSet.has(i) ? 1 : (Math.random() < PROBABILITY_THREE_AMOUNTS ? 3 : 2)
     );
-    const amounts = nonprofits.map((_, i) => generateRandomDonationAmounts(counts[i]));
-    const selectedIndex = amounts.map((arr) => Math.floor(Math.random() * arr.length));
+    const amounts = nonprofits.map((_, i) =>
+      i === ORG_10_INDEX ? ORG_10_PRESET_AMOUNTS : generateRandomDonationAmounts(counts[i])
+    );
+    const selectedIndex = amounts.map((arr, i) =>
+      i === ORG_10_INDEX ? ORG_10_SELECTED_AMOUNT_INDEX : Math.floor(Math.random() * arr.length)
+    );
     return { presetAmountsByOrg: amounts, selectedAmountIndexByOrg: selectedIndex };
   }, []);
   const presetAmounts = presetAmountsByOrg[currentNonprofitIndex] ?? presetAmountsByOrg[0] ?? [];
@@ -769,7 +777,7 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
       <div className="relative shrink-0 w-full overflow-visible">
         <div className="size-full overflow-visible">
           <div className="box-border content-stretch flex flex-col gap-[12px] items-start relative w-full py-[8px] mt-[0px] mx-0 overflow-visible">
-            <div className="content-stretch flex gap-[8px] items-stretch relative shrink-0 w-full overflow-visible">
+            <div className="content-stretch flex gap-[8px] items-stretch hello relative shrink-0 w-full overflow-visible">
                 {/* Preset amounts – each slot equal width */}
                 {presetAmounts.map((amount) => {
                   const isLoading = loadingAmount === amount;
