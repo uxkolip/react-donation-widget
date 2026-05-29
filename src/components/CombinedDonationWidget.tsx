@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import * as ReactDOM from 'react-dom';
 import { useSearchParams } from 'react-router-dom';
 import { Loader2, Heart, Dog, Users, TreePine, Stethoscope, ChevronDown } from 'lucide-react';
@@ -88,41 +88,8 @@ const nonprofits: Nonprofit[] = (nonprofitsData as NonprofitsJsonItem[]).map((it
   };
 });
 
-const NUM_ORGS_WITH_ONE_AMOUNT = 10;
-const PROBABILITY_THREE_AMOUNTS = 0.7; // of the rest, most get 3
-/** URL ?org=10 (1-based) → fixed preset amounts and default selection */
-const ORG_10_INDEX = 9;
-const ORG_10_PRESET_AMOUNTS = [0.3, 0.5, 1.0];
-const ORG_10_SELECTED_AMOUNT_INDEX = 2; // 1,00€
-const MIN_AMOUNT = 0.5;
-const MAX_AMOUNT = 5.0;
-const MAX_FIRST_AMOUNT_TWO = 2.0; // when 2 amounts: the first (smaller) must be in [0.50€, 2.00€]
-const MAX_AMOUNT_DIFF = 1.0; // amounts at most 1€ apart
-
-const generateRandomDonationAmounts = (count: number) => {
-  const step = Math.random() < 0.5 ? 0.5 : 1.0;
-  // First (smaller) amount range: when 2 amounts use [0.50, 2.00]; else [0.50, 4.00] so window fits in [0.50, 5.00]
-  const maxStart = count === 2 ? MAX_FIRST_AMOUNT_TWO : MAX_AMOUNT - MAX_AMOUNT_DIFF;
-  const possibleStarts: number[] = [];
-  for (let s = MIN_AMOUNT; s <= maxStart + 1e-9; s += 0.5) {
-    possibleStarts.push(Number(s.toFixed(2)));
-  }
-  const windowStart = possibleStarts[Math.floor(Math.random() * possibleStarts.length)];
-  const windowEnd = windowStart + MAX_AMOUNT_DIFF;
-
-  const values: number[] = [];
-  for (let v = windowStart; v <= windowEnd + 1e-9; v += step) {
-    values.push(Number(v.toFixed(2)));
-  }
-
-  // Fisher–Yates shuffle, then take `count` and sort
-  for (let i = values.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [values[i], values[j]] = [values[j], values[i]];
-  }
-  const take = Math.max(1, Math.min(count, values.length));
-  return values.slice(0, take).sort((a, b) => a - b);
-};
+const PRESET_DONATION_AMOUNTS = [0.5, 1.0];
+const DEFAULT_SELECTED_AMOUNT_INDEX = 1; // 1,00€
 
 const DEFAULT_WIDGET_BG = '#fcf5ff';
 const DEFAULT_ACCENT = '#8320bd';
@@ -261,27 +228,8 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
   const EMOJI_DEBOUNCE_MS = 1500; // 1.5 seconds debounce to prevent overload
   const amountButtonRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
 
-  // One set of random donation amounts per org + which one is pre-selected (varies per org)
-  const { presetAmountsByOrg, selectedAmountIndexByOrg } = useMemo(() => {
-    const n = nonprofits.length;
-    const indices = Array.from({ length: n }, (_, i) => i);
-    for (let i = indices.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [indices[i], indices[j]] = [indices[j], indices[i]];
-    }
-    const oneAmountSet = new Set(indices.slice(0, Math.min(NUM_ORGS_WITH_ONE_AMOUNT, n)));
-    const counts = Array.from({ length: n }, (_, i) =>
-      oneAmountSet.has(i) ? 1 : (Math.random() < PROBABILITY_THREE_AMOUNTS ? 3 : 2)
-    );
-    const amounts = nonprofits.map((_, i) =>
-      i === ORG_10_INDEX ? ORG_10_PRESET_AMOUNTS : generateRandomDonationAmounts(counts[i])
-    );
-    const selectedIndex = amounts.map((arr, i) =>
-      i === ORG_10_INDEX ? ORG_10_SELECTED_AMOUNT_INDEX : Math.floor(Math.random() * arr.length)
-    );
-    return { presetAmountsByOrg: amounts, selectedAmountIndexByOrg: selectedIndex };
-  }, []);
-  const presetAmounts = presetAmountsByOrg[currentNonprofitIndex] ?? presetAmountsByOrg[0] ?? [];
+  const presetAmounts = PRESET_DONATION_AMOUNTS;
+  const defaultSelectedAmount = PRESET_DONATION_AMOUNTS[DEFAULT_SELECTED_AMOUNT_INDEX] ?? 0;
 
   const [logoBgColor, setLogoBgColor] = useState<string>(DEFAULT_WIDGET_BG);
   const [logoAccentColor, setLogoAccentColor] = useState<string>(DEFAULT_ACCENT);
@@ -341,11 +289,9 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
     if (Number.isFinite(orgNum) && orgNum >= 1 && orgNum <= n) {
       goToOrgByIndex(orgNum - 1);
     } else {
-      const idx = selectedAmountIndexByOrg[0] ?? 0;
-      const defaultAmount = presetAmountsByOrg[0]?.[idx] ?? 0;
-      setSelectedAmount(defaultAmount);
+      setSelectedAmount(defaultSelectedAmount);
       if (selectedNonprofit) {
-        onDonationChange?.(defaultAmount, selectedNonprofit);
+        onDonationChange?.(defaultSelectedAmount, selectedNonprofit);
       }
       if (singleOrg && n > 0) {
         setSearchParams({ org: '1' }, { replace: true });
@@ -518,25 +464,20 @@ export default function CombinedDonationWidget({ onDonationChange, singleOrg = f
       setCurrentNonprofitIndex(idx);
       if (singleOrg) setSearchParams({ org: String(idx + 1) }, { replace: true });
     }
-    const selIdx = idx >= 0 ? selectedAmountIndexByOrg[idx] ?? 0 : 0;
-    const defaultAmount = presetAmountsByOrg[idx]?.[selIdx] ?? 0;
-    setSelectedAmount(defaultAmount);
+    setSelectedAmount(defaultSelectedAmount);
     clearFloatingHearts();
-    onDonationChange?.(defaultAmount, nonprofit);
+    onDonationChange?.(defaultSelectedAmount, nonprofit);
   };
 
   const goToOrgByIndex = (nextIndex: number) => {
     if (!nonprofits.length) return;
     const nextNonprofit = nonprofits[nextIndex] ?? null;
-    const selIdx = selectedAmountIndexByOrg[nextIndex] ?? 0;
-    const defaultAmount = presetAmountsByOrg[nextIndex]?.[selIdx] ?? 0;
-
     const applySwitch = () => {
       setCurrentNonprofitIndex(nextIndex);
       setSelectedNonprofit(nextNonprofit);
-      setSelectedAmount(defaultAmount);
+      setSelectedAmount(defaultSelectedAmount);
       clearFloatingHearts();
-      onDonationChange?.(defaultAmount, nextNonprofit ?? null);
+      onDonationChange?.(defaultSelectedAmount, nextNonprofit ?? null);
       if (singleOrg) {
         setSearchParams({ org: String(nextIndex + 1) }, { replace: true });
       }

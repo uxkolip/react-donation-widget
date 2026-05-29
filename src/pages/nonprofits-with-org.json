@@ -1,0 +1,1274 @@
+[
+  {
+    "org": 1,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=1",
+    "name": "Αγκαλιά",
+    "cta": "Μια μικρή δωρεά, μια μεγάλη αγκαλιά.",
+    "logo": "logos/0.jpg",
+    "id": "org-1"
+  },
+  {
+    "org": 2,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=2",
+    "name": "Αρκτούρος",
+    "cta": "Υποστηρίξτε την προστασία της άγριας ζωής.",
+    "logo": "logos/1.jpg",
+    "id": "org-2"
+  },
+  {
+    "org": 3,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=3",
+    "name": "Ελπιδοχώρι",
+    "cta": "Δώστε ελπίδα με ένα κλικ.",
+    "logo": "logos/2.png",
+    "id": "org-3"
+  },
+  {
+    "org": 4,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=4",
+    "name": "Φροντίδα",
+    "cta": "Ενισχύστε την κατ’ οίκον φροντίδα.",
+    "logo": "logos/3.png",
+    "id": "org-4"
+  },
+  {
+    "org": 5,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=5",
+    "name": "Γιατροί Χωρίς Σύνορα (MSF)",
+    "cta": "Συμβάλλετε σε δράσεις υγείας.",
+    "logo": "logos/4.jpg",
+    "id": "msf-5"
+  },
+  {
+    "org": 6,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=6",
+    "name": "Ζωοφιλική Ένωση Ηλιούπολης",
+    "cta": "Υποστηρίξτε τη φροντίδα αδέσποτων ζώων.",
+    "logo": "logos/5.png",
+    "id": "org-6"
+  },
+  {
+    "org": 7,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=7",
+    "name": "Κιβωτός του Κόσμου",
+    "cta": "Στηρίξτε ένα παιδί που το χρειάζεται.",
+    "logo": "logos/6.jpg",
+    "id": "org-7"
+  },
+  {
+    "org": 8,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=8",
+    "name": "Πνοή Αγάπης",
+    "cta": "Χαρίστε δύναμη σε μια οικογένεια.",
+    "logo": "logos/7.png",
+    "id": "org-8"
+  },
+  {
+    "org": 9,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=9",
+    "name": "Labyrinth of Senses",
+    "cta": "Υποστηρίξτε δράσεις για άτομα με αναπηρία.",
+    "logo": "logos/8.png",
+    "id": "labyrinth-of-senses-9"
+  },
+  {
+    "org": 10,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=10",
+    "name": "Make-A-Wish (Κάνε-Μια-Ευχή Ελλάδος)",
+    "cta": "Θέλεις να προσθέσεις 1€ για ένα παιδικό όνειρο; 💫",
+    "logo": "logos/9.png",
+    "id": "make-a-wish-10"
+  },
+  {
+    "org": 11,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=11",
+    "name": "ΕΛΙΖΑ - Εταιρία κατά της Κακοποίησης του Παιδιού",
+    "cta": "Στηρίξτε δράσεις κατά της κακοποίησης παιδιών.",
+    "logo": "logos/10.jpg",
+    "id": "org-11"
+  },
+  {
+    "org": 12,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=12",
+    "name": "GIVMED | Share medicine Share life",
+    "cta": "Υποστηρίξτε την πρόσβαση σε φάρμακα.",
+    "logo": "logos/11.jpg",
+    "id": "givmed-share-medicine-share-life-12"
+  },
+  {
+    "org": 13,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=13",
+    "name": "Social Hackers Academy",
+    "cta": "Υποστηρίξτε την πρόσβαση στην τεχνολογία.",
+    "logo": "logos/12.png",
+    "id": "social-hackers-academy-13"
+  },
+  {
+    "org": 14,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=14",
+    "name": "ActionAid",
+    "cta": "Ενισχύστε δράσεις κοινωνικής αλληλεγγύης.",
+    "logo": "logos/13.jpg",
+    "id": "actionaid-14"
+  },
+  {
+    "org": 15,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=15",
+    "name": "Ithaca Laundry",
+    "cta": "Στηρίξτε ανθρώπους χωρίς στέγη.",
+    "logo": "logos/14.jpg",
+    "id": "ithaca-laundry-15"
+  },
+  {
+    "org": 16,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=16",
+    "name": "Σύλλογος Νοσηλεία",
+    "cta": "Προσφέρετε βοήθεια σε ασθενείς και οικογένειες.",
+    "logo": "logos/15.png",
+    "id": "org-16"
+  },
+  {
+    "org": 17,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=17",
+    "name": "HIGGS Higher Incubator Giving Growth and Sustainability",
+    "cta": "Ενισχύστε δράσεις εθελοντισμού.",
+    "logo": "logos/16.png",
+    "id": "higgs-higher-incubator-giving-growth-and-sustainability-17"
+  },
+  {
+    "org": 18,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=18",
+    "name": "Σε Αναμονή / On Hold",
+    "cta": "Στηρίξτε δράσεις κοινωνικής συνοχής.",
+    "logo": "logos/17.jpg",
+    "id": "on-hold-18"
+  },
+  {
+    "org": 19,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=19",
+    "name": "Emfasis Foundation",
+    "cta": "Θέλετε να βοηθήσετε σήμερα;.",
+    "logo": "logos/18.jpg",
+    "id": "emfasis-foundation-19"
+  },
+  {
+    "org": 20,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=20",
+    "name": "Άλμα Ζωής",
+    "cta": "Στηρίξτε δράσεις για τον καρκίνο του μαστού.",
+    "logo": "logos/19.jpg",
+    "id": "org-20"
+  },
+  {
+    "org": 21,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=21",
+    "name": "Be Visible Be You",
+    "cta": "Δώστε χώρο στη διαφορετικότητα.",
+    "logo": "logos/20.png",
+    "id": "be-visible-be-you-21"
+  },
+  {
+    "org": 22,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=22",
+    "name": "Δώσε Ζωή",
+    "cta": "Ενισχύστε την αιμοδοσία.",
+    "logo": "logos/21.png",
+    "id": "org-22"
+  },
+  {
+    "org": 23,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=23",
+    "name": "Σύλλογος Σκελετικής Υγείας Πεταλούδα",
+    "cta": "Φροντίζω το σώμα μου.",
+    "logo": "logos/22.png",
+    "id": "org-23"
+  },
+  {
+    "org": 24,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=24",
+    "name": "Φροντίζω",
+    "cta": "Ενισχύστε την κατ’ οίκον φροντίδα.",
+    "logo": "logos/23.png",
+    "id": "org-24"
+  },
+  {
+    "org": 25,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=25",
+    "name": "Ένωση Κυριών Δράμας - Σπίτι Ανοιχτής Φιλοξενίας",
+    "cta": "Προσφέρετε υποστήριξη σε οικογένειες σε κρίση.",
+    "logo": "logos/24.jpg",
+    "id": "org-25"
+  },
+  {
+    "org": 26,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=26",
+    "name": "Σύλλογος Προστασίας Παιδιών ΒΕΝΙΑΜΙΝ",
+    "cta": "Δώστε χαρά σε ένα παιδί.",
+    "logo": "logos/25.png",
+    "id": "org-26"
+  },
+  {
+    "org": 27,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=27",
+    "name": "Διαβάζω Για Τους Άλλους",
+    "cta": "Υποστηρίξτε την πρόσβαση στη γνώση.",
+    "logo": "logos/26.png",
+    "id": "org-27"
+  },
+  {
+    "org": 28,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=28",
+    "name": "ART HUB Athens",
+    "cta": "Υποστηρίξτε τη δημιουργική έκφραση.",
+    "logo": "logos/27.png",
+    "id": "art-hub-athens-28"
+  },
+  {
+    "org": 29,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=29",
+    "name": "SPIN - Space Innovation",
+    "cta": "Στηρίξτε τις διαστημικές μας δράσεις .",
+    "logo": "logos/28.png",
+    "id": "spin-space-innovation-29"
+  },
+  {
+    "org": 30,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=30",
+    "name": "SciFY - Επιστήμη Για Σένα",
+    "cta": "Υποστηρίξτε την πρόσβαση στην τεχνολογία.",
+    "logo": "logos/29.jpg",
+    "id": "scify-30"
+  },
+  {
+    "org": 31,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=31",
+    "name": "Αμυμώνη",
+    "cta": "Υποστηρίξτε παιδιά με αναπηρία.",
+    "logo": "logos/30.jpg",
+    "id": "org-31"
+  },
+  {
+    "org": 32,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=32",
+    "name": "Σύλλογος «Ορίζοντας»",
+    "cta": "Ενισχύστε δράσεις για παιδιά με ασθένειες.",
+    "logo": "logos/31.png",
+    "id": "org-32"
+  },
+  {
+    "org": 33,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=33",
+    "name": "Μέριμνα",
+    "cta": "Προσφέρετε στήριξη σε δύσκολες στιγμές.",
+    "logo": "logos/32.png",
+    "id": "org-33"
+  },
+  {
+    "org": 34,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=34",
+    "name": "Φιλανθρωπικό Σωματείο «Οι Φίλοι του Παιδιού»",
+    "cta": "Στηρίξτε την προστασία των δικαιωμάτων των παιδιών.",
+    "logo": "logos/33.png",
+    "id": "org-34"
+  },
+  {
+    "org": 35,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=35",
+    "name": "Eyes of Light",
+    "cta": "Στηρίξτε την ψυχική ανθεκτικότητα.",
+    "logo": "logos/34.jpg",
+    "id": "eyes-of-light-35"
+  },
+  {
+    "org": 36,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=36",
+    "name": "People Behind",
+    "cta": "Στηρίξτε την κοινωνική ένταξη.",
+    "logo": "logos/35.jpg",
+    "id": "people-behind-36"
+  },
+  {
+    "org": 37,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=37",
+    "name": "CHEERing",
+    "cta": "Ενισχύστε την ισότητα και τα δικαιώματα.",
+    "logo": "logos/36.png",
+    "id": "cheering-37"
+  },
+  {
+    "org": 38,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=38",
+    "name": "ΦΙΞ in art (Αναζητητές Θεάτρου)",
+    "cta": "Υποστηρίξτε τη δημιουργική έκφραση.",
+    "logo": "logos/37.jpg",
+    "id": "in-art-38"
+  },
+  {
+    "org": 39,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=39",
+    "name": "Σύλλογος Βοήθειας Παιδιών - Lalibela",
+    "cta": "Στηρίξτε ένα παιδί που το χρειάζεται.",
+    "logo": "logos/38.png",
+    "id": "lalibela-39"
+  },
+  {
+    "org": 40,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=40",
+    "name": "e-Nable Greece",
+    "cta": "Υποστηρίξτε δράσεις για άτομα με αναπηρία.",
+    "logo": "logos/39.jpg",
+    "id": "e-nable-greece-40"
+  },
+  {
+    "org": 41,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=41",
+    "name": "iSea",
+    "cta": "Στηρίξτε δράσεις για καθαρές θάλασσες.",
+    "logo": "logos/40.jpg",
+    "id": "isea-41"
+  },
+  {
+    "org": 42,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=42",
+    "name": "Καθετή",
+    "cta": "Συμμετέχετε σε μια πράξη προσφοράς;.",
+    "logo": "logos/41.png",
+    "id": "org-42"
+  },
+  {
+    "org": 43,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=43",
+    "name": "MYARTIST",
+    "cta": "Υποστηρίξτε τη δημιουργική έκφραση.",
+    "logo": "logos/42.png",
+    "id": "myartist-43"
+  },
+  {
+    "org": 44,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=44",
+    "name": "REMIND - Ελληνική Εταιρεία Νόσου Alzheimer και Συγγενών Διαταραχών Χαλκίδας",
+    "cta": "Στηρίξτε δράσεις για την άνοια και το Alzheimer.",
+    "logo": "logos/43.png",
+    "id": "remind-alzheimer-44"
+  },
+  {
+    "org": 45,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=45",
+    "name": "Σώμα Ελλήνων Προσκόπων",
+    "cta": "Ενδυναμώστε νέους ανθρώπους.",
+    "logo": "logos/44.png",
+    "id": "org-45"
+  },
+  {
+    "org": 46,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=46",
+    "name": "PRAKSIS",
+    "cta": "Στηρίξτε την κοινωνική ένταξη.",
+    "logo": "logos/45.jpg",
+    "id": "praksis-46"
+  },
+  {
+    "org": 47,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=47",
+    "name": "SCARS",
+    "cta": "Υποστηρίξτε τη φροντίδα αδέσποτων ζώων.",
+    "logo": "logos/46.jpg",
+    "id": "scars-47"
+  },
+  {
+    "org": 48,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=48",
+    "name": "A21 - Ενάντια στην Εμπορία Ανθρώπων",
+    "cta": "Στηρίξτε δράσεις κατά της εμπορίας ανθρώπων.",
+    "logo": "logos/47.jpg",
+    "id": "a21-48"
+  },
+  {
+    "org": 49,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=49",
+    "name": "Γέφυρα Ζωής",
+    "cta": "Δώστε στήριξη σε ανθρώπους σε κρίση.",
+    "logo": "logos/48.png",
+    "id": "org-49"
+  },
+  {
+    "org": 50,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=50",
+    "name": "Ασπίδα Κοιν.ΣΕΠ περιβάλλον-άνθρωποι-ζώα",
+    "cta": "Βοηθήστε στην προστασία των ζώων.",
+    "logo": "logos/49.jpg",
+    "id": "org-50"
+  },
+  {
+    "org": 51,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=51",
+    "name": "Genderhood",
+    "cta": "Στηρίξτε δράσεις υπέρ της ισότητας φύλων.",
+    "logo": "logos/50.jpg",
+    "id": "genderhood-51"
+  },
+  {
+    "org": 52,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=52",
+    "name": "Εθελοντική Ομάδα Διάσωσης και Υγειονομικών Αποστολών",
+    "cta": "Συμβάλλετε σε δράσεις υγείας.",
+    "logo": "logos/51.png",
+    "id": "org-52"
+  },
+  {
+    "org": 53,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=53",
+    "name": "Πολιτιστικός Φιλοζωικός Σύλλογος Τρίπολης",
+    "cta": "Υποστηρίξτε τη φροντίδα αδέσποτων ζώων.",
+    "logo": "logos/52.png",
+    "id": "org-53"
+  },
+  {
+    "org": 54,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=54",
+    "name": "Φιλοζωικός Σύλλογος Χίου",
+    "cta": "Υποστηρίξτε τη φροντίδα αδέσποτων ζώων.",
+    "logo": "logos/53.png",
+    "id": "org-54"
+  },
+  {
+    "org": 55,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=55",
+    "name": "ANKAA Project",
+    "cta": "Στηρίξτε την κοινωνική ένταξη.",
+    "logo": "logos/54.jpg",
+    "id": "ankaa-project-55"
+  },
+  {
+    "org": 56,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=56",
+    "name": "Women Do Business",
+    "cta": "Δώστε δύναμη σε γυναίκες που το χρειάζονται.",
+    "logo": "logos/55.png",
+    "id": "women-do-business-56"
+  },
+  {
+    "org": 57,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=57",
+    "name": "Σκοπός Ζωής",
+    "cta": "Δώστε ελπίδα σε ανθρώπους που παλεύουν.",
+    "logo": "logos/56.jpg",
+    "id": "org-57"
+  },
+  {
+    "org": 58,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=58",
+    "name": "Σύνδεσμος Θεραπευτικής Ιππασίας Ελλάδας-ΣΘΙΕ",
+    "cta": "Υποστηρίξτε δράσεις για άτομα με αναπηρία.",
+    "logo": "logos/57.jpg",
+    "id": "org-58"
+  },
+  {
+    "org": 59,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=59",
+    "name": "Πανελλήνια Ομοσπονδία Ατόμων με Σκλήρυνση Κατά Πλάκας",
+    "cta": "Δώστε ελπίδα σε ανθρώπους με χρόνιες παθήσεις.",
+    "logo": "logos/58.jpg",
+    "id": "org-59"
+  },
+  {
+    "org": 60,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=60",
+    "name": "Ζω.Ε.Σ. (Ζωοφιλικές Ενημερώσεις Σχολείων, Ιδρυμάτων και Οργανισμών)",
+    "cta": "Δώστε φωνή σε όσους δεν ακούγονται.",
+    "logo": "logos/59.jpg",
+    "id": "org-60"
+  },
+  {
+    "org": 61,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=61",
+    "name": "Παγκρήτιος Σύλλογος Γονέων και Φίλων παιδιών με νεοπλασία «Η ΗΛΙΑΧΤΙΔΑ»",
+    "cta": "Ενισχύστε δράσεις για παιδιά με ασθένειες.",
+    "logo": "logos/60.jpg",
+    "id": "org-61"
+  },
+  {
+    "org": 62,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=62",
+    "name": "Include Διεπιστημονικό Δίκτυο Ειδικής και Διαπολιτισμικής Αγωγής",
+    "cta": "Υποστηρίξτε εκπαιδευτικά προγράμματα για νέους.",
+    "logo": "logos/61.jpg",
+    "id": "include-62"
+  },
+  {
+    "org": 63,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=63",
+    "name": "ΑμΚΕ ΙΑΣΙΣ",
+    "cta": "Στηρίξτε την ψυχική ανθεκτικότητα.",
+    "logo": "logos/62.png",
+    "id": "org-63"
+  },
+  {
+    "org": 64,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=64",
+    "name": "APICCO -Community Based Art",
+    "cta": "Υποστηρίξτε τη δημιουργική έκφραση.",
+    "logo": "logos/63.jpg",
+    "id": "apicco-community-based-art-64"
+  },
+  {
+    "org": 65,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=65",
+    "name": "Σώμα Φίλων ΑμεΑ «Δράση για το κάτι άλλο»",
+    "cta": "Υποστηρίξτε δράσεις για άτομα με αναπηρία.",
+    "logo": "logos/64.jpg",
+    "id": "org-65"
+  },
+  {
+    "org": 66,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=66",
+    "name": "Προστασία Αδέσποτων Ζώων Η Αγάπη",
+    "cta": "Υποστηρίξτε τη φροντίδα αδέσποτων ζώων.",
+    "logo": "logos/65.jpg",
+    "id": "org-66"
+  },
+  {
+    "org": 67,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=67",
+    "name": "Σύλλογος αλληλεγγύης και εθελοντισμού Γρεβενών Ελπίδα",
+    "cta": "Προσφέρετε στήριξη σε δύσκολες στιγμές.",
+    "logo": "logos/66.png",
+    "id": "org-67"
+  },
+  {
+    "org": 68,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=68",
+    "name": "Άγγελοι της Χαράς",
+    "cta": "Δώστε χαμόγελο σε νοσηλευόμενους.",
+    "logo": "logos/67.png",
+    "id": "org-68"
+  },
+  {
+    "org": 69,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=69",
+    "name": "Greek Eco Project",
+    "cta": "Στηρίξτε δράσεις για την προστασία του περιβάλλοντος.",
+    "logo": "logos/68.png",
+    "id": "greek-eco-project-69"
+  },
+  {
+    "org": 70,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=70",
+    "name": "Socialinnov",
+    "cta": "Στηρίξτε δράσεις κοινωνικής καινοτομίας.",
+    "logo": "logos/69.png",
+    "id": "socialinnov-70"
+  },
+  {
+    "org": 71,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=71",
+    "name": "Κοινωνική Μέριμνα Μοσχάτου",
+    "cta": "Στηρίξτε τους παππούδες και τις γιαγιάδες μας.",
+    "logo": "logos/70.jpg",
+    "id": "org-71"
+  },
+  {
+    "org": 72,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=72",
+    "name": "ΑΜΚΕ Visit Agiasos",
+    "cta": "Υποστηρίξτε τη βιωσιμότητα.",
+    "logo": "logos/71.png",
+    "id": "visit-agiasos-72"
+  },
+  {
+    "org": 73,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=73",
+    "name": "Κιβωτός Μυτιλήνης",
+    "cta": "Στηρίξτε δράσεις άμεσης βοήθειας για αδέσποτα ζώα.",
+    "logo": "logos/72.jpg",
+    "id": "org-73"
+  },
+  {
+    "org": 74,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=74",
+    "name": "Σύλλογος Ασθενών Ήπατος Ελλάδος «Προμηθέας»",
+    "cta": "Προσφέρετε βοήθεια σε ασθενείς και οικογένειες.",
+    "logo": "logos/73.png",
+    "id": "org-74"
+  },
+  {
+    "org": 75,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=75",
+    "name": "Σχολή Σκύλων Οδηγών Λάρα",
+    "cta": "Υποστηρίξτε δράσεις για άτομα με αναπηρία.",
+    "logo": "logos/74.jpg",
+    "id": "org-75"
+  },
+  {
+    "org": 76,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=76",
+    "name": "Πνοή Ελπίδας",
+    "cta": "Δώστε ελπίδα σε μια νέα αρχή.",
+    "logo": "logos/75.jpg",
+    "id": "org-76"
+  },
+  {
+    "org": 77,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=77",
+    "name": "NAOMI",
+    "cta": "Στηρίξτε δράσεις για τα δικαιώματα των γυναικών.",
+    "logo": "logos/76.jpg",
+    "id": "naomi-77"
+  },
+  {
+    "org": 78,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=78",
+    "name": "Το Φωτεινό Αστέρι",
+    "cta": "Δώστε χαμόγελο με μια μικρή δωρεά.",
+    "logo": "logos/77.jpg",
+    "id": "org-78"
+  },
+  {
+    "org": 79,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=79",
+    "name": "The Bee Camp",
+    "cta": "Στηρίξτε δράσεις για την προστασία του περιβάλλοντος.",
+    "logo": "logos/78.png",
+    "id": "the-bee-camp-79"
+  },
+  {
+    "org": 80,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=80",
+    "name": "InCommOn",
+    "cta": "Ενισχύστε την ενσωμάτωση προσφύγων.",
+    "logo": "logos/79.png",
+    "id": "incommon-80"
+  },
+  {
+    "org": 81,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=81",
+    "name": "Θάρρος και Ζωή",
+    "cta": "Στηρίζω τους συνανθρώπους μου.",
+    "logo": "logos/80.jpg",
+    "id": "org-81"
+  },
+  {
+    "org": 82,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=82",
+    "name": "Καθ' Οδόν",
+    "cta": "Στηρίξτε ανθρώπους χωρίς στέγη.",
+    "logo": "logos/81.jpg",
+    "id": "org-82"
+  },
+  {
+    "org": 83,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=83",
+    "name": "Stray Planet - Αδέσποτος Πλανήτης",
+    "cta": "Υποστηρίξτε τη φροντίδα αδέσποτων ζώων.",
+    "logo": "logos/82.png",
+    "id": "stray-planet-83"
+  },
+  {
+    "org": 84,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=84",
+    "name": "Σύλλογος Γονέων και Φίλων Αυτιστικών Ατόμων Αναγέννηση",
+    "cta": "Υποστηρίξτε παιδιά με αναπηρία.",
+    "logo": "logos/83.png",
+    "id": "org-84"
+  },
+  {
+    "org": 85,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=85",
+    "name": "Γη Θεραπαινίς",
+    "cta": "Ενισχύστε δράσεις κατά της πείνας.",
+    "logo": "logos/84.png",
+    "id": "org-85"
+  },
+  {
+    "org": 86,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=86",
+    "name": "Δίκτυο για τα Δικαιώματα του Παιδιού - Network for Children's Rights",
+    "cta": "Υποστηρίξτε την προστασία των ανθρωπίνων δικαιωμάτων.",
+    "logo": "logos/85.png",
+    "id": "network-for-children-s-rights-86"
+  },
+  {
+    "org": 87,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=87",
+    "name": "ΕΠΙΛΕΚΤΗ ΟΜΑΔΑ ΕΙΔΙΚΩΝ ΑΠΟΣΤΟΛΩΝ ΕΛΛΑΔΟΣ",
+    "cta": "Ενισχύστε δράσεις εθελοντισμού.",
+    "logo": "logos/86.png",
+    "id": "org-87"
+  },
+  {
+    "org": 88,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=88",
+    "name": "Mamagea",
+    "cta": "Υποστηρίξτε προγράμματα κοινωνικής ένταξης.",
+    "logo": "logos/87.png",
+    "id": "mamagea-88"
+  },
+  {
+    "org": 89,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=89",
+    "name": "Ελληνικός Σύλλογος Προστασίας Ιπποειδών",
+    "cta": "Υποστηρίξτε την προστασία των ιπποειδών.",
+    "logo": "logos/88.jpg",
+    "id": "org-89"
+  },
+  {
+    "org": 90,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=90",
+    "name": "ΔΕΣΜΟΣ",
+    "cta": "Μαζί μπορούμε να κάνουμε τη διαφορά.",
+    "logo": "logos/89.jpg",
+    "id": "org-90"
+  },
+  {
+    "org": 91,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=91",
+    "name": "MEDASSET",
+    "cta": "Συμβάλλετε στην προστασία της θαλάσσιας ζωής.",
+    "logo": "logos/90.jpg",
+    "id": "medasset-91"
+  },
+  {
+    "org": 92,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=92",
+    "name": "Openous",
+    "cta": "Μαζί μπορούμε περισσότερα.",
+    "logo": "logos/91.png",
+    "id": "openous-92"
+  },
+  {
+    "org": 93,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=93",
+    "name": "Σκύλοι Βοηθοί Ελλάδας",
+    "cta": "Υποστηρίξτε δράσεις για άτομα με αναπηρία.",
+    "logo": "logos/92.png",
+    "id": "org-93"
+  },
+  {
+    "org": 94,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=94",
+    "name": "Save Your Hood",
+    "cta": "Στηρίξτε δράσεις για καθαρές γειτονιές.",
+    "logo": "logos/93.png",
+    "id": "save-your-hood-94"
+  },
+  {
+    "org": 95,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=95",
+    "name": "Οικανός",
+    "cta": "Στηρίξτε δράσεις πρόληψης.",
+    "logo": "logos/94.png",
+    "id": "org-95"
+  },
+  {
+    "org": 96,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=96",
+    "name": "«Ariel» Φιλοζωϊκό-Πολιτιστικό Σωματείο",
+    "cta": "Υποστηρίξτε τη δημιουργική έκφραση.",
+    "logo": "logos/95.jpg",
+    "id": "ariel-96"
+  },
+  {
+    "org": 97,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=97",
+    "name": "Αδεσποτούλια Ξάνθης",
+    "cta": "Υποστηρίξτε τη φροντίδα αδέσποτων ζώων.",
+    "logo": "logos/96.jpg",
+    "id": "org-97"
+  },
+  {
+    "org": 98,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=98",
+    "name": "Σ.Ε.ΔΙ.Π. ΔΥΤΙΚΗΣ ΑΧΑΪΑΣ",
+    "cta": "Στηρίξτε δράσεις πρόληψης.",
+    "logo": "logos/97.png",
+    "id": "org-98"
+  },
+  {
+    "org": 99,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=99",
+    "name": "Ο.Α.Κ. 4Χ4 ΜΕΣΣΗΝΙΑΣ",
+    "cta": "Ενισχύστε δράσεις εθελοντισμού.",
+    "logo": "logos/98.png",
+    "id": "4-4-99"
+  },
+  {
+    "org": 100,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=100",
+    "name": "Εθελοντική Δασοπροστασία Νοτίου Υμηττού (Ε.Δ.Ν.Υ.)",
+    "cta": "Στηρίξτε δράσεις δασοπροστασίας.",
+    "logo": "logos/99.png",
+    "id": "org-100"
+  },
+  {
+    "org": 101,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=101",
+    "name": "Strays Sparta Greece - Smart Paws Save A Stray",
+    "cta": "Υποστηρίξτε τη φροντίδα αδέσποτων ζώων.",
+    "logo": "logos/100.jpg",
+    "id": "strays-sparta-greece-smart-paws-save-a-stray-101"
+  },
+  {
+    "org": 102,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=102",
+    "name": "Α.ΞΕ.Π.Τ",
+    "cta": "Ενισχύστε δράσεις εθελοντισμού.",
+    "logo": "logos/101.png",
+    "id": "org-102"
+  },
+  {
+    "org": 103,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=103",
+    "name": "Humanity Greece",
+    "cta": "Ενισχύστε δράσεις κοινωνικής αλληλεγγύης.",
+    "logo": "logos/102.png",
+    "id": "humanity-greece-103"
+  },
+  {
+    "org": 104,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=104",
+    "name": "ΣΥΝΔΕΣΜΟΣ ΕΠΙΧΕΙΡΗΜΑΤΙΩΝ ΓΥΝΑΙΚΩΝ ΕΛΛΑΔΟΣ - Σ.Ε.Γ.Ε.",
+    "cta": "Στηρίξτε δράσεις υπέρ της ισότητας φύλων.",
+    "logo": "logos/103.jpg",
+    "id": "org-104"
+  },
+  {
+    "org": 105,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=105",
+    "name": "Aegean Sails",
+    "cta": "Στηρίξτε δράσεις για καθαρές ακτές.",
+    "logo": "logos/104.jpg",
+    "id": "aegean-sails-105"
+  },
+  {
+    "org": 106,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=106",
+    "name": "ΚΕΕΠΕΑ Ορίζοντες",
+    "cta": "Υποστηρίξτε δράσεις για άτομα με αναπηρία.",
+    "logo": "logos/105.png",
+    "id": "org-106"
+  },
+  {
+    "org": 107,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=107",
+    "name": "ΜΟΙΑΖΩ",
+    "cta": "Στηρίξτε την κοινωνική ένταξη.",
+    "logo": "logos/106.png",
+    "id": "org-107"
+  },
+  {
+    "org": 108,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=108",
+    "name": "e-Αιμοδότες",
+    "cta": "Ενισχύστε την αιμοδοσία.",
+    "logo": "logos/107.png",
+    "id": "e-108"
+  },
+  {
+    "org": 109,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=109",
+    "name": "Σίβα ΟΜ",
+    "cta": "Δώστε στήριξη σε ανθρώπους σε κρίση.",
+    "logo": "logos/108.jpg",
+    "id": "org-109"
+  },
+  {
+    "org": 110,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=110",
+    "name": "Κέντρο Παιδιού και Εφήβου",
+    "cta": "Υποστηρίξτε δράσεις για την ψυχική υγεία.",
+    "logo": "logos/109.jpg",
+    "id": "org-110"
+  },
+  {
+    "org": 111,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=111",
+    "name": "Cο2gether",
+    "cta": "Υποστηρίξτε τη βιωσιμότητα.",
+    "logo": "logos/110.jpg",
+    "id": "c-2gether-111"
+  },
+  {
+    "org": 112,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=112",
+    "name": "Σύλλογος για την Ψυχική Υγεία ΣΟΨΥ Πάτρας",
+    "cta": "Ενισχύστε την πρόσβαση σε ψυχολογική υποστήριξη.",
+    "logo": "logos/111.jpg",
+    "id": "org-112"
+  },
+  {
+    "org": 113,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=113",
+    "name": "Φιλοζωικό Σωματείο Σάμου",
+    "cta": "Υποστηρίξτε τη φροντίδα αδέσποτων ζώων.",
+    "logo": "logos/112.jpg",
+    "id": "org-113"
+  },
+  {
+    "org": 114,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=114",
+    "name": "Δράση για την άγρια ζωή",
+    "cta": "Υποστηρίξτε την προστασία της άγριας ζωής.",
+    "logo": "logos/113.jpg",
+    "id": "org-114"
+  },
+  {
+    "org": 115,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=115",
+    "name": "We Need Books",
+    "cta": "Ενισχύστε την πρόσβαση στη γνώση.",
+    "logo": "logos/114.png",
+    "id": "we-need-books-115"
+  },
+  {
+    "org": 116,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=116",
+    "name": "Career Sign",
+    "cta": "Ενδυναμώστε νέους ανθρώπους.",
+    "logo": "logos/115.png",
+    "id": "career-sign-116"
+  },
+  {
+    "org": 117,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=117",
+    "name": "Εικαστικό Θέατρο Κούκλας, «Πράσσειν Άλογα»",
+    "cta": "Υποστηρίξτε τη δημιουργική έκφραση.",
+    "logo": "logos/116.jpg",
+    "id": "org-117"
+  },
+  {
+    "org": 118,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=118",
+    "name": "ΟΑΣΙΣ Κέντρο Απεξάρτησης",
+    "cta": "Υποστηρίξτε δράσεις θεραπευτικής υποστήριξης.",
+    "logo": "logos/117.jpg",
+    "id": "org-118"
+  },
+  {
+    "org": 119,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=119",
+    "name": "50και Ελλάς",
+    "cta": "Προσφέρετε στήριξη σε ηλικιωμένους.",
+    "logo": "logos/118.png",
+    "id": "50-119"
+  },
+  {
+    "org": 120,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=120",
+    "name": "ΑΡΣΙΣ",
+    "cta": "Στηρίξτε ανθρώπους σε ανάγκη.",
+    "logo": "logos/119.png",
+    "id": "org-120"
+  },
+  {
+    "org": 121,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=121",
+    "name": "ΕΡΓΑΣΤΗΡΙ ΕΙΔΙΚΗΣ ΑΓΩΓΗΣ ΜΑΡΓΑΡΙΤΑ",
+    "cta": "Υποστηρίξτε παιδιά με αναπηρία.",
+    "logo": "logos/120.jpg",
+    "id": "org-121"
+  },
+  {
+    "org": 122,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=122",
+    "name": "ΑΝΤΑΜΑ",
+    "cta": "Υποστηρίξτε προγράμματα κοινωνικής ένταξης.",
+    "logo": "logos/121.jpg",
+    "id": "org-122"
+  },
+  {
+    "org": 123,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=123",
+    "name": "ΧΡΙΣΤΙΑΝΙΚΗ ΣΤΕΓΗ ΚΟΡΙΤΣΙΟΥ ΑΓΙΑ ΑΝΝΑ",
+    "cta": "Δώστε μια δεύτερη ευκαιρία.",
+    "logo": "logos/122.jpg",
+    "id": "org-123"
+  },
+  {
+    "org": 124,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=124",
+    "name": "Τεχνοδρομώ",
+    "cta": "Δώστε μια ευκαιρία για εκπαίδευση.",
+    "logo": "logos/123.jpg",
+    "id": "org-124"
+  },
+  {
+    "org": 125,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=125",
+    "name": "Πρώτα το Παιδί",
+    "cta": "Στηρίξτε την προστασία των δικαιωμάτων των παιδιών.",
+    "logo": "logos/124.png",
+    "id": "org-125"
+  },
+  {
+    "org": 126,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=126",
+    "name": "Ελληνική Ομάδα Διάσωσης Παράρτημα Λέσβου",
+    "cta": "Ενισχύστε δράσεις εθελοντισμού.",
+    "logo": "logos/125.png",
+    "id": "org-126"
+  },
+  {
+    "org": 127,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=127",
+    "name": "Εθελοντική ομάδα Κιμώλου, Κιμωλιστές",
+    "cta": "Στηρίξτε δράσεις για καθαρές γειτονιές.",
+    "logo": "logos/126.jpg",
+    "id": "org-127"
+  },
+  {
+    "org": 128,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=128",
+    "name": "ΑμKE Ψυχοκοινωνικών Παρεμβάσεων «Αγκαλιά»",
+    "cta": "Μια μικρή δωρεά, μια μεγάλη αγκαλιά.",
+    "logo": "logos/127.png",
+    "id": "ke-128"
+  },
+  {
+    "org": 129,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=129",
+    "name": "Σπουδαία Events",
+    "cta": "Μαζί μπορούμε περισσότερα.",
+    "logo": "logos/128.png",
+    "id": "events-129"
+  },
+  {
+    "org": 130,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=130",
+    "name": "COSMUS DIY",
+    "cta": "Υποστηρίξτε τη βιωσιμότητα.",
+    "logo": "logos/129.jpg",
+    "id": "cosmus-diy-130"
+  },
+  {
+    "org": 131,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=131",
+    "name": "Κέντρο Καθοδήγησης Καρκινοπαθών-Κάπα3",
+    "cta": "Υποστηρίξτε τη συμβουλευτική και καθοδήγηση νέων.",
+    "logo": "logos/130.png",
+    "id": "3-131"
+  },
+  {
+    "org": 132,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=132",
+    "name": "ΣΥΛΛΟΓΟΣ ΚΟΙΝΩΝΙΚΗΣ ΠΑΡΕΜΒΑΣΗΣ «ΕΡΑΣΜΟΣ»",
+    "cta": "Ενισχύστε δράσεις κοινωνικής συνοχής.",
+    "logo": "logos/131.jpg",
+    "id": "org-132"
+  },
+  {
+    "org": 133,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=133",
+    "name": "Φιλοζωικός Σύλλογος Αιγιαλείας «Τα Φιλαράκια»",
+    "cta": "Υποστηρίξτε τη φροντίδα αδέσποτων ζώων.",
+    "logo": "logos/132.jpg",
+    "id": "org-133"
+  },
+  {
+    "org": 134,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=134",
+    "name": "Φαιναρέτη",
+    "cta": "Ενισχύστε την κατ’ οίκον φροντίδα.",
+    "logo": "logos/133.png",
+    "id": "org-134"
+  },
+  {
+    "org": 135,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=135",
+    "name": "Ίδρυμα Τζένη Καρέζη",
+    "cta": "Υποστηρίξτε τη δημιουργική έκφραση.",
+    "logo": "logos/134.png",
+    "id": "org-135"
+  },
+  {
+    "org": 136,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=136",
+    "name": "FairLife L.C.C.",
+    "cta": "Στηρίξτε δράσεις πρόληψης.",
+    "logo": "logos/135.jpg",
+    "id": "fairlife-l-c-c-136"
+  },
+  {
+    "org": 137,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=137",
+    "name": "Σύλλογος Γυναικών με Καρκίνο Μαστού «Άλμα Ζωής» Ν. Θεσσαλονίκης",
+    "cta": "Στηρίξτε δράσεις για τον καρκίνο του μαστού.",
+    "logo": "logos/136.png",
+    "id": "org-137"
+  },
+  {
+    "org": 138,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=138",
+    "name": "Σύλλογος Γονέων και Κηδεμόνων Παιδιών με Συγγενείς Καρδιοπάθειες «Η Αγία Σοφία»",
+    "cta": "Δώστε ελπίδα σε ανθρώπους που παλεύουν.",
+    "logo": "logos/137.png",
+    "id": "org-138"
+  },
+  {
+    "org": 139,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=139",
+    "name": "Startagers",
+    "cta": "Ενδυναμώστε νέους ανθρώπους.",
+    "logo": "logos/138.png",
+    "id": "startagers-139"
+  },
+  {
+    "org": 140,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=140",
+    "name": "Παιδική Αγκαλιά",
+    "cta": "Στηρίξτε ένα παιδί που το χρειάζεται.",
+    "logo": "logos/139.png",
+    "id": "org-140"
+  },
+  {
+    "org": 141,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=141",
+    "name": "Οικολογική Εταιρεία Ανακύκλωσης",
+    "cta": "Στηρίξτε δράσεις για την προστασία του περιβάλλοντος.",
+    "logo": "logos/140.png",
+    "id": "org-141"
+  },
+  {
+    "org": 142,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=142",
+    "name": "Βήμα Ζωής",
+    "cta": "Στηρίξτε ανθρώπους σε ανάγκη.",
+    "logo": "logos/152.jpg",
+    "id": "org-142"
+  },
+  {
+    "org": 143,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=143",
+    "name": "She Tells - Αυτή Λέει",
+    "cta": "Στηρίξτε δράσεις για τα δικαιώματα των γυναικών.",
+    "logo": "logos/141.png",
+    "id": "she-tells-143"
+  },
+  {
+    "org": 144,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=144",
+    "name": "ΚΑΡΚΙΝΑΚΙ",
+    "cta": "Δώστε χαρά σε ένα παιδί.",
+    "logo": "logos/142.jpg",
+    "id": "org-144"
+  },
+  {
+    "org": 145,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=145",
+    "name": "Κέντρο Αυτισμού SOS",
+    "cta": "Υποστηρίξτε παιδιά με αναπηρία.",
+    "logo": "logos/143.png",
+    "id": "sos-145"
+  },
+  {
+    "org": 146,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=146",
+    "name": "Home-Start Ελλάς",
+    "cta": "Προσφέρετε υποστήριξη σε οικογένειες σε κρίση.",
+    "logo": "logos/144.png",
+    "id": "home-start-146"
+  },
+  {
+    "org": 147,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=147",
+    "name": "Κοι.Σ.Π.Ε Ρεθύμνου «αρωδαμός»",
+    "cta": "Βοηθήστε στην κοινωνική επανένταξη.",
+    "logo": "logos/145.jpg",
+    "id": "org-147"
+  },
+  {
+    "org": 148,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=148",
+    "name": "Σύλλογος ΑμεΑ, Γονέων & Φίλων \"ΑΛΚΥΟΝΗ\" Ναυπακτίας & Δωρίδας",
+    "cta": "Υποστηρίξτε δράσεις για άτομα με αναπηρία.",
+    "logo": "logos/146.jpg",
+    "id": "org-148"
+  },
+  {
+    "org": 149,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=149",
+    "name": "Πολιτιστικός Σύλλογος Σελιανιτίκων Ήλιος",
+    "cta": "Υποστηρίξτε τη δημιουργική έκφραση.",
+    "logo": "logos/147.jpg",
+    "id": "org-149"
+  },
+  {
+    "org": 150,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=150",
+    "name": "Ελληνική Ομάδα Διάσωσης Β. Σποράδων - Hellenic Rescue Team Ν.Sporades",
+    "cta": "Ενισχύστε δράσεις άμεσης βοήθειας.",
+    "logo": "logos/148.jpg",
+    "id": "hellenic-rescue-team-sporades-150"
+  },
+  {
+    "org": 151,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=151",
+    "name": "Kids Fair Collection",
+    "cta": "Στηρίξτε δράσεις κοινωνικής καινοτομίας.",
+    "logo": "logos/149.png",
+    "id": "kids-fair-collection-151"
+  },
+  {
+    "org": 152,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=152",
+    "name": "Cleaningans",
+    "cta": "Στηρίξτε δράσεις για την προστασία του περιβάλλοντος.",
+    "logo": "logos/153.png",
+    "id": "cleaningans-152"
+  },
+  {
+    "org": 153,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=153",
+    "name": "Caritas Athens",
+    "cta": "Ενισχύστε δράσεις κοινωνικής αλληλεγγύης.",
+    "logo": "logos/150.jpg",
+    "id": "caritas-athens-153"
+  },
+  {
+    "org": 154,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=154",
+    "name": "Συνυπάρχω - Φιλοζωικό Σωματείο Νέας Αγχιάλου Βόλου",
+    "cta": "Υποστηρίξτε τη φροντίδα αδέσποτων ζώων.",
+    "logo": "logos/151.jpg",
+    "id": "org-154"
+  },
+  {
+    "org": 155,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=155",
+    "name": "Vegan Life",
+    "cta": "Στηρίξτε ανθρώπους σε ανάγκη.",
+    "logo": "logos/154.jpg",
+    "id": "vegan-life-155"
+  },
+  {
+    "org": 156,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=156",
+    "name": "Tastes of Greece",
+    "cta": "Στηρίξτε ανθρώπους σε ανάγκη.",
+    "logo": "logos/155.jpg",
+    "id": "tastes-of-greece-156"
+  },
+  {
+    "org": 157,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=157",
+    "name": "akako.gr",
+    "cta": "Στηρίξτε ανθρώπους σε ανάγκη.",
+    "logo": "logos/156.png",
+    "id": "akako-gr-157"
+  },
+  {
+    "org": 158,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=158",
+    "name": "ORAMATI-ΖΩ",
+    "cta": "Στηρίξτε ανθρώπους σε ανάγκη.",
+    "logo": "logos/157.png",
+    "id": "oramati-158"
+  },
+  {
+    "org": 159,
+    "url": "https://uxkolip.github.io/react-donation-widget/donation-only?org=159",
+    "name": "Fenix Humanitarian Legal Aid",
+    "cta": "Στηρίξτε ανθρώπους σε ανάγκη.",
+    "logo": "logos/158.png",
+    "id": "fenix-humanitarian-legal-aid-159"
+  }
+]
